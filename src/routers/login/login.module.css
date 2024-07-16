@@ -1,0 +1,19 @@
+.bg {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    min-width: 500px;
+    height: 100vh;
+    margin: auto;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+}
+.btnSignUp {
+    align-self: flex-end;
+}
+.btnLogin {
+    margin-top: 10px;
+}
