@@ -9,11 +9,12 @@ export default function Login() {
     const navigate = useNavigate();
     const submit = async() => {
         if(username && password) {
-            const data = await fetch("user/login", {
+            const data = await fetch("/api/user/login", {
                 body: { username, password },
                 method: "POST"
             })
             if(data.status) {
+                localStorage.setItem("username", username);
                 navigate("/online");
             }
 
