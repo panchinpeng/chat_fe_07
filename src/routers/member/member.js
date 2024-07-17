@@ -19,7 +19,7 @@ export default function Member() {
                 {
                   name: "offset",
                   options: {
-                    offset: [0, -22],
+                    offset: [0, -10],
                   },
                 },
               ],
@@ -34,7 +34,7 @@ export default function Member() {
         </Tooltip>
       </div>
 
-      <AddFriend open={showAddFriend}></AddFriend>
+      <AddFriend open={showAddFriend} setOpen={setShowAddFriend}></AddFriend>
     </Box>
   );
 }

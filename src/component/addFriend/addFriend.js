@@ -1,4 +1,6 @@
 import React from "react";
+import style from "./addFriend.module.css";
+import RecommendedFriend from "./../recommendFriend/recommendFriend";
 import {
   Dialog,
   Slide,
@@ -12,26 +14,28 @@ import {
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-export default function AddFriend({ open }) {
-  const handleClose = () => {};
+export default function AddFriend({ open, setOpen }) {
+  const handleClose = () => {
+    setOpen(false);
+  };
   return (
     <Dialog
       open={open}
       TransitionComponent={Transition}
       keepMounted
-      onClose={handleClose}
       aria-describedby="alert-dialog-slide-description"
     >
-      <DialogTitle>{"Use Google's location service?"}</DialogTitle>
+      <DialogTitle>search friend ...</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-slide-description">
-          Let Google help apps determine location. This means sending anonymous
-          location data to Google, even when no apps are running.
+          <div className={style.friendRecommend}>
+            <h5 className={style.title}>Recommended for you.</h5>
+            <RecommendedFriend open={open}></RecommendedFriend>
+          </div>
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Disagree</Button>
-        <Button onClick={handleClose}>Agree</Button>
+        <Button onClick={handleClose}>close</Button>
       </DialogActions>
     </Dialog>
   );
