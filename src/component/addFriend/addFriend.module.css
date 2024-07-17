@@ -1,6 +1,11 @@
 .friendRecommend {
   max-width: 400px;
-  width: 100vw;
+  width: 100%;
+}
+@media screen and (max-width: 600px) {
+  .friendRecommend {
+    max-width: 100%;
+  }
 }
 .title {
   margin: 0;
