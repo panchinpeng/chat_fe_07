@@ -1,0 +1,8 @@
+.box {
+  flex: 1;
+}
+.addFriend {
+  position: absolute;
+  bottom: 7%;
+  right: 5%;
+}

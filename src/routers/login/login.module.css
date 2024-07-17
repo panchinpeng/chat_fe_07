@@ -3,13 +3,29 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 50%;
-    min-width: 500px;
-    height: 100vh;
+    width: 100%;
+    max-width: 550px;
+    height: 550px;
     margin: auto;
     padding: 10px;
     justify-content: center;
     align-items: center;
+    box-shadow: 0 0px 70px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    position: relative;
+
+}
+.bg::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #1976d2;
+    height: 10px;
+    width: 100%;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 .btnSignUp {
     align-self: flex-end;
