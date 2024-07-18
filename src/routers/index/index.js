@@ -1,8 +1,9 @@
 import { Outlet } from "react-router-dom";
-import { Box, Button, Toolbar } from "@mui/material";
+import { Box, ThemeProvider } from "@mui/material";
 import style from "./index.module.css";
 import Header from "../../component/header/header";
 import Footer from "../../component/footer/footer";
+
 export default function Index() {
   return (
     <>

@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite";
 import { useStore } from "../store";
 import Index from "./index";
 import { useEffect, useState } from "react";
-import fetch from "../common/fetch";
+import api from "../common/api";
 
 function PrivateRoutes() {
   const location = useLocation();
@@ -13,7 +13,7 @@ function PrivateRoutes() {
   useEffect(() => {
     setVerify(false);
     (async () => {
-      const res = await fetch("/api/user/verify");
+      const res = await api.getVerify();
       if (res.status) {
         setVerify(true);
         store.user.setLogin(true);

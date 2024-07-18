@@ -1,13 +1,13 @@
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
-import fetch from "./../../common/fetch";
+import api from "../../common/api";
 import style from "./recommendFriend.module.css";
 export default function RecommendedFriend({ open }) {
   const [persons, setPersons] = useState([]);
   useEffect(() => {
     (async () => {
       if (open) {
-        const res = await fetch("/api/user/recommendFriend");
+        const res = await api.getRecommendFriend();
         if (res.status && res.data.length > 0) {
           setPersons(res.data);
         }

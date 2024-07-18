@@ -1,11 +1,14 @@
+import { useState } from "react";
 import { AppBar, Toolbar, Avatar } from "@mui/material";
 import style from "./header.module.css";
+import MenuRight from "../menuRight/menuRight";
 
 // store
 import { observer } from "mobx-react-lite";
 import { useStore } from "./../../store";
 
 function Header() {
+  const [rightOpen, setRightOpen] = useState(false);
   const store = useStore();
 
   return (
@@ -14,9 +17,10 @@ function Header() {
         <div className={style.functions}>
           {store.user.login && (
             <>
-              <Avatar>
+              <Avatar onClick={() => setRightOpen(true)}>
                 {store.user.info.username.substr(0, 1).toUpperCase()}
               </Avatar>
+              <MenuRight open={rightOpen} setOpen={setRightOpen}></MenuRight>
             </>
           )}
         </div>

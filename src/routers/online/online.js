@@ -2,7 +2,6 @@ import { Box, TextField } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import style from "./online.module.css";
-import fetch from "./../../common/fetch";
 
 export default function Online() {
   const socket = useRef(null);

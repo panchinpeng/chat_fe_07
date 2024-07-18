@@ -4,6 +4,7 @@ import Online from "./routers/online/online";
 import Intro from "./routers/intro/intro";
 import PrivateRoutes from "./routers/privateRoute";
 import Member from "./routers/member/member";
+import Signup from "./routers/signup/signup";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/signup",
+    element: <Signup />,
   },
 ]);
 
