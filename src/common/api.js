@@ -38,4 +38,15 @@ export default {
       return Promise.reject(e);
     }
   },
+  async regester(username, password, birthday) {
+    try {
+      const res = await fetch("/api/user/register", {
+        body: { username, password, birthday },
+        method: "POST",
+      });
+      return res;
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  },
 };

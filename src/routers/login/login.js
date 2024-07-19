@@ -3,10 +3,11 @@ import style from "./login.module.css";
 import {
   TextField,
   Box,
-  Link,
   Button,
   FormControlLabel,
   Checkbox,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import api from "../../common/api";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -19,15 +20,29 @@ function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [betaCheck, setBetaCheck] = useState(false);
+  const [warn, setWarn] = useState("");
+  const [loginFail, setLoginFail] = useState(false);
   const navigate = useNavigate();
   const store = useStore();
   const submit = async () => {
-    if (username && password) {
-      const data = await api.login(username, password);
-      if (data.status) {
-        store.user.setLogin(true);
-        navigate("/member");
-      }
+    if (!username) {
+      setWarn("Please enter your username.");
+      return;
+    }
+    if (!password) {
+      setWarn("Please enter your password.");
+      return;
+    }
+    if (!betaCheck) {
+      setWarn("Please enter your checkbox.");
+      return;
+    }
+    const data = await api.login(username, password);
+    if (data.status) {
+      store.user.setLogin(true);
+      navigate("/member");
+    } else {
+      setLoginFail(true);
     }
   };
 
@@ -41,6 +56,13 @@ function Login() {
           We're glad to see you again. Please log in to access your account and
           continue enjoying our services.
         </div>
+        <Alert
+          variant="filled"
+          severity="error"
+          sx={{ my: 1, display: loginFail ? "" : "none" }}
+        >
+          Login Failed. Please check your username and password and try again
+        </Alert>
         <TextField
           fullWidth
           value={username}
@@ -78,6 +100,12 @@ function Login() {
         <Button variant="contained" onClick={submit} sx={{ mt: 4 }}>
           Log in
         </Button>
+        <Snackbar
+          open={!!warn}
+          autoHideDuration={4000}
+          onClose={() => setWarn("")}
+          message={warn}
+        />
       </Box>
       <Footer></Footer>
     </>
