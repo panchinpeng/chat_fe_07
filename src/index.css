@@ -25,3 +25,22 @@ a {
   color: #fff;
   text-decoration: none;
 }
+
+*::-webkit-scrollbar {
+  width: 2px;
+}
+::-webkit-scrollbar-thumb {
+  background: #a09f9f; /* 滑塊的背景色 */
+}
+.swiper {
+  width: 100%;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.swiper-slide {
+  background-position: center;
+  background-size: cover;
+  width: 300px;
+  height: 300px;
+}
