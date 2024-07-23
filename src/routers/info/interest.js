@@ -1,13 +1,7 @@
-import {
-  Box,
-  FormControl,
-  FormLabel,
-  Chip,
-  Snackbar,
-  Alert,
-} from "@mui/material";
-import { useContext, useState } from "react";
+import { Box, FormControl, FormLabel, Chip, Paper } from "@mui/material";
+import { useContext, useRef } from "react";
 import style from "./interest.module.css";
+import Alert from "../../component/alert/alert";
 import InfoContext from "./infoContext";
 const interests = [
   "跑步",
@@ -112,78 +106,71 @@ const interests = [
   "釣魚",
 ];
 export default function Interest() {
-  const [warnMsg, setWarnMsg] = useState("");
+  const warnRef = useRef();
   const { person, setPerson } = useContext(InfoContext);
   return (
     <Box
       sx={{
         width: "100%",
-        p: 2,
+        mb: 2,
         borderRadius: 3,
       }}
     >
-      <h3>Interest</h3>
-      <FormControl>
-        <FormLabel>
-          Please share your interests and hobbies with us so we can better
-          understand you and recommend suitable activities and resources.
-        </FormLabel>
-        <div className={style.interestWrap}>
-          {interests
-            .filter((item) => !person.interests.includes(item))
-            .map((item) => (
-              <Chip
-                color="primary"
-                sx={{ ml: 1, mt: 1 }}
-                label={item}
-                onClick={() => {
-                  if (person.interests.length >= 10) {
-                    setWarnMsg("Select up to 10");
-                    return;
-                  }
-                  setPerson((person) => ({
-                    ...person,
-                    interests: [...person.interests, item],
-                  }));
-                }}
-                key={item}
-                variant="outlined"
-              />
-            ))}
-        </div>
-      </FormControl>
+      <Paper elevation="2" sx={{ p: 2 }}>
+        <h3>Interest</h3>
+        <FormControl>
+          <FormLabel>
+            Please share your interests and hobbies with us so we can better
+            understand you and recommend suitable activities and resources.
+          </FormLabel>
+          <div className={style.interestWrap}>
+            {interests
+              .filter((item) => !person.interests.includes(item))
+              .map((item) => (
+                <Chip
+                  color="primary"
+                  sx={{ ml: 1, mt: 1 }}
+                  label={item}
+                  onClick={() => {
+                    if (person.interests.length >= 10) {
+                      warnRef.current.setMessage("Select up to 10");
+                      return;
+                    }
+                    setPerson((person) => ({
+                      ...person,
+                      interests: [...person.interests, item],
+                    }));
+                  }}
+                  key={item}
+                  variant="outlined"
+                />
+              ))}
+          </div>
+        </FormControl>
 
-      <h5>Selected ({person.interests.length})</h5>
-      <div className={style.interestWrap}>
-        {person.interests.map((item, index) => (
-          <Chip
-            color="primary"
-            sx={{ ml: 1, mt: 1 }}
-            label={item}
-            onDelete={() => {
-              setPerson((person) => {
-                const cp = [...person.interests];
-                cp.splice(index, 1);
-                return {
-                  ...person,
-                  interests: cp,
-                };
-              });
-            }}
-            key={item}
-          />
-        ))}
-      </div>
-      <Snackbar
-        autoHideDuration={6000}
-        open={warnMsg}
-        onClose={() => setWarnMsg("")}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert variant="filled" severity="error">
-          {warnMsg}
-        </Alert>
-      </Snackbar>
+        <h5>Selected ({person.interests.length})</h5>
+        <div className={style.interestWrap}>
+          {person.interests.map((item, index) => (
+            <Chip
+              color="primary"
+              sx={{ ml: 1, mt: 1 }}
+              label={item}
+              onDelete={() => {
+                setPerson((person) => {
+                  const cp = [...person.interests];
+                  cp.splice(index, 1);
+                  return {
+                    ...person,
+                    interests: cp,
+                  };
+                });
+              }}
+              key={item}
+            />
+          ))}
+        </div>
+        <Alert severity="error" ref={warnRef}></Alert>
+      </Paper>
     </Box>
   );
 }

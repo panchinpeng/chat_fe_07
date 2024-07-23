@@ -49,4 +49,15 @@ export default {
       return Promise.reject(e);
     }
   },
+  async setUserInfo(job, work_time, salary, self_introd, interests) {
+    try {
+      const res = await fetch("/api/user/info", {
+        body: { job, work_time, salary, self_introd, interests },
+        method: "POST",
+      });
+      return res;
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  },
 };

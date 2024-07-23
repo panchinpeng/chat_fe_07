@@ -1,3 +1,6 @@
 .box {
   flex: 1;
 }
+.sendWrap {
+  text-align: center;
+}

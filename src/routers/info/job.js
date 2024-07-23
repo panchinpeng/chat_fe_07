@@ -5,6 +5,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  Paper,
 } from "@mui/material";
 import style from "./job.module.css";
 import { useContext } from "react";
@@ -68,80 +69,84 @@ export default function Job() {
     <Box
       sx={{
         width: "100%",
-        p: 2,
+        mb: 2,
         borderRadius: 3,
       }}
     >
-      <h3>What Do You Do?</h3>
-      <h5></h5>
+      <Paper elevation="2" sx={{ p: 2 }}>
+        <h3>What Do You Do?</h3>
+        <h5></h5>
 
-      <FormControl sx={{ mb: 4 }}>
-        <FormLabel id="job">
-          Please choose your profession so we can offer tailored content and
-          recommendations.
-        </FormLabel>
-        <select
-          className={style.select}
-          value={person.job}
-          onChange={(e) =>
-            setPerson((person) => ({ ...person, job: e.target.value }))
-          }
-        >
-          {jobMap.map((item) => (
-            <option value={item} key={item}>
-              {item}
-            </option>
-          ))}
-        </select>
-      </FormControl>
-      <FormControl sx={{ mb: 4 }}>
-        <FormLabel id="job_time">Choose Your Working Hours</FormLabel>
-        <RadioGroup
-          row
-          name="job_time"
-          aria-labelledby="job_time"
-          value={person.wTime}
-          onChange={(e, v) => {
-            setPerson((person) => ({ ...person, wTime: v }));
-          }}
-        >
-          <FormControlLabel
-            value="Morning"
-            control={<Radio />}
-            label="Morning"
-          />
-          <FormControlLabel
-            value="Afternoon"
-            control={<Radio />}
-            label="Afternoon"
-          />
-          <FormControlLabel
-            value="Evening"
-            control={<Radio />}
-            label="Evening"
-          />
-        </RadioGroup>
-      </FormControl>
-      <FormControl>
-        <FormLabel id="job_time">
-          Providing your salary range helps us offer you more relevant content
-          and services
-        </FormLabel>
-        <select
-          className={style.select}
-          value={person.salary}
-          onChange={(e) =>
-            setPerson((person) => ({ ...person, salary: e.target.value }))
-          }
-        >
-          <option value="20000 ~ 30000">20000 ~ 30000</option>
-          <option value="30000 ~ 40000">30000 ~ 40000</option>
-          <option value="40000 ~ 50000">40000 ~ 50000</option>
-          <option value="50000 ~ 60000">50000 ~ 60000</option>
-          <option value="60000 ~ 700000">60000 ~ 700000</option>
-          <option value="70000 up">70000 up</option>
-        </select>
-      </FormControl>
+        <FormControl sx={{ mb: 4, width: "100%" }}>
+          <FormLabel id="job">
+            Please choose your profession so we can offer tailored content and
+            recommendations.
+          </FormLabel>
+          <select
+            className={style.select}
+            value={person.job}
+            onChange={(e) =>
+              setPerson((person) => ({ ...person, job: e.target.value }))
+            }
+          >
+            <option value=""></option>
+            {jobMap.map((item) => (
+              <option value={item} key={item}>
+                {item}
+              </option>
+            ))}
+          </select>
+        </FormControl>
+        <FormControl sx={{ mb: 4, width: "100%" }}>
+          <FormLabel id="job_time">Choose Your Working Hours</FormLabel>
+          <RadioGroup
+            row
+            name="job_time"
+            aria-labelledby="job_time"
+            value={person.wTime}
+            onChange={(e, v) => {
+              setPerson((person) => ({ ...person, wTime: v }));
+            }}
+          >
+            <FormControlLabel
+              value="Morning"
+              control={<Radio />}
+              label="Morning"
+            />
+            <FormControlLabel
+              value="Afternoon"
+              control={<Radio />}
+              label="Afternoon"
+            />
+            <FormControlLabel
+              value="Evening"
+              control={<Radio />}
+              label="Evening"
+            />
+          </RadioGroup>
+        </FormControl>
+        <FormControl sx={{ width: "100%" }}>
+          <FormLabel id="job_time">
+            Providing your salary range helps us offer you more relevant content
+            and services
+          </FormLabel>
+          <select
+            className={style.select}
+            value={person.salary}
+            onChange={(e) =>
+              setPerson((person) => ({ ...person, salary: e.target.value }))
+            }
+          >
+            <option value=""></option>
+            <option value="20000 ~ 30000">20000 ~ 30000</option>
+            <option value="30000 ~ 40000">30000 ~ 40000</option>
+            <option value="40000 ~ 50000">40000 ~ 50000</option>
+            <option value="50000 ~ 60000">50000 ~ 60000</option>
+            <option value="60000 ~ 700000">60000 ~ 700000</option>
+            <option value="70000 up">70000 up</option>
+          </select>
+        </FormControl>
+      </Paper>
     </Box>
   );
 }
