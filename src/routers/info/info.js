@@ -2,7 +2,7 @@ import { Box, Stepper, Step, StepLabel, Button } from "@mui/material";
 import style from "./info.module.css";
 import Alert from "../../component/alert/alert.js";
 import My from "./my";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Friend from "./friend";
 import InfoContext from "./infoContext.js";
 import api from "../../common/api.js";
@@ -18,6 +18,20 @@ export default function Info() {
     salary: "",
     intro: "",
   });
+  useEffect(() => {
+    (async () => {
+      const res = await api.getUserInfo();
+      if (res.status) {
+        setPerson({
+          interests: res.data.interests ? res.data.interests.split(",") : [],
+          job: res.data.job || "",
+          wTime: res.data.work_time || "",
+          salary: res.data.salary || "",
+          intro: res.data.self_introd || "",
+        });
+      }
+    })();
+  }, []);
   const checkPersonData = async () => {
     if (
       person.interests.length === 0 ||

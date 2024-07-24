@@ -60,4 +60,12 @@ export default {
       return Promise.reject(e);
     }
   },
+  async getUserInfo() {
+    try {
+      const res = await fetch("/api/user/info");
+      return res;
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  },
 };

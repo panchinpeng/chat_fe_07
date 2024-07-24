@@ -108,21 +108,9 @@ export default function Job() {
               setPerson((person) => ({ ...person, wTime: v }));
             }}
           >
-            <FormControlLabel
-              value="Morning"
-              control={<Radio />}
-              label="Morning"
-            />
-            <FormControlLabel
-              value="Afternoon"
-              control={<Radio />}
-              label="Afternoon"
-            />
-            <FormControlLabel
-              value="Evening"
-              control={<Radio />}
-              label="Evening"
-            />
+            <FormControlLabel value="1" control={<Radio />} label="Morning" />
+            <FormControlLabel value="2" control={<Radio />} label="Afternoon" />
+            <FormControlLabel value="3" control={<Radio />} label="Evening" />
           </RadioGroup>
         </FormControl>
         <FormControl sx={{ width: "100%" }}>
