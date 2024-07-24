@@ -75,8 +75,6 @@ export default function Job() {
     >
       <Paper elevation="2" sx={{ p: 2 }}>
         <h3>What Do You Do?</h3>
-        <h5></h5>
-
         <FormControl sx={{ mb: 4, width: "100%" }}>
           <FormLabel id="job">
             Please choose your profession so we can offer tailored content and

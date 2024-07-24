@@ -68,4 +68,24 @@ export default {
       return Promise.reject(e);
     }
   },
+  async setAvatar(fd) {
+    try {
+      const res = await fetch("/api/user/avatar", {
+        method: "POST",
+        headers: {},
+        body: fd,
+      });
+      return res;
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  },
+  async getAvatar() {
+    try {
+      const res = await fetch("/api/user/avatar");
+      return res;
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  },
 };
