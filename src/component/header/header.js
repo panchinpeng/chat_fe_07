@@ -14,12 +14,16 @@ function Header() {
   return (
     <AppBar position="static">
       <Toolbar>
+        <div>🅻🅾🆅🅴 ​ & ​ 🅲🅷🅰🆃</div>
         <div className={style.functions}>
           {store.user.login && (
             <>
-              <Avatar onClick={() => setRightOpen(true)}>
-                {store.user.info.username.substr(0, 1).toUpperCase()}
-              </Avatar>
+              {store.user.info.username && (
+                <Avatar onClick={() => setRightOpen(true)}>
+                  {store.user.info.username.substr(0, 1).toUpperCase()}
+                </Avatar>
+              )}
+
               <MenuRight open={rightOpen} setOpen={setRightOpen}></MenuRight>
             </>
           )}

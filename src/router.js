@@ -8,20 +8,16 @@ import Signup from "./routers/signup/signup";
 import Info from "./routers/info/info";
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/member",
     element: <PrivateRoutes></PrivateRoutes>,
     children: [
       {
         path: "",
-        element: <Intro />,
+        element: <Member />,
       },
       {
         path: "online",
         element: <Online />,
-      },
-      {
-        path: "member",
-        element: <Member />,
       },
       {
         path: "info",
@@ -36,6 +32,10 @@ const router = createBrowserRouter([
   {
     path: "/signup",
     element: <Signup />,
+  },
+  {
+    path: "/",
+    element: <Intro />,
   },
 ]);
 

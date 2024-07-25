@@ -6,7 +6,7 @@ import { observer } from "mobx-react-lite";
 import style from "./avatar.module.css";
 import api from "../../common/api";
 import Alert from "../alert/alert";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 function CuAvatar({ from }) {
   const store = useStore();

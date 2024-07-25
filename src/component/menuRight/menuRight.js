@@ -55,7 +55,7 @@ function MenuRight({ open, setOpen }) {
       >
         <List>
           <ListItem disablePadding>
-            <ListItemButton onClick={() => nevigate("/info")}>
+            <ListItemButton onClick={() => nevigate("/member/info")}>
               <ListItemIcon>
                 <PersonIcon />
               </ListItemIcon>
@@ -83,7 +83,13 @@ function MenuRight({ open, setOpen }) {
           </ListItem>
           <Divider />
           <ListItem disablePadding>
-            <ListItemButton onClick={() => api.logout(nevigate)}>
+            <ListItemButton
+              onClick={() =>
+                api.logout(nevigate, () => {
+                  store.user.setLogin(false);
+                })
+              }
+            >
               <ListItemIcon>
                 <LogoutIcon />
               </ListItemIcon>

@@ -1,0 +1,49 @@
+.content {
+  flex: 1;
+}
+.title {
+  font-weight: 900;
+  text-shadow: 12px -8px 1px #cccccc4f;
+}
+.bannerText {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 10%;
+  width: 100%;
+  max-width: 300px;
+  background: #f4e9e9d4;
+  padding: 1%;
+  border-radius: 17px;
+  color: #5c4949;
+  font-size: 12px;
+}
+.shareTitle {
+  margin: 0;
+}
+.coinBg {
+  position: relative;
+}
+.coinBg::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: -1;
+  background: url(./../../public/bg_ground.png) bottom right / 100px 100px
+    no-repeat;
+}
+
+@media screen and (max-width: 500px) {
+  .banner img {
+    width: auto !important;
+    height: 200px;
+    object-position: -100px;
+  }
+  .bannerText {
+    display: none;
+    right: 0%;
+  }
+}

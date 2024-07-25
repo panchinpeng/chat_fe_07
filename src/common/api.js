@@ -1,11 +1,12 @@
 import fetch from "./fetch";
 
 export default {
-  async logout(nevigate) {
+  async logout(nevigate, cb) {
     try {
       const res = await fetch("/api/user/logout");
       if (res.status) {
-        nevigate("/login");
+        cb instanceof Function && cb();
+        nevigate("/");
       }
     } catch (e) {
       return Promise.reject(e);
