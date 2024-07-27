@@ -35,7 +35,7 @@ export default function Popular() {
           <CardMedia
             component="img"
             height="194"
-            image="/static/images/cards/paella.jpg"
+            image="https://placehold.jp/150x150.png"
             alt="Paella dish"
           />
           <CardContent>
@@ -65,7 +65,7 @@ export default function Popular() {
           <CardMedia
             component="img"
             height="194"
-            image="/static/images/cards/paella.jpg"
+            image="https://placehold.jp/150x150.png"
             alt="Paella dish"
           />
           <CardContent>
@@ -95,7 +95,7 @@ export default function Popular() {
           <CardMedia
             component="img"
             height="194"
-            image="/static/images/cards/paella.jpg"
+            image="https://placehold.jp/150x150.png"
             alt="Paella dish"
           />
           <CardContent>
@@ -125,7 +125,7 @@ export default function Popular() {
           <CardMedia
             component="img"
             height="194"
-            image="/static/images/cards/paella.jpg"
+            image="https://placehold.jp/150x150.png"
             alt="Paella dish"
           />
           <CardContent>

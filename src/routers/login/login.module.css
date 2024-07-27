@@ -69,7 +69,6 @@
   width: 100px;
   height: 100px;
   background: url(./../../../public/logo.png) center / contain no-repeat;
-  border-radius: 50%;
 }
 .extraAction {
   margin-top: 10px;

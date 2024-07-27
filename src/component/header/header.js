@@ -6,7 +6,7 @@ import MenuRight from "../menuRight/menuRight";
 // store
 import { observer } from "mobx-react-lite";
 import { useStore } from "./../../store";
-
+import logo from "./../../public/logo.png";
 function Header() {
   const [rightOpen, setRightOpen] = useState(false);
   const store = useStore();
@@ -14,7 +14,9 @@ function Header() {
   return (
     <AppBar position="static">
       <Toolbar>
-        <div>🅻🅾🆅🅴 ​ & ​ 🅲🅷🅰🆃</div>
+        <div>
+          <img src={logo} height="50px" className={style.logo}></img>
+        </div>
         <div className={style.functions}>
           {store.user.login && (
             <>

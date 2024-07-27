@@ -1,17 +1,17 @@
+@font-face {
+  font-family: "851tegaki_zatsu_normal_0883";
+  src: url("./../public/font/851tegaki_zatsu_normal_0883.ttf")
+    format("truetype");
+}
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-size: 14px;
+}
+body * {
+  font-family: "851tegaki_zatsu_normal_0883" !important;
+  font-size: 18px;
+  line-height: 1.4;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
-}
 * {
   box-sizing: border-box;
 }

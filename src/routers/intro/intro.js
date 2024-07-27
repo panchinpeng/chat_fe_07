@@ -22,6 +22,7 @@ import "swiper/css/navigation";
 
 import { Navigation } from "swiper/modules";
 import Popular from "../../component/popular/popular";
+import CoinRank from "../../component/coinRank/coinRank";
 
 export default function Intro() {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ export default function Intro() {
             <h4 className={style.title}>探索真实的连接</h4>
             <Box>
               在这个快节奏的世界里，我们相信每个人都值得拥有真挚的情感。通过我们独特的匹配算法和严格的安全措施，你可以放心地在这里探索真实的连接，发现与你志趣相投的人。
-              <Box sx={{ textAlign: "center" }}>
+              <Box sx={{ textAlign: "center", mt: 2 }}>
                 <Button
                   variant="outlined"
                   sx={{ p: 0.5, m: 1, fontSize: "12px" }}
@@ -176,15 +177,71 @@ export default function Intro() {
       <Box
         sx={{ maxWidth: "800px", width: "100%", marginY: 5, marginX: "auto" }}
       >
-        <Typography
-          variant="h5"
-          gutterBottom
-          sx={{ color: "primary.main" }}
-          className={style.title}
+        <Grid container spacing={1} justifyContent="center" sx={{ mt: 2 }}>
+          <Grid item xs={11} md={12}>
+            <Typography
+              variant="h5"
+              gutterBottom
+              sx={{ color: "primary.main" }}
+              className={style.title}
+            >
+              熱門動態
+            </Typography>
+          </Grid>
+        </Grid>
+        <Grid item xs={11} md={12}>
+          <Popular></Popular>
+        </Grid>
+      </Box>
+      <Box
+        sx={{
+          width: "100%",
+          marginY: 5,
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        <Grid
+          container
+          spacing={0}
+          justifyContent="center"
+          sx={{
+            maxWidth: "800px",
+            width: "100%",
+            overflow: "auto",
+            marginX: "auto",
+            padding: "0",
+          }}
+          className={style.scroll}
         >
-          熱門動態
-        </Typography>
-        <Popular></Popular>
+          <Grid
+            item
+            xs={11}
+            md={12}
+            sx={{
+              borderBottomLeftRadius: "5px",
+              borderBottomRightRadius: "5px",
+              background: "#fff",
+              position: "absolute",
+              width: "800px",
+            }}
+          >
+            <Typography
+              variant="h5"
+              gutterBottom
+              sx={{
+                color: "primary.main",
+              }}
+              className={style.title}
+            >
+              金幣排行
+            </Typography>
+          </Grid>
+          <Grid item xs={12} md={12}>
+            <CoinRank></CoinRank>
+          </Grid>
+        </Grid>
+        <div className={style.stageBg}></div>
       </Box>
       <Footer></Footer>
     </>
