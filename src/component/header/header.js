@@ -7,6 +7,7 @@ import MenuRight from "../menuRight/menuRight";
 import { observer } from "mobx-react-lite";
 import { useStore } from "./../../store";
 import logo from "./../../public/logo.png";
+import { Link } from "react-router-dom";
 function Header() {
   const [rightOpen, setRightOpen] = useState(false);
   const store = useStore();
@@ -15,7 +16,9 @@ function Header() {
     <AppBar position="static">
       <Toolbar>
         <div>
-          <img src={logo} height="50px" className={style.logo}></img>
+          <Link to="/">
+            <img src={logo} height="50px" className={style.logo}></img>
+          </Link>
         </div>
         <div className={style.functions}>
           {store.user.login && (
