@@ -2,6 +2,7 @@ import { useState } from "react";
 import { AppBar, Toolbar, Avatar } from "@mui/material";
 import style from "./header.module.css";
 import MenuRight from "../menuRight/menuRight";
+import CuAvatar from "./../avatar/avatar";
 
 // store
 import { observer } from "mobx-react-lite";
@@ -24,9 +25,9 @@ function Header() {
           {store.user.login && (
             <>
               {store.user.info.username && (
-                <Avatar onClick={() => setRightOpen(true)}>
-                  {store.user.info.username.substr(0, 1).toUpperCase()}
-                </Avatar>
+                <div onClick={() => setRightOpen(true)}>
+                  <CuAvatar from="Index"></CuAvatar>
+                </div>
               )}
 
               <MenuRight open={rightOpen} setOpen={setRightOpen}></MenuRight>

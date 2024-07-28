@@ -55,7 +55,12 @@ function MenuRight({ open, setOpen }) {
       >
         <List>
           <ListItem disablePadding>
-            <ListItemButton onClick={() => nevigate("/member/info")}>
+            <ListItemButton
+              onClick={() => {
+                setOpen(false);
+                nevigate("/member/info");
+              }}
+            >
               <ListItemIcon>
                 <PersonIcon />
               </ListItemIcon>

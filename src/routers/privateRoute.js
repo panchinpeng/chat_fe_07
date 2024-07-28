@@ -5,7 +5,7 @@ import Index from "./index";
 import { useEffect, useState } from "react";
 import api from "../common/api";
 
-function PrivateRoutes() {
+function PrivateRoutes({ forceToLogin }) {
   const location = useLocation();
   const navigate = useNavigate();
   const store = useStore();
@@ -20,7 +20,7 @@ function PrivateRoutes() {
         store.user.setInfo(res.data);
       } else {
         store.user.setLogin(false);
-        navigate("/login");
+        forceToLogin && navigate("/login");
       }
     })();
     return () => {
@@ -28,6 +28,6 @@ function PrivateRoutes() {
     };
   }, [location]);
 
-  return store.user.login && verify ? <Index /> : null;
+  return <Index />;
 }
 export default observer(PrivateRoutes);

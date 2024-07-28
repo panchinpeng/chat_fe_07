@@ -60,7 +60,7 @@ export default function Info() {
   };
   return (
     <InfoContext.Provider value={{ person, setPerson }}>
-      <Box className={style.box} sx={{ width: 1 }}>
+      <Box className={style.box} sx={{ width: 1, pt: 1 }}>
         <Stepper
           activeStep={step}
           alternativeLabel

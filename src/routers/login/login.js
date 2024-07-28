@@ -40,6 +40,7 @@ function Login() {
     const data = await api.login(username, password);
     if (data.status) {
       store.user.setLogin(true);
+      store.user.setInfo(data.data);
       navigate("/member");
     } else {
       setLoginFail(true);

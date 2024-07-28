@@ -8,7 +8,7 @@ export default function Index() {
   return (
     <>
       <Header></Header>
-      <Box component="section" sx={{ p: 2 }} className={style.content}>
+      <Box component="section" className={style.content}>
         <Outlet />
         <Footer></Footer>
       </Box>

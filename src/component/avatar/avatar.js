@@ -39,7 +39,7 @@ function CuAvatar({ from }) {
         badgeContent={
           <label for="uploadAvatar">
             <AddPhotoAlternateIcon
-              sx={{ color: grey[900], fontSize: from !== "my" ? 30 : 40 }}
+              sx={{ color: grey[900], fontSize: from !== "my" ? 0 : 40 }}
             ></AddPhotoAlternateIcon>
           </label>
         }
@@ -47,7 +47,9 @@ function CuAvatar({ from }) {
         <Avatar
           sx={
             from !== "my"
-              ? { width: 80, height: 80 }
+              ? from === "Index"
+                ? { width: 40, height: 40 }
+                : { width: 80, height: 80 }
               : { width: 160, height: 160 }
           }
         >
