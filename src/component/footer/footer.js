@@ -1,8 +1,13 @@
 import style from "./footer.module.css";
-export default function Footer() {
+import BottomNav from "./../bottomNav/bottomNav";
+function Footer() {
   return (
-    <div className={style.wrap}>
-      Copyright © 2024 ParryPan All rights reserved
-    </div>
+    <>
+      <div className={style.wrap}>
+        Copyright © 2024 ParryPan All rights reserved
+      </div>
+      <BottomNav></BottomNav>
+    </>
   );
 }
+export default Footer;

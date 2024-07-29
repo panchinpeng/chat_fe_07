@@ -6,6 +6,7 @@ import PrivateRoutes from "./routers/privateRoute";
 import Member from "./routers/member/member";
 import Signup from "./routers/signup/signup";
 import Info from "./routers/info/info";
+import Post from "./routers/post/post";
 const router = createBrowserRouter([
   {
     path: "/member",
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: "info",
         element: <Info />,
+      },
+      {
+        path: "post",
+        element: <Post />,
       },
     ],
   },
