@@ -1,0 +1,23 @@
+.wrap {
+  overflow-x: auto;
+  overflow-y: hidden;
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+.color {
+  border-radius: 50%;
+  height: 50px;
+  margin-right: 10px;
+  animation: colorJump 0.3s linear forwards;
+  flex: 0 0 50px;
+}
+
+@keyframes colorJump {
+  0% {
+    transform: translateY(-600px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}

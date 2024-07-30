@@ -26,7 +26,13 @@
 #postImg {
   display: none;
 }
+.textareaWrap {
+  position: absolute;
+  top: 45%;
+  left: 45%;
+}
 .textarea {
+  resize: none;
   background-color: transparent;
   color: #fff;
   display: flex;
@@ -34,12 +40,14 @@
   outline: 0;
   padding: 0;
   position: absolute;
-  z-index: 1;
-  min-height: 100px;
-  min-width: 100px;
+  z-index: 999;
+  width: 150px;
+  height: 23px;
   white-space: pre;
   transform-origin: top left;
   overflow: hidden;
+  user-select: none;
+  touch-action: none;
 }
 .textarea::-webkit-input-placeholder {
   color: #fff;
@@ -54,4 +62,20 @@
 }
 .none {
   display: none;
+}
+.bgImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-position: center;
+  background-size: cover;
+}
+.colorPick {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 6;
+  width: 100%;
 }

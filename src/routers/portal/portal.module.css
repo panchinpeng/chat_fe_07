@@ -58,9 +58,7 @@
     display: none;
   }
 }
-.scroll::-webkit-scrollbar {
-  display: none;
-}
+
 @media screen and (max-width: 500px) {
   .banner img {
     width: auto !important;
