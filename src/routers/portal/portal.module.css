@@ -53,6 +53,12 @@
   min-width: 800px;
   background: url(./../../public/666.png) center top / 1152px 896px no-repeat;
 }
+.banner img {
+  height: 600px;
+  width: 100%;
+  object-fit: cover;
+  display: block;
+}
 @media screen and (max-width: 800px) {
   .stageBg {
     display: none;
@@ -60,13 +66,14 @@
 }
 
 @media screen and (max-width: 500px) {
-  .banner img {
-    width: auto !important;
-    height: 200px;
-    object-position: -100px;
-  }
   .bannerText {
-    display: none;
-    right: 0%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: 100%;
+    min-height: 200px;
+    transform: none;
+    height: auto;
+    top: auto;
   }
 }

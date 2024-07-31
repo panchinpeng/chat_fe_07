@@ -10,6 +10,7 @@ import {
 
 import banner1 from "./../../public/chat1.png";
 import banner2 from "./../../public/chat2.png";
+import banner3 from "./../../public/chat3.png";
 import { useNavigate } from "react-router-dom";
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -35,11 +36,20 @@ function Portal() {
         className={`mySwiper ${style.mySwiper}`}
       >
         <SwiperSlide className={style.banner}>
+          <img src={banner3} width="100%"></img>
+          <div className={style.bannerText}>
+            <h4 className={style.title}>愛情與虛擬的完美結合！</h4>
+            <Box>
+              在這裡，不只是聊天。使用金幣遊戲與區塊鏈支付功能，體驗前所未有的心動感受！加入我們，開始你的愛情冒險吧！
+            </Box>
+          </div>
+        </SwiperSlide>
+        <SwiperSlide className={style.banner}>
           <img src={banner1} width="100%"></img>
           <div class={style.bannerText}>
-            <h4 className={style.title}>探索真实的连接</h4>
+            <h4 className={style.title}>開啟你的數位戀愛之旅！</h4>
             <Box>
-              在这个快节奏的世界里，我们相信每个人都值得拥有真挚的情感。通过我们独特的匹配算法和严格的安全措施，你可以放心地在这里探索真实的连接，发现与你志趣相投的人。
+              尋找有趣的靈魂伴侶？在這裡，聊天只是開始。金幣遊戲和區塊鏈支付讓你的戀愛旅程更有趣、更安全！
               {!store.user.login && (
                 <Box sx={{ textAlign: "center", mt: 2 }}>
                   <Button
@@ -64,21 +74,11 @@ function Portal() {
         <SwiperSlide className={style.banner}>
           <img src={banner2} width="100%"></img>
           <div className={style.bannerText}>
-            <h4 className={style.title}>用户心声</h4>
+            <h4 className={style.title}>
+              在遊戲中戀愛，用區塊鏈支付保護你的心！
+            </h4>
             <Box>
-              “在这里，我找到了生命中的另一半，我们拥有很多共同兴趣，相处得非常愉快。感谢这个平台让我遇见了他。”
-              - 小美
-              <br />
-              “这个网站让我认识了很多新朋友，我们经常一起出去玩，生活变得更加丰富多彩。”
-              - 阿明
-              <Box sx={{ textAlign: "center" }}>
-                <Button
-                  variant="outlined"
-                  sx={{ p: 0.5, m: 1, fontSize: "12px" }}
-                >
-                  更多
-                </Button>
-              </Box>
+              不只是聊聊而已，來場與眾不同的愛情冒險吧！我們的交友軟體讓你在遊戲中認識真愛，用區塊鏈支付保護你的每一份心意。
             </Box>
           </div>
         </SwiperSlide>

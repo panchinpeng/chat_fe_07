@@ -5,6 +5,7 @@ import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SendIcon from "@mui/icons-material/Send";
 import DeleteIcon from "@mui/icons-material/Delete";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
+import FormatColorTextIcon from "@mui/icons-material/FormatColorText";
 import { useNavigate } from "react-router-dom";
 import interact from "interactjs";
 import ColorPick from "./../../component/colorPick/colorPick";
@@ -15,18 +16,17 @@ var angleScale = {
 
 export default function Post() {
   const navigate = useNavigate();
-  const intervalID = useRef();
+  const touchId = useRef();
   const textarea = useRef();
   const imgIuput = useRef();
   const resetTimeout = useRef();
   const [loopTouch, setLoopTouch] = useState(false);
+  const [openDial, setOpenDial] = useState(false);
   const [message, setMessage] = useState({
     message: "",
     bgImage: "",
     textColor: "#fff",
   });
-
-  useCallback(() => {}, []);
 
   useEffect(() => {
     window.dragMoveListener = (event) => {
@@ -36,7 +36,11 @@ export default function Post() {
       var y = (parseFloat(target.getAttribute("data-y")) || 0) + event.dy;
 
       // translate the element
-      target.style.transform = "translate(" + x + "px, " + y + "px)";
+      console.log(
+        "translate(calc(-50% + " + x + "px), calc(-50% + " + y + "px))"
+      );
+      target.style.transform =
+        "translate(calc(-50% + " + x + "px), calc(-50% + " + y + "px))";
 
       // update the posiion attributes
       target.setAttribute("data-x", x);
@@ -86,9 +90,11 @@ export default function Post() {
   };
 
   const textareaContextMenuEvent = (e) => {
-    setLoopTouch(true);
     e.preventDefault();
     e.stopPropagation();
+    if (!window.supportTouch) {
+      setLoopTouch(true);
+    }
   };
   const textareaInputEvent = (e) => {
     setMessage((message) => ({
@@ -99,6 +105,17 @@ export default function Post() {
     e.target.style.height = `${e.target.scrollHeight}px`;
     e.target.style.width = `${e.target.scrollWidth}px`;
   };
+
+  const textareaTouchStartEvent = (e) => {
+    e.preventDefault();
+    touchId.current = setTimeout(() => {
+      setLoopTouch(true);
+    }, 3000);
+  };
+  const textareaTouchEndEvent = (e) => {
+    clearTimeout(touchId.current);
+  };
+
   return (
     <>
       <div className={style.bg}>
@@ -117,7 +134,9 @@ export default function Post() {
             style={{
               color: `${message.textColor}`,
             }}
-            onContextMenu={(e) => textareaContextMenuEvent(e)}
+            onContextMenu={textareaContextMenuEvent}
+            onTouchStart={textareaTouchStartEvent}
+            onTouchEnd={textareaTouchEndEvent}
             onInput={textareaInputEvent}
           ></textarea>
         </div>
@@ -141,17 +160,24 @@ export default function Post() {
         accept="image/*"
       ></input>
       <SpeedDial
-        ariaLabel="SpeedDial basic example"
+        ariaLabel="more"
         sx={{ position: "fixed", bottom: 16, right: 16 }}
+        onClose={() => setOpenDial(false)}
+        onOpen={() => setOpenDial(true)}
+        open={openDial}
         icon={<SpeedDialIcon />}
       >
         {[
-          { title: "delete", icon: <DeleteIcon></DeleteIcon> },
+          { title: "刪除", icon: <DeleteIcon></DeleteIcon> },
           {
-            title: "send",
+            title: "傳送",
             icon: <SendIcon></SendIcon>,
           },
-          { title: "picture", icon: <InsertPhotoIcon></InsertPhotoIcon> },
+          { title: "選擇圖片", icon: <InsertPhotoIcon></InsertPhotoIcon> },
+          {
+            title: "字形顏色",
+            icon: <FormatColorTextIcon></FormatColorTextIcon>,
+          },
         ].map((action) => (
           <SpeedDialAction
             key={action.title}
@@ -159,15 +185,19 @@ export default function Post() {
             icon={action.icon}
             onClick={() => {
               switch (action.title) {
-                case "delete":
+                case "刪除":
                   navigate(-1);
                   break;
-                case "picture":
+                case "選擇圖片":
                   imgIuput.current.click();
                   break;
-                case "send":
+                case "傳送":
+                  break;
+                case "字形顏色":
+                  setLoopTouch(true);
                   break;
               }
+              setOpenDial(false);
             }}
           />
         ))}

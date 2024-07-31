@@ -6,11 +6,12 @@
   margin: 10px 0;
 }
 .color {
+  border: 2px solid #fff;
   border-radius: 50%;
-  height: 50px;
+  height: 40px;
   margin-right: 10px;
   animation: colorJump 0.3s linear forwards;
-  flex: 0 0 50px;
+  flex: 0 0 40px;
 }
 
 @keyframes colorJump {
