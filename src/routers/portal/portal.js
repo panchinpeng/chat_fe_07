@@ -14,6 +14,8 @@ import banner3 from "./../../public/chat3.png";
 import { useNavigate } from "react-router-dom";
 
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
+import SwiperCore from "swiper/core";
 
 import style from "./portal.module.css";
 import "swiper/css";
@@ -25,6 +27,8 @@ import CoinRank from "../../component/coinRank/coinRank";
 
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../store";
+
+SwiperCore.use([Autoplay]);
 function Portal() {
   const navigate = useNavigate();
   const store = useStore();
@@ -34,6 +38,11 @@ function Portal() {
         avigation={true}
         modules={[Navigation]}
         className={`mySwiper ${style.mySwiper}`}
+        loop={true}
+        autoplay={{
+          delay: 5000,
+          disableOnInteraction: false,
+        }}
       >
         <SwiperSlide className={style.banner}>
           <img src={banner3} width="100%"></img>
