@@ -10,18 +10,19 @@
       content="blockchain chat & online chat & social"
     />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo.png" />
-    <script>
-      document.addEventListener("toh")
-      document.body.addEventListener("touch", function() {
-        window.supportTouch = true;
-      })
-    </script>
+
 
     <title>Parry Chat</title>
-    
+
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <script>
+      document.body.addEventListener("touch", function() {
+        window.supportTouch = true;
+      })
+
+  </script>
   </body>
 </html>

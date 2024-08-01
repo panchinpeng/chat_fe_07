@@ -1,11 +1,24 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import style from "./post.module.css";
-import { SpeedDial, SpeedDialAction } from "@mui/material";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  SpeedDial,
+  SpeedDialAction,
+  Button,
+  Chip,
+} from "@mui/material";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SendIcon from "@mui/icons-material/Send";
 import DeleteIcon from "@mui/icons-material/Delete";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import FormatColorTextIcon from "@mui/icons-material/FormatColorText";
+import SecurityIcon from "@mui/icons-material/Security";
+import LockOpenIcon from "@mui/icons-material/LockOpen";
+import ShieldIcon from "@mui/icons-material/Shield";
 import { useNavigate } from "react-router-dom";
 import interact from "interactjs";
 import ColorPick from "./../../component/colorPick/colorPick";
@@ -22,10 +35,12 @@ export default function Post() {
   const resetTimeout = useRef();
   const [loopTouch, setLoopTouch] = useState(false);
   const [openDial, setOpenDial] = useState(false);
+  const [openLeaveAlert, setOpenLeaveAlert] = useState(false);
   const [message, setMessage] = useState({
     message: "",
     bgImage: "",
     textColor: "#fff",
+    security: false,
   });
 
   useEffect(() => {
@@ -118,7 +133,7 @@ export default function Post() {
 
   return (
     <>
-      <div className={style.bg}>
+      <div className={style.bg} onClick={() => setLoopTouch(false)}>
         {message.bgImage && (
           <div
             className={style.bgImage}
@@ -178,15 +193,24 @@ export default function Post() {
             title: "字形顏色",
             icon: <FormatColorTextIcon></FormatColorTextIcon>,
           },
+          {
+            title: "私密",
+            icon: message.security ? (
+              <LockOpenIcon></LockOpenIcon>
+            ) : (
+              <SecurityIcon></SecurityIcon>
+            ),
+          },
         ].map((action) => (
           <SpeedDialAction
             key={action.title}
             tooltipTitle={action.title}
             icon={action.icon}
             onClick={() => {
+              setOpenDial(false);
               switch (action.title) {
                 case "刪除":
-                  navigate(-1);
+                  setOpenLeaveAlert(true);
                   break;
                 case "選擇圖片":
                   imgIuput.current.click();
@@ -196,12 +220,37 @@ export default function Post() {
                 case "字形顏色":
                   setLoopTouch(true);
                   break;
+                case "私密":
+                  setMessage((message) => ({
+                    ...message,
+                    security: !message.security,
+                  }));
+                  break;
               }
-              setOpenDial(false);
             }}
           />
         ))}
       </SpeedDial>
+
+      <Dialog open={openLeaveAlert} onClose={() => setOpenLeaveAlert(false)}>
+        <DialogTitle>確定要離開?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            我們無法自動儲存您的編輯內容。建議在繼續之前先複製您的文案，以防止意外的資料丟失。
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => navigate(-1)}>確定離開</Button>
+          <Button onClick={() => setOpenLeaveAlert(false)} autoFocus>
+            取消
+          </Button>
+        </DialogActions>
+      </Dialog>
+      {message.security && (
+        <div className={style.security}>
+          <Chip color="primary" icon={<ShieldIcon />} label="私密" />
+        </div>
+      )}
     </>
   );
 }

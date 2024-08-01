@@ -54,8 +54,23 @@
   height: 60px;
   background: url(./../../public/third.png) center / cover no-repeat;
 }
-.rankWrap {
-  /* padding-bottom: 20px; */
+.otherRank {
+  margin: 10px;
+  padding: 5px 0;
+  background: #fff9;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+}
+.picSelf {
+  width: 80px;
+  height: 80px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url(https://picsum.photos/id/237/200/300);
+  border-radius: 50%;
+  border: 2px solid #fff;
 }
 
 @media screen and (max-width: 800px) {

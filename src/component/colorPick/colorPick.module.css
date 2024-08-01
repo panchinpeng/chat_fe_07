@@ -1,8 +1,7 @@
 .wrap {
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow: auto;
   display: flex;
-  justify-content: center;
+  justify-content: left;
   margin: 10px 0;
 }
 .color {
@@ -12,6 +11,12 @@
   margin-right: 10px;
   animation: colorJump 0.3s linear forwards;
   flex: 0 0 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.pickColorSelf {
+  display: none;
 }
 
 @keyframes colorJump {

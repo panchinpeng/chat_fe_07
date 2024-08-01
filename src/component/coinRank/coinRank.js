@@ -25,6 +25,16 @@ export default function CoinRank() {
       </div>
 
       <div className={style.stage}></div>
+      <div className={style.otherRank}>
+        <div className={style.picSelf}></div>
+        <div className={style.picSelf}></div>
+        <div className={style.picSelf}></div>
+        <div className={style.picSelf}></div>
+        <div className={style.picSelf}></div>
+        <div className={style.picSelf}></div>
+        <div className={style.picSelf}></div>
+        <div className={style.picSelf}></div>
+      </div>
     </Box>
   );
 }

@@ -3,18 +3,18 @@ import Login from "./routers/login/login";
 import Online from "./routers/online/online";
 import Portal from "./routers/portal/portal";
 import PrivateRoutes from "./routers/privateRoute";
-import Member from "./routers/member/member";
 import Signup from "./routers/signup/signup";
 import Info from "./routers/info/info";
 import Post from "./routers/post/post";
+import Chatroom from "./routers/chatroom/chatroom";
 const router = createBrowserRouter([
   {
     path: "/member",
     element: <PrivateRoutes forceToLogin={true}></PrivateRoutes>,
     children: [
       {
-        path: "",
-        element: <Member />,
+        path: "chatroom",
+        element: <Chatroom></Chatroom>,
       },
       {
         path: "online",

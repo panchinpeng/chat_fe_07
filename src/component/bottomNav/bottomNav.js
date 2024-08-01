@@ -30,6 +30,7 @@ function BottomNav() {
               label="訊息"
               icon={<MessageIcon />}
               sx={{ flex: "1 1 0" }}
+              onClick={() => navigate("/member/chatroom")}
             />
           </BottomNavigation>
         </Paper>

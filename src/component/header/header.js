@@ -15,7 +15,7 @@ function Header() {
   const store = useStore();
 
   return (
-    <AppBar position="static">
+    <AppBar position="relative" sx={{ zIndex: 3 }}>
       <Toolbar>
         <div>
           <Link to="/">

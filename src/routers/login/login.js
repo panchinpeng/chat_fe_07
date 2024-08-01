@@ -41,7 +41,7 @@ function Login() {
     if (data.status) {
       store.user.setLogin(true);
       store.user.setInfo(data.data);
-      navigate("/member");
+      navigate("/");
     } else {
       setLoginFail(true);
     }
