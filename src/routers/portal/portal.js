@@ -214,6 +214,7 @@ function Portal() {
           marginY: 5,
           position: "relative",
           overflow: "hidden",
+          flex: "0 0 100%",
         }}
       >
         <Grid

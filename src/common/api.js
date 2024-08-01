@@ -89,4 +89,27 @@ export default {
       return Promise.reject(e);
     }
   },
+  async addPost(message, privateString, color, image, pos) {
+    const fd = new FormData();
+    try {
+      JSON.parse(pos);
+      color = /^#[0-9a-f]+$/is.test(color) ? color : "#fff";
+      privateString = privateString * 1 === 1 ? 1 : 0;
+      message = message ? message : "";
+      fd.append("image", image);
+      fd.append("message", message);
+      fd.append("private", privateString);
+      fd.append("color", color);
+      fd.append("pos", pos);
+
+      const res = await fetch("/api/trends/add", {
+        method: "POST",
+        headers: {},
+        body: fd,
+      });
+      return res;
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  },
 };

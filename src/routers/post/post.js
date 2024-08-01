@@ -22,6 +22,7 @@ import ShieldIcon from "@mui/icons-material/Shield";
 import { useNavigate } from "react-router-dom";
 import interact from "interactjs";
 import ColorPick from "./../../component/colorPick/colorPick";
+import api from "../../common/api";
 var angleScale = {
   angle: 0,
   scale: 1,
@@ -31,6 +32,7 @@ export default function Post() {
   const navigate = useNavigate();
   const touchId = useRef();
   const textarea = useRef();
+  const textWrap = useRef();
   const imgIuput = useRef();
   const resetTimeout = useRef();
   const [loopTouch, setLoopTouch] = useState(false);
@@ -131,6 +133,24 @@ export default function Post() {
     clearTimeout(touchId.current);
   };
 
+  const addPost = async () => {
+    const res = await api.addPost(
+      message.message,
+      message.security ? 1 : 0,
+      message.textColor,
+      message.bgImage ? imgIuput.current.files[0] : "",
+      JSON.stringify({
+        x: textWrap.current.dataset.x,
+        y: textWrap.current.dataset.y,
+        r: angleScale.angle,
+        s: angleScale.scale,
+      })
+    );
+    if (res.status) {
+      navigate(-1);
+    }
+  };
+
   return (
     <>
       <div className={style.bg} onClick={() => setLoopTouch(false)}>
@@ -140,7 +160,7 @@ export default function Post() {
             style={{ backgroundImage: `url(${message.bgImage})` }}
           ></div>
         )}
-        <div className={`${style.textareaWrap} textareaWrap`}>
+        <div className={`${style.textareaWrap} textareaWrap`} ref={textWrap}>
           <textarea
             placeholder="今天心情是..."
             value={message.message}
@@ -216,6 +236,7 @@ export default function Post() {
                   imgIuput.current.click();
                   break;
                 case "傳送":
+                  addPost();
                   break;
                 case "字形顏色":
                   setLoopTouch(true);
