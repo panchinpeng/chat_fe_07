@@ -61,6 +61,14 @@ export default {
       return Promise.reject(e);
     }
   },
+  async getAccountData() {
+    try {
+      const res = await fetch("/api/user/account");
+      return res;
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  },
   async getUserInfo() {
     try {
       const res = await fetch("/api/user/info");

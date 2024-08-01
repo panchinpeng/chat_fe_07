@@ -22,6 +22,7 @@ function CuAvatar({ from }) {
       warnRef.current.setMessage("file type must images");
       return;
     }
+
     const fd = new FormData();
     fd.append("images", file);
     fd.append("type", "image");
@@ -30,29 +31,39 @@ function CuAvatar({ from }) {
       setAvatar(`/api/user/avatar?v=${Date.now()}`);
     }
   };
+
+  const computedAvatarClassName = () => {
+    const styleObj =
+      from !== "my"
+        ? from === "Index"
+          ? { width: 40, height: 40 }
+          : { width: 80, height: 80 }
+        : { width: 160, height: 160 };
+    return styleObj;
+  };
   return (
     <>
       <Alert ref={warnRef} severity="error"></Alert>
       <Badge
         overlap="circular"
+        className={
+          store.user.account.trends > 0
+            ? `${style.avatarTreads} ${from === "my" ? style.big : ""}`
+            : ""
+        }
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         badgeContent={
-          <label for="uploadAvatar">
+          <label for="uploadAvatarmy">
             <AddPhotoAlternateIcon
-              sx={{ color: grey[900], fontSize: from !== "my" ? 0 : 40 }}
+              sx={{
+                color: grey[900],
+                fontSize: from !== "my" ? 0 : 40,
+              }}
             ></AddPhotoAlternateIcon>
           </label>
         }
       >
-        <Avatar
-          sx={
-            from !== "my"
-              ? from === "Index"
-                ? { width: 40, height: 40 }
-                : { width: 80, height: 80 }
-              : { width: 160, height: 160 }
-          }
-        >
+        <Avatar sx={computedAvatarClassName()}>
           {avatar === "" ? (
             store.user.info.username.substr(0, 1).toUpperCase()
           ) : (
@@ -67,7 +78,7 @@ function CuAvatar({ from }) {
         </Avatar>
         <input
           type="file"
-          id="uploadAvatar"
+          id={`uploadAvatar${from}`}
           className={style.hide}
           onChange={handleAvatar}
           accept="image/*"

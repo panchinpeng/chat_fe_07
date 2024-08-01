@@ -23,15 +23,9 @@ function Header() {
           </Link>
         </div>
         <div className={style.functions}>
-          {store.user.login && store.user.info.username ? (
-            <div onClick={() => setRightOpen(true)}>
-              <CuAvatar from="Index"></CuAvatar>
-            </div>
-          ) : (
-            <div onClick={() => setRightOpen(true)}>
-              <MenuIcon></MenuIcon>
-            </div>
-          )}
+          <div onClick={() => setRightOpen(true)}>
+            <MenuIcon></MenuIcon>
+          </div>
         </div>
 
         <MenuRight open={rightOpen} setOpen={setRightOpen}></MenuRight>

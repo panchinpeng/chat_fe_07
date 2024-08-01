@@ -10,25 +10,40 @@ function PrivateRoutes({ forceToLogin }) {
   const navigate = useNavigate();
   const intervalID = useRef();
   const store = useStore();
-  const checkLogin = useCallback(async () => {
+  const checkLogin = useCallback(async (callback) => {
     const res = await api.getVerify();
     if (res.status) {
       store.user.setLogin(true);
       store.user.setInfo(res.data);
+      callback instanceof Function && callback();
     } else {
       store.user.setLogin(false);
       forceToLogin && navigate("/login");
     }
   }, []);
+
   useEffect(() => {
-    checkLogin();
-    intervalID.current = setInterval(() => {
-      checkLogin();
-    }, 60000);
+    checkLogin(() => {
+      intervalID.current = setInterval(() => {
+        checkLogin();
+      }, 60000);
+    });
+
     return () => {
       clearInterval(intervalID.current);
     };
   }, [location]);
+
+  useEffect(() => {
+    (async () => {
+      if (store.user.login) {
+        const res = await api.getAccountData();
+        if (res.status && res.data) {
+          store.user.setAccount(res.data);
+        }
+      }
+    })();
+  }, [store.user.login]);
 
   return <Index />;
 }

@@ -1,3 +1,22 @@
 .hide {
   display: none;
 }
+
+.avatarTreads {
+  background-image: linear-gradient(to right, #be00ff, #fc03ac);
+  background-clip: border-box;
+  border-radius: 50%;
+  padding: 2px;
+  animation: bglinearGradient 2s linear alternate infinite;
+}
+.avatarTreads.big {
+  padding: 4px;
+}
+@keyframes bglinearGradient {
+  0% {
+    background-image: linear-gradient(to right, #be00ff, #fc03ac);
+  }
+  100% {
+    background-image: linear-gradient(to bottom, #be00ff, #fc03ac);
+  }
+}

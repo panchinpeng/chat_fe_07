@@ -2,8 +2,9 @@ import { makeAutoObservable } from "mobx";
 import { observer } from "mobx-react-lite";
 
 class User {
-  login = false;
+  login = undefined;
   info = null;
+  account = {};
   constructor() {
     makeAutoObservable(this);
   }
@@ -12,6 +13,9 @@ class User {
   }
   setInfo(info) {
     this.info = info;
+  }
+  setAccount(account) {
+    this.account = account;
   }
 }
 
