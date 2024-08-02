@@ -50,10 +50,24 @@ export default {
       return Promise.reject(e);
     }
   },
-  async setUserInfo(job, work_time, salary, self_introd, interests) {
+  async setUserInfo(
+    job,
+    work_time,
+    salary,
+    self_introd,
+    interests,
+    publicData
+  ) {
     try {
       const res = await fetch("/api/user/info", {
-        body: { job, work_time, salary, self_introd, interests },
+        body: {
+          job,
+          work_time,
+          salary,
+          self_introd,
+          interests,
+          public: publicData,
+        },
         method: "POST",
       });
       return res;

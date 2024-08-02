@@ -55,7 +55,7 @@ function Portal() {
         </SwiperSlide>
         <SwiperSlide className={style.banner}>
           <img src={banner1} width="100%"></img>
-          <div class={style.bannerText}>
+          <div className={style.bannerText}>
             <h4 className={style.title}>開啟你的數位戀愛之旅！</h4>
             <Box>
               尋找有趣的靈魂伴侶？在這裡，聊天只是開始。金幣遊戲和區塊鏈支付讓你的戀愛旅程更有趣、更安全！

@@ -1,4 +1,12 @@
-import { Box, FormControl, FormLabel, Paper } from "@mui/material";
+import {
+  Box,
+  FormControl,
+  FormLabel,
+  Paper,
+  RadioGroup,
+  Radio,
+  FormControlLabel,
+} from "@mui/material";
 import CuAvatar from "./../../component/avatar/avatar";
 import Alert from "../../component/alert/alert";
 import style from "./intro.module.css";
@@ -16,25 +24,59 @@ export default function Intro() {
       }}
     >
       <Paper elevation="2" sx={{ p: 2 }}>
-        <h3>Personal Introduction</h3>
+        <h3>個人介紹</h3>
         <Box sx={{ textAlign: "center" }}>
           <CuAvatar from="my"></CuAvatar>
+
           <Box sx={{ mt: 4, textAlign: "left" }}>
             <FormControl sx={{ width: "100%" }}>
-              <FormLabel id="job_time">Share Your Self-Introduction</FormLabel>
+              <FormLabel>關於自己</FormLabel>
               <textarea
                 rows={3}
                 className={style.textarea}
-                placeholder="Share a short introduction😄"
+                placeholder="更有趣的簡介，可以增加配對哦😄"
                 value={person.intro}
                 onChange={(e) => {
                   if (e.target.value.length > 100) {
-                    warnRef.current.setMessage("max 100 character!");
+                    warnRef.current.setMessage("最多100個字");
                     return;
                   }
                   setPerson((person) => ({ ...person, intro: e.target.value }));
                 }}
               ></textarea>
+            </FormControl>
+          </Box>
+          <Box sx={{ mt: 4, textAlign: "left" }}>
+            <FormControl sx={{ width: "100%" }}>
+              <FormLabel>
+                是否開放被搜尋
+                <div className={style.memo}>
+                  當開放被搜尋後，其他人將能透過搜尋功能找尋到你
+                </div>
+              </FormLabel>
+              <RadioGroup
+                aria-labelledby="開放搜尋"
+                name="開放搜尋"
+                value={person.public ? "open" : "close"}
+                onChange={(e) => {
+                  setPerson((person) => ({
+                    ...person,
+                    public: e.target.value === "open",
+                  }));
+                }}
+                sx={{ display: "inline" }}
+              >
+                <FormControlLabel
+                  value="open"
+                  control={<Radio />}
+                  label="開啟"
+                />
+                <FormControlLabel
+                  value="close"
+                  control={<Radio />}
+                  label="關閉"
+                />
+              </RadioGroup>
             </FormControl>
           </Box>
         </Box>

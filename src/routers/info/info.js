@@ -17,6 +17,7 @@ export default function Info() {
     wTime: "",
     salary: "",
     intro: "",
+    public: true,
   });
   useEffect(() => {
     (async () => {
@@ -28,6 +29,7 @@ export default function Info() {
           wTime: res.data.work_time || "",
           salary: res.data.salary || "",
           intro: res.data.self_introd || "",
+          public: res.data.public * 1 === 1,
         });
       }
     })();
@@ -38,7 +40,8 @@ export default function Info() {
       person.job === "" ||
       person.wTime === "" ||
       person.salary === "" ||
-      person.intro === ""
+      person.intro === "" ||
+      typeof person.public !== "boolean"
     ) {
       warnRef.current.setMessage(
         "Your information is incomplete. Please check and fill out all required fields."
@@ -49,7 +52,8 @@ export default function Info() {
         person.wTime,
         person.salary,
         person.intro,
-        person.interests.join(",")
+        person.interests.join(","),
+        person.public
       );
       if (res.status) {
         successRef.current.setMessage("Saved");
