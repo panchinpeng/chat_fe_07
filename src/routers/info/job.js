@@ -73,7 +73,7 @@ export default function Job() {
         borderRadius: 3,
       }}
     >
-      <Paper elevation="2" sx={{ p: 2 }}>
+      <Paper elevation="2" sx={{ p: 2, bgcolor: "#ffffff78" }}>
         <h3>What Do You Do?</h3>
         <FormControl sx={{ mb: 4, width: "100%" }}>
           <FormLabel id="job">

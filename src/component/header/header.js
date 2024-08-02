@@ -23,9 +23,10 @@ function Header() {
           </Link>
         </div>
         <div className={style.functions}>
-          <div onClick={() => setRightOpen(true)}>
-            <MenuIcon></MenuIcon>
-          </div>
+          <MenuIcon
+            sx={{ fontSize: 28 }}
+            onClick={() => setRightOpen(true)}
+          ></MenuIcon>
         </div>
 
         <MenuRight open={rightOpen} setOpen={setRightOpen}></MenuRight>

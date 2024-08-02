@@ -39,12 +39,13 @@ function Portal() {
         className={`mySwiper ${style.mySwiper}`}
         loop={true}
         autoplay={{
-          delay: 5000,
+          delay: 10000,
           disableOnInteraction: false,
         }}
       >
         <SwiperSlide className={style.banner}>
-          <img src={banner3} width="100%"></img>
+          <img src={banner3} width="100%" className={style.frontImg}></img>
+          <img src={banner3} width="100%" className={style.blurImg}></img>
           <div className={style.bannerText}>
             <h4 className={style.title}>愛情與虛擬的完美結合！</h4>
             <Box>
@@ -53,7 +54,8 @@ function Portal() {
           </div>
         </SwiperSlide>
         <SwiperSlide className={style.banner}>
-          <img src={banner1} width="100%"></img>
+          <img src={banner1} width="100%" className={style.frontImg}></img>
+          <img src={banner1} width="100%" className={style.blurImg}></img>
           <div className={style.bannerText}>
             <h4 className={style.title}>開啟你的數位戀愛之旅！</h4>
             <Box>
@@ -80,7 +82,8 @@ function Portal() {
           </div>
         </SwiperSlide>
         <SwiperSlide className={style.banner}>
-          <img src={banner2} width="100%"></img>
+          <img src={banner2} width="100%" className={style.frontImg}></img>
+          <img src={banner2} width="100%" className={style.blurImg}></img>
           <div className={style.bannerText}>
             <h4 className={style.title}>
               在遊戲中戀愛，用區塊鏈支付保護你的心！
@@ -213,7 +216,7 @@ function Portal() {
           marginY: 5,
           position: "relative",
           overflow: "hidden",
-          flex: "0 0 700px",
+          flex: "0 0 auto",
         }}
       >
         <Grid

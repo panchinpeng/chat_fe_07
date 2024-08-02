@@ -8,10 +8,12 @@ import api from "../../common/api";
 import Alert from "../alert/alert";
 import { useRef, useState } from "react";
 
-function CuAvatar({ from }) {
+function CuAvatar({ from, friendName, friendTrends }) {
   const store = useStore();
   const warnRef = useRef();
-  const [avatar, setAvatar] = useState("/api/user/avatar");
+  const [avatar, setAvatar] = useState(
+    `/api/user/avatar${friendName ? "?username=" + friendName : ""}`
+  );
   const handleAvatar = async (e) => {
     const file = e.target.files[0];
     if (file.size > 1024000) {
@@ -41,19 +43,26 @@ function CuAvatar({ from }) {
         : { width: 160, height: 160 };
     return styleObj;
   };
+  const computedavatarTreadsCLassName = () => {
+    if (friendName) {
+      return friendTrends * 1 > 0
+        ? `${style.avatarTreads} ${from === "my" ? style.big : ""}`
+        : "";
+    } else {
+      return store.user.account.trends > 0
+        ? `${style.avatarTreads} ${from === "my" ? style.big : ""}`
+        : "";
+    }
+  };
   return (
     <>
       <Alert ref={warnRef} severity="error"></Alert>
       <Badge
         overlap="circular"
-        className={
-          store.user.account.trends > 0
-            ? `${style.avatarTreads} ${from === "my" ? style.big : ""}`
-            : ""
-        }
+        className={computedavatarTreadsCLassName()}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         badgeContent={
-          <label for="uploadAvatarmy">
+          <label htmlFor="uploadAvatarmy">
             <AddPhotoAlternateIcon
               sx={{
                 color: grey[900],
@@ -65,7 +74,11 @@ function CuAvatar({ from }) {
       >
         <Avatar sx={computedAvatarClassName()}>
           {avatar === "" ? (
-            store.user.info.username.substr(0, 1).toUpperCase()
+            friendName ? (
+              friendName.substr(0, 1).toUpperCase()
+            ) : (
+              store.user.info.username.substr(0, 1).toUpperCase()
+            )
           ) : (
             <img
               alt="avatar"
@@ -76,13 +89,15 @@ function CuAvatar({ from }) {
             ></img>
           )}
         </Avatar>
-        <input
-          type="file"
-          id={`uploadAvatar${from}`}
-          className={style.hide}
-          onChange={handleAvatar}
-          accept="image/*"
-        ></input>
+        {from === "my" && (
+          <input
+            type="file"
+            id={`uploadAvatar${from}`}
+            className={style.hide}
+            onChange={handleAvatar}
+            accept="image/*"
+          ></input>
+        )}
       </Badge>
     </>
   );

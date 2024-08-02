@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import { observer } from "mobx-react-lite";
+import api from "../common/api";
 
 class User {
   login = undefined;
@@ -14,8 +14,11 @@ class User {
   setInfo(info) {
     this.info = info;
   }
-  setAccount(account) {
-    this.account = account;
+  async setAccount() {
+    const res = await api.getAccountData();
+    if (res.status && res.data) {
+      this.account = res.data;
+    }
   }
 }
 

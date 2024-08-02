@@ -1,5 +1,7 @@
 .functions {
   margin-left: auto;
+  display: flex;
+  align-items: center;
 }
 .logo {
   vertical-align: middle;

@@ -23,6 +23,9 @@ function PrivateRoutes({ forceToLogin }) {
   }, []);
 
   useEffect(() => {
+    if (location.pathname === "/logout") {
+      return;
+    }
     checkLogin(() => {
       intervalID.current = setInterval(() => {
         checkLogin();
@@ -37,10 +40,7 @@ function PrivateRoutes({ forceToLogin }) {
   useEffect(() => {
     (async () => {
       if (store.user.login) {
-        const res = await api.getAccountData();
-        if (res.status && res.data) {
-          store.user.setAccount(res.data);
-        }
+        store.user.setAccount();
       }
     })();
   }, [store.user.login]);

@@ -23,12 +23,15 @@ import { useNavigate } from "react-router-dom";
 import interact from "interactjs";
 import ColorPick from "./../../component/colorPick/colorPick";
 import api from "../../common/api";
+import { useStore } from "../../store";
+import { observer } from "mobx-react-lite";
 var angleScale = {
   angle: 0,
   scale: 1,
 };
 
-export default function Post() {
+function Post() {
+  const store = useStore();
   const navigate = useNavigate();
   const touchId = useRef();
   const textarea = useRef();
@@ -147,6 +150,7 @@ export default function Post() {
       })
     );
     if (res.status) {
+      store.user.setAccount();
       navigate(-1);
     }
   };
@@ -275,3 +279,4 @@ export default function Post() {
     </>
   );
 }
+export default observer(Post);

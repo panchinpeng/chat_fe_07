@@ -7,11 +7,13 @@ function Logout() {
   const navigate = useNavigate();
   const store = useStore();
   useEffect(() => {
-    const res = api.logout();
-    if (res.status) {
-      store.user.setLogin(false);
-    }
-    navigate("/");
+    (async () => {
+      const res = await api.logout();
+      if (res.status) {
+        store.user.setLogin(false);
+      }
+      navigate("/");
+    })();
   }, []);
   return <div></div>;
 }

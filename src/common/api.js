@@ -138,6 +138,7 @@ export default {
         method: "POST",
         body: { keyword },
       });
+      return res;
     } catch (e) {
       throw Promise.reject(e);
     }

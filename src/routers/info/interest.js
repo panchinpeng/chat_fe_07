@@ -116,7 +116,7 @@ export default function Interest() {
         borderRadius: 3,
       }}
     >
-      <Paper elevation="2" sx={{ p: 2 }}>
+      <Paper elevation="2" sx={{ p: 2, bgcolor: "#ffffff78" }}>
         <h3>Interest</h3>
         <FormControl>
           <FormLabel>

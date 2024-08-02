@@ -7,15 +7,12 @@
   align-items: center;
   position: relative;
 }
-.content::before {
-  content: "";
+
+.bgAnimate {
   position: fixed;
-  z-index: -1;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  /* background: url(./../../../public/index_bg.png) top center / cover no-repeat */
-  /* fixed; */
-  opacity: 0.3;
+  z-index: -1;
 }
