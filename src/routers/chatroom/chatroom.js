@@ -14,7 +14,7 @@ export default function Chatroom() {
   const navigator = useNavigate();
   return (
     <Box className={style.content}>
-      {/* <Box
+      <Box
         sx={{
           display: "flex",
           alignItems: "center",
@@ -23,8 +23,8 @@ export default function Chatroom() {
         }}
       >
         哭哭，沒有好朋友
-      </Box> */}
-      <List sx={{ width: "100%", bgcolor: "background.paper" }}>
+      </Box>
+      {/* <List sx={{ width: "100vw", bgcolor: "background.paper" }}>
         <ListItem
           alignItems="flex-start"
           onClick={() => navigator("/member/online")}
@@ -51,7 +51,7 @@ export default function Chatroom() {
             }
           ></ListItemText>
         </ListItem>
-        <Divider variant="inset" component="li" />
+        <Divider />
         <ListItem alignItems="flex-start">
           <ListItemAvatar>
             <Avatar
@@ -75,7 +75,7 @@ export default function Chatroom() {
             }
           ></ListItemText>
         </ListItem>
-        <Divider variant="inset" component="li" />
+        <Divider />
         <ListItem alignItems="flex-start">
           <ListItemAvatar>
             <Avatar
@@ -99,7 +99,7 @@ export default function Chatroom() {
             }
           ></ListItemText>
         </ListItem>
-        <Divider variant="inset" component="li" />
+        <Divider />
         <ListItem alignItems="flex-start">
           <ListItemAvatar>
             <Avatar
@@ -123,7 +123,7 @@ export default function Chatroom() {
             }
           ></ListItemText>
         </ListItem>
-        <Divider variant="inset" component="li" />
+        <Divider />
         <ListItem alignItems="flex-start">
           <ListItemAvatar>
             <Avatar
@@ -147,7 +147,7 @@ export default function Chatroom() {
             }
           ></ListItemText>
         </ListItem>
-        <Divider variant="inset" component="li" />
+        <Divider />
         <ListItem alignItems="flex-start">
           <ListItemAvatar>
             <Avatar
@@ -171,7 +171,7 @@ export default function Chatroom() {
             }
           ></ListItemText>
         </ListItem>
-        <Divider variant="inset" component="li" />
+        <Divider />
         <ListItem alignItems="flex-start">
           <ListItemAvatar>
             <Avatar
@@ -195,7 +195,7 @@ export default function Chatroom() {
             }
           ></ListItemText>
         </ListItem>
-        <Divider variant="inset" component="li" />
+        <Divider />
         <ListItem alignItems="flex-start">
           <ListItemAvatar>
             <Avatar
@@ -219,7 +219,7 @@ export default function Chatroom() {
             }
           ></ListItemText>
         </ListItem>
-      </List>
+      </List> */}
     </Box>
   );
 }

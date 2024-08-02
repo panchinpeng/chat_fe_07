@@ -8,6 +8,8 @@ import Info from "./routers/info/info";
 import Post from "./routers/post/post";
 import Chatroom from "./routers/chatroom/chatroom";
 import Logout from "./routers/logout/logout";
+import AddFriend from "./routers/addFriend/addFriend";
+import Error from "./routers/error/error";
 const router = createBrowserRouter([
   {
     path: "/member",
@@ -29,6 +31,10 @@ const router = createBrowserRouter([
         path: "post",
         element: <Post />,
       },
+      {
+        path: "addFriend",
+        element: <AddFriend></AddFriend>,
+      },
     ],
   },
   {
@@ -42,6 +48,10 @@ const router = createBrowserRouter([
   {
     path: "/logout",
     element: <Logout></Logout>,
+  },
+  {
+    path: "/error",
+    element: <Error></Error>,
   },
   {
     path: "/",

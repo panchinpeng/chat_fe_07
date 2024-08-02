@@ -23,6 +23,10 @@
         window.supportTouch = true;
       })
 
+      window.addEventListener("unhandledrejection", function(e) {
+        window.location = "/error";
+      });
+
   </script>
   </body>
 </html>

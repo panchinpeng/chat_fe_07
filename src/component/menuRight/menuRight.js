@@ -38,7 +38,7 @@ const menu = [
   },
   {
     title: "好友",
-    page: "",
+    page: "/member/addFriend",
     loginRequire: true,
     icon: <PersonAddIcon></PersonAddIcon>,
   },
@@ -102,8 +102,8 @@ function MenuRight({ open, setOpen }) {
                     <ListItem disablePadding key={item.title}>
                       <ListItemButton
                         onClick={() => {
-                          setOpen(false);
                           navigate(item.page);
+                          setOpen(false);
                         }}
                       >
                         <ListItemIcon>{item.icon}</ListItemIcon>
@@ -138,8 +138,8 @@ function MenuRight({ open, setOpen }) {
                   <ListItem disablePadding key={item.title}>
                     <ListItemButton
                       onClick={() => {
-                        setOpen(false);
                         navigate(item.page);
+                        setOpen(false);
                       }}
                     >
                       <ListItemIcon>{item.icon}</ListItemIcon>

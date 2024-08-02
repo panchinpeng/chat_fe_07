@@ -6,7 +6,7 @@ export default {
       const res = await fetch("/api/user/logout");
       return res;
     } catch (e) {
-      return Promise.reject(e);
+      throw Promise.reject(e);
     }
   },
   async getRecommendFriend() {
@@ -14,7 +14,7 @@ export default {
       const res = await fetch("/api/user/recommendFriend");
       return res;
     } catch (e) {
-      return Promise.reject(e);
+      throw Promise.reject(e);
     }
   },
   async getVerify() {
@@ -22,7 +22,7 @@ export default {
       const res = await fetch("/api/user/verify");
       return res;
     } catch (e) {
-      return Promise.reject(e);
+      throw Promise.reject(e);
     }
   },
   async login(username, password) {
@@ -33,7 +33,7 @@ export default {
       });
       return res;
     } catch (e) {
-      return Promise.reject(e);
+      throw Promise.reject(e);
     }
   },
   async regester(username, password, birthday) {
@@ -44,7 +44,7 @@ export default {
       });
       return res;
     } catch (e) {
-      return Promise.reject(e);
+      throw Promise.reject(e);
     }
   },
   async setUserInfo(
@@ -69,7 +69,7 @@ export default {
       });
       return res;
     } catch (e) {
-      return Promise.reject(e);
+      throw Promise.reject(e);
     }
   },
   async getAccountData() {
@@ -77,7 +77,7 @@ export default {
       const res = await fetch("/api/user/account");
       return res;
     } catch (e) {
-      return Promise.reject(e);
+      throw Promise.reject(e);
     }
   },
   async getUserInfo() {
@@ -85,7 +85,7 @@ export default {
       const res = await fetch("/api/user/info");
       return res;
     } catch (e) {
-      return Promise.reject(e);
+      throw Promise.reject(e);
     }
   },
   async setAvatar(fd) {
@@ -97,7 +97,7 @@ export default {
       });
       return res;
     } catch (e) {
-      return Promise.reject(e);
+      throw Promise.reject(e);
     }
   },
   async getAvatar() {
@@ -105,7 +105,7 @@ export default {
       const res = await fetch("/api/user/avatar");
       return res;
     } catch (e) {
-      return Promise.reject(e);
+      throw Promise.reject(e);
     }
   },
   async addPost(message, privateString, color, image, pos) {
@@ -128,7 +128,18 @@ export default {
       });
       return res;
     } catch (e) {
-      return Promise.reject(e);
+      throw Promise.reject(e);
+    }
+  },
+  async searchFriend(keyword) {
+    keyword = keyword.trim();
+    try {
+      const res = await fetch("/api/user/searchUser", {
+        method: "POST",
+        body: { keyword },
+      });
+    } catch (e) {
+      throw Promise.reject(e);
     }
   },
 };
