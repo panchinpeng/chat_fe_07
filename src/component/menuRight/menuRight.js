@@ -14,20 +14,55 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import PaymentIcon from "@mui/icons-material/Payment";
 import LoginIcon from "@mui/icons-material/Login";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { grey } from "@mui/material/colors";
 import api from "../../common/api";
 import { useNavigate } from "react-router-dom";
-
 import { observer } from "mobx-react-lite";
 import { useStore } from "./../../store";
-
 import CuAvatar from "./../avatar/avatar";
-
 import style from "./menuRight.module.css";
+
+const menu = [
+  {
+    title: "資訊",
+    page: "/member/info",
+    loginRequire: true,
+    icon: <PersonIcon></PersonIcon>,
+  },
+  {
+    title: "支付",
+    page: "",
+    loginRequire: true,
+    icon: <PaymentIcon></PaymentIcon>,
+  },
+  {
+    title: "好友",
+    page: "",
+    loginRequire: true,
+    icon: <PersonAddIcon></PersonAddIcon>,
+  },
+  {
+    title: "登出",
+    page: "/logout",
+    loginRequire: true,
+    icon: <LogoutIcon></LogoutIcon>,
+  },
+  {
+    title: "登入",
+    page: "/login",
+    icon: <LoginIcon></LoginIcon>,
+  },
+  {
+    title: "註冊",
+    page: "/signup",
+    icon: <AppRegistrationIcon></AppRegistrationIcon>,
+  },
+];
 
 function MenuRight({ open, setOpen }) {
   const store = useStore();
-  const nevigate = useNavigate();
+  const navigate = useNavigate();
   return (
     <Drawer
       anchor="right"
@@ -47,6 +82,7 @@ function MenuRight({ open, setOpen }) {
               borderRadius: 1,
               width: 1,
             }}
+            key="avatar"
           >
             <CuAvatar></CuAvatar>
           </Box>
@@ -56,60 +92,32 @@ function MenuRight({ open, setOpen }) {
               color: grey[900],
               height: 1,
             }}
+            key="login_menu"
           >
             <List>
-              <ListItem disablePadding>
-                <ListItemButton
-                  onClick={() => {
-                    setOpen(false);
-                    nevigate("/member/info");
-                  }}
-                >
-                  <ListItemIcon>
-                    <PersonIcon />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary="Information"
-                    sx={{
-                      width: 200,
-                    }}
-                  />
-                </ListItemButton>
-              </ListItem>
-              <Divider />
-              <ListItem disablePadding>
-                <ListItemButton onClick={() => {}}>
-                  <ListItemIcon>
-                    <PaymentIcon></PaymentIcon>
-                  </ListItemIcon>
-                  <ListItemText
-                    primary="payment"
-                    sx={{
-                      width: 200,
-                    }}
-                  />
-                </ListItemButton>
-              </ListItem>
-              <Divider />
-              <ListItem disablePadding>
-                <ListItemButton
-                  onClick={() =>
-                    api.logout(nevigate, () => {
-                      store.user.setLogin(false);
-                    })
-                  }
-                >
-                  <ListItemIcon>
-                    <LogoutIcon />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary="logout"
-                    sx={{
-                      width: 200,
-                    }}
-                  />
-                </ListItemButton>
-              </ListItem>
+              {menu
+                .filter((item) => item.loginRequire)
+                .map((item) => (
+                  <>
+                    <ListItem disablePadding key={item.title}>
+                      <ListItemButton
+                        onClick={() => {
+                          setOpen(false);
+                          navigate(item.page);
+                        }}
+                      >
+                        <ListItemIcon>{item.icon}</ListItemIcon>
+                        <ListItemText
+                          primary={item.title}
+                          sx={{
+                            width: 200,
+                          }}
+                        />
+                      </ListItemButton>
+                    </ListItem>
+                    <Divider />
+                  </>
+                ))}
             </List>
           </Box>
         </>
@@ -120,46 +128,32 @@ function MenuRight({ open, setOpen }) {
             color: grey[900],
             height: 1,
           }}
+          key="un_login_menu"
         >
           <List>
-            <ListItem disablePadding>
-              <ListItemButton
-                onClick={() => {
-                  setOpen(false);
-                  nevigate("/login");
-                }}
-              >
-                <ListItemIcon>
-                  <LoginIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary="LOGIN"
-                  sx={{
-                    width: 200,
-                  }}
-                />
-              </ListItemButton>
-            </ListItem>
-            <Divider />
-            <ListItem disablePadding>
-              <ListItemButton
-                onClick={() => {
-                  setOpen(false);
-                  nevigate("/signup");
-                }}
-              >
-                <ListItemIcon>
-                  <AppRegistrationIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary="SIGN UP"
-                  sx={{
-                    width: 200,
-                  }}
-                />
-              </ListItemButton>
-            </ListItem>
-            <Divider />
+            {menu
+              .filter((item) => !item.loginRequire)
+              .map((item) => (
+                <>
+                  <ListItem disablePadding key={item.title}>
+                    <ListItemButton
+                      onClick={() => {
+                        setOpen(false);
+                        navigate(item.page);
+                      }}
+                    >
+                      <ListItemIcon>{item.icon}</ListItemIcon>
+                      <ListItemText
+                        primary={item.title}
+                        sx={{
+                          width: 200,
+                        }}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                  <Divider />
+                </>
+              ))}
           </List>
         </Box>
       )}

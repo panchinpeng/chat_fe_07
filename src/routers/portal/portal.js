@@ -35,7 +35,6 @@ function Portal() {
   return (
     <>
       <Swiper
-        avigation={true}
         modules={[Navigation]}
         className={`mySwiper ${style.mySwiper}`}
         loop={true}
@@ -185,7 +184,7 @@ function Portal() {
             </Paper>
           </Grid>
           <Grid item xs={11} md={12} sx={{ textAlign: "right" }}>
-            <Link href="#">更多</Link>
+            <Link to="#">更多</Link>
           </Grid>
         </Grid>
       </Box>

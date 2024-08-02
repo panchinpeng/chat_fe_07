@@ -1,3 +1,4 @@
+import { useState, useRef, useEffect } from "react";
 import {
   Box,
   TextField,
@@ -11,11 +12,16 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import style from "./signup.module.css";
-import { useState } from "react";
 import Footer from "../../component/footer/footer";
+import * as THREE from "three";
+
 import { NavLink, useNavigate } from "react-router-dom";
 import api from "../../common/api";
+
+import WAVES from "vanta/dist/vanta.waves.min";
+
 export default function Signup() {
+  const myRef = useRef(null);
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -24,6 +30,24 @@ export default function Signup() {
   const [warn, setWarn] = useState("");
   const [regesterFail, setRegesterFail] = useState(false);
   const [regesterSuccess, setRegesterSuccess] = useState(false);
+
+  useEffect(() => {
+    const vantaEffect = WAVES({
+      el: myRef.current,
+      mouseControls: false,
+      touchControls: false,
+      THREE: THREE,
+      gyroControls: false,
+      scale: 1.0,
+      scaleMobile: 1.0,
+      color: "#1685c8",
+    });
+
+    return () => {
+      if (vantaEffect) vantaEffect.destroy();
+    };
+  }, []);
+
   const submit = async () => {
     if (!username) {
       setWarn("Please enter your username.");
@@ -54,7 +78,7 @@ export default function Signup() {
   };
   return (
     <>
-      <div className={style.bgImgage}></div>
+      <div className={style.bgImgage} ref={myRef}></div>
       <Box className={style.bg}>
         <div className={style.logo}></div>
         <h4>Welcome to our chat! </h4>

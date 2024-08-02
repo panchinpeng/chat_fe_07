@@ -7,6 +7,7 @@ import Signup from "./routers/signup/signup";
 import Info from "./routers/info/info";
 import Post from "./routers/post/post";
 import Chatroom from "./routers/chatroom/chatroom";
+import Logout from "./routers/logout/logout";
 const router = createBrowserRouter([
   {
     path: "/member",
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
   {
     path: "/signup",
     element: <Signup />,
+  },
+  {
+    path: "/logout",
+    element: <Logout></Logout>,
   },
   {
     path: "/",

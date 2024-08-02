@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import style from "./login.module.css";
 import {
   TextField,
@@ -12,11 +12,16 @@ import {
 import api from "../../common/api";
 import { NavLink, useNavigate } from "react-router-dom";
 import Footer from "../../component/footer/footer";
+import * as THREE from "three";
 
 // store
 import { observer } from "mobx-react-lite";
 import { useStore } from "./../../store";
+
+import WAVES from "vanta/dist/vanta.waves.min";
+
 function Login() {
+  const myRef = useRef(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [betaCheck, setBetaCheck] = useState(false);
@@ -24,6 +29,24 @@ function Login() {
   const [loginFail, setLoginFail] = useState(false);
   const navigate = useNavigate();
   const store = useStore();
+
+  useEffect(() => {
+    const vantaEffect = WAVES({
+      el: myRef.current,
+      mouseControls: false,
+      touchControls: false,
+      THREE: THREE,
+      gyroControls: false,
+      scale: 1.0,
+      scaleMobile: 1.0,
+      color: "#1685c8",
+    });
+
+    return () => {
+      if (vantaEffect) vantaEffect.destroy();
+    };
+  }, []);
+
   const submit = async () => {
     if (!username) {
       setWarn("Please enter your username.");
@@ -49,7 +72,7 @@ function Login() {
 
   return (
     <>
-      <div className={style.bgImgage}></div>
+      <div className={style.bgImgage} ref={myRef}></div>
       <Box className={style.bg}>
         <div className={style.logo}></div>
         <h4>Welcome Back!</h4>

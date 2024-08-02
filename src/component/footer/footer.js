@@ -3,7 +3,6 @@ import BottomNav from "./../bottomNav/bottomNav";
 import { useLocation } from "react-router-dom";
 function Footer() {
   const location = useLocation();
-  console.log(location.pathname);
   return (
     <>
       {location.pathname === "/" && (

@@ -4,10 +4,7 @@ export default {
   async logout(nevigate, cb) {
     try {
       const res = await fetch("/api/user/logout");
-      if (res.status) {
-        cb instanceof Function && cb();
-        nevigate("/");
-      }
+      return res;
     } catch (e) {
       return Promise.reject(e);
     }
