@@ -143,4 +143,15 @@ export default {
       throw Promise.reject(e);
     }
   },
+  async AddFriend(friendUsername) {
+    try {
+      const res = await fetch("/api/user/addFriend", {
+        method: "POST",
+        body: { friendUsername },
+      });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
 };

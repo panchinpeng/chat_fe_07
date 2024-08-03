@@ -6,7 +6,12 @@ import {
   DialogActions,
   Button,
 } from "@mui/material";
-export default function FriendInvite({ friendUsername, closeFn }) {
+import api from "../../common/api";
+export default function FriendInvite({ friendUsername, closeFn, AddFriendFn }) {
+  const sendInvite = async () => {
+    const res = await api.AddFriend(friendUsername);
+    AddFriendFn(res.status);
+  };
   return (
     <Dialog
       open={friendUsername !== ""}
@@ -22,7 +27,7 @@ export default function FriendInvite({ friendUsername, closeFn }) {
       </DialogContent>
       <DialogActions>
         <Button onClick={closeFn}>取消</Button>
-        <Button onClick={closeFn} autoFocus>
+        <Button onClick={sendInvite} autoFocus>
           確認
         </Button>
       </DialogActions>

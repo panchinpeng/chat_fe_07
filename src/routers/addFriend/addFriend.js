@@ -12,6 +12,7 @@ import {
   ListItemText,
   Divider,
   CircularProgress,
+  Alert,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import api from "../../common/api";
@@ -22,12 +23,30 @@ export default function AddFriend() {
   const [keyword, setKeyword] = useState("");
   const [friend, setFriend] = useState([]);
   const [seleceUser, setSelectUser] = useState("");
+  const [inviteUser, setInviteUser] = useState([]);
+  const [AlertComponent, setAlertComponent] = useState(null);
   const searchHandler = async () => {
     setFriend(false);
     const res = await api.searchFriend(keyword);
     if (res.status) {
       setFriend(res.data);
     }
+  };
+  const AddFriendResFn = async (status) => {
+    if (status) {
+      setInviteUser((inviteUser) => [...inviteUser, seleceUser]);
+      setSelectUser("");
+    }
+    setAlertComponent(
+      status ? (
+        <Alert severity="success">已送出邀請</Alert>
+      ) : (
+        <Alert severity="error">出現錯誤，請重新在試</Alert>
+      )
+    );
+    setTimeout(() => {
+      setAlertComponent(null);
+    }, 4000);
   };
   return (
     <>
@@ -65,7 +84,7 @@ export default function AddFriend() {
         </Typography>
         {friend.length > 0 && friend.map ? (
           <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-            {friend.map((friendItem) => (
+            {friend.map((friendItem, index) => (
               <Fragment key={friendItem.username}>
                 <ListItem
                   alignItems="flex-start"
@@ -86,8 +105,12 @@ export default function AddFriend() {
                         : "這個人很懶，沒有個人簡介"
                     }
                   />
+                  {(inviteUser.includes(friendItem.username) ||
+                    friendItem.applying) && (
+                    <div className={style.AddFriendWait}>等待回復</div>
+                  )}
                 </ListItem>
-                <Divider />
+                {friend.length !== index + 1 && <Divider />}
               </Fragment>
             ))}
           </List>
@@ -102,7 +125,9 @@ export default function AddFriend() {
       <FriendInvite
         friendUsername={seleceUser}
         closeFn={() => setSelectUser("")}
+        AddFriendFn={AddFriendResFn}
       ></FriendInvite>
+      {AlertComponent && AlertComponent}
     </>
   );
 }
