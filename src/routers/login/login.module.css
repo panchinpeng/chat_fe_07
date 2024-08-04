@@ -37,7 +37,7 @@
 }
 
 .bg::after {
-  content: "Log in";
+  content: "登入";
   display: block;
   position: absolute;
   width: 120px;

@@ -6,10 +6,10 @@ import {
   DialogActions,
   Button,
 } from "@mui/material";
-import api from "../../common/api";
+import api from "../../../common/api";
 export default function FriendInvite({ friendUsername, closeFn, AddFriendFn }) {
   const sendInvite = async () => {
-    const res = await api.AddFriend(friendUsername);
+    const res = await api.addFriend(friendUsername);
     AddFriendFn(res.status);
   };
   return (

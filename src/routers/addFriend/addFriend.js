@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useRef } from "react";
 import style from "./addFriend.module.css";
 import {
   Box,
@@ -12,19 +12,23 @@ import {
   ListItemText,
   Divider,
   CircularProgress,
-  Alert,
+  Button,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import api from "../../common/api";
 import Avatar from "../../component/avatar/avatar";
-import FriendInvite from "../../component/friendInvite/friendInvite";
+import FriendInvite from "../../component/dialog/friendInvite/friendInvite";
+import Alert from "./../../component/alert/alert";
+import { useStore } from "../../store";
+import { observer } from "mobx-react-lite";
 
-export default function AddFriend() {
+function AddFriend() {
   const [keyword, setKeyword] = useState("");
   const [friend, setFriend] = useState([]);
   const [seleceUser, setSelectUser] = useState("");
   const [inviteUser, setInviteUser] = useState([]);
-  const [AlertComponent, setAlertComponent] = useState(null);
+  const alertRef = useRef();
+  const store = useStore();
   const searchHandler = async () => {
     setFriend(false);
     const res = await api.searchFriend(keyword);
@@ -37,16 +41,41 @@ export default function AddFriend() {
       setInviteUser((inviteUser) => [...inviteUser, seleceUser]);
       setSelectUser("");
     }
-    setAlertComponent(
-      status ? (
-        <Alert severity="success">已送出邀請</Alert>
-      ) : (
-        <Alert severity="error">出現錯誤，請重新在試</Alert>
-      )
-    );
-    setTimeout(() => {
-      setAlertComponent(null);
-    }, 4000);
+    if (status) {
+      alertRef.current.setMessage("已送出邀請");
+      alertRef.current.setSeverity("success");
+    } else {
+      alertRef.current.setMessage("出現錯誤，請重新在試");
+      alertRef.current.setSeverity("error");
+    }
+  };
+  const handleAccept = async (username, index) => {
+    const res = await api.setFriendApply("allow", username);
+    if (res.status) {
+      alertRef.current.setMessage("已成為好友，趕快敲他聊天吧");
+      store.user.setAccount();
+      const cfriend = [...friend];
+      cfriend.splice(index, 1);
+      setFriend(cfriend);
+      store.user.setAccount();
+    } else {
+      alertRef.current.setMessage("發生錯誤，請重試");
+      alertRef.current.setSeverity("error");
+    }
+  };
+  const handleReject = async (username, index) => {
+    const res = await api.setFriendApply("reject", username);
+    if (res.status) {
+      alertRef.current.setMessage("成功拒絕好友邀請");
+      store.user.setAccount();
+      const cfriend = [...friend];
+      cfriend.splice(index, 1);
+      setFriend(cfriend);
+      store.user.setAccount();
+    } else {
+      alertRef.current.setMessage("發生錯誤，請重試");
+      alertRef.current.setSeverity("error");
+    }
   };
   return (
     <>
@@ -86,10 +115,7 @@ export default function AddFriend() {
           <List sx={{ width: "100%", bgcolor: "background.paper" }}>
             {friend.map((friendItem, index) => (
               <Fragment key={friendItem.username}>
-                <ListItem
-                  alignItems="flex-start"
-                  onClick={() => setSelectUser(friendItem.username)}
-                >
+                <ListItem alignItems="flex-start">
                   <ListItemAvatar>
                     <Avatar
                       from="Index"
@@ -100,14 +126,44 @@ export default function AddFriend() {
                   <ListItemText
                     primary={friendItem.username}
                     secondary={
-                      friendItem.self_introd
-                        ? friendItem.self_introd
-                        : "這個人很懶，沒有個人簡介"
+                      <div>
+                        {friendItem.self_introd
+                          ? friendItem.self_introd
+                          : "這個人很懶，沒有個人簡介"}
+
+                        {friendItem.receiveApplying && (
+                          <div className={style.replyAction}>
+                            <Button
+                              size="medium"
+                              variant="contained"
+                              color="success"
+                              onClick={() =>
+                                handleAccept(friendItem.username, index)
+                              }
+                            >
+                              允許
+                            </Button>
+                            <Button
+                              size="medium"
+                              variant="contained"
+                              color="error"
+                              onClick={() =>
+                                handleReject(friendItem.username, index)
+                              }
+                            >
+                              拒絕
+                            </Button>
+                          </div>
+                        )}
+                      </div>
                     }
                   />
                   {(inviteUser.includes(friendItem.username) ||
                     friendItem.applying) && (
                     <div className={style.AddFriendWait}>等待回復</div>
+                  )}
+                  {friendItem.receiveApplying && (
+                    <div className={style.AddFriendWait}>已邀請你</div>
                   )}
                 </ListItem>
                 {friend.length !== index + 1 && <Divider />}
@@ -127,7 +183,8 @@ export default function AddFriend() {
         closeFn={() => setSelectUser("")}
         AddFriendFn={AddFriendResFn}
       ></FriendInvite>
-      {AlertComponent && AlertComponent}
+      <Alert severity="success" ref={alertRef}></Alert>
     </>
   );
 }
+export default observer(AddFriend);

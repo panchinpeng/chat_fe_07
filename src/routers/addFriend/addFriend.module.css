@@ -3,9 +3,14 @@
   margin-top: 10px;
 }
 .AddFriendWait {
-  font-size: 13px;
-  padding: 5px 10px;
+  font-size: 11px;
+  padding: 2px 5px;
   background-color: #57b657;
   border-radius: 5px;
   color: #fff;
+}
+.replyAction {
+  margin-top: 5px;
+  display: flex;
+  justify-content: space-around;
 }

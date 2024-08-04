@@ -2,6 +2,8 @@
   margin-left: auto;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 80px;
 }
 .logo {
   vertical-align: middle;

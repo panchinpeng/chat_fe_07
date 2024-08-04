@@ -1,12 +1,15 @@
-import React from "react";
+import React, { Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import router from "./router";
 import { RouterProvider } from "react-router-dom";
-
+import Loading from "./component/loading/loading";
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
 root.render(
   // <React.StrictMode>
-  <RouterProvider router={router}></RouterProvider>
+  <Suspense fallback={<Loading></Loading>}>
+    <RouterProvider router={router}></RouterProvider>
+  </Suspense>
   // </React.StrictMode>
 );

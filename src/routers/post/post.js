@@ -1,16 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import style from "./post.module.css";
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  SpeedDial,
-  SpeedDialAction,
-  Button,
-  Chip,
-} from "@mui/material";
+import { SpeedDial, SpeedDialAction, Chip } from "@mui/material";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SendIcon from "@mui/icons-material/Send";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -25,6 +15,7 @@ import ColorPick from "./../../component/colorPick/colorPick";
 import api from "../../common/api";
 import { useStore } from "../../store";
 import { observer } from "mobx-react-lite";
+import PostCancel from "../../component/dialog/postCancel/postCancel";
 var angleScale = {
   angle: 0,
   scale: 1,
@@ -256,21 +247,10 @@ function Post() {
           />
         ))}
       </SpeedDial>
-
-      <Dialog open={openLeaveAlert} onClose={() => setOpenLeaveAlert(false)}>
-        <DialogTitle>確定要離開?</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            我們無法自動儲存您的編輯內容。建議在繼續之前先複製您的文案，以防止意外的資料丟失。
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => navigate(-1)}>確定離開</Button>
-          <Button onClick={() => setOpenLeaveAlert(false)} autoFocus>
-            取消
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <PostCancel
+        open={openLeaveAlert}
+        closeFn={() => setOpenLeaveAlert(false)}
+      ></PostCancel>
       {message.security && (
         <div className={style.security}>
           <Chip color="primary" icon={<ShieldIcon />} label="私密" />

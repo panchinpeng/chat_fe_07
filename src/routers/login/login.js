@@ -7,11 +7,11 @@ import {
   FormControlLabel,
   Checkbox,
   Snackbar,
-  Alert,
 } from "@mui/material";
 import api from "../../common/api";
 import { NavLink, useNavigate } from "react-router-dom";
 import Footer from "../../component/footer/footer";
+import Alert from "./../../component/alert/alert";
 import * as THREE from "three";
 
 // store
@@ -22,11 +22,10 @@ import WAVES from "vanta/dist/vanta.waves.min";
 
 function Login() {
   const myRef = useRef(null);
+  const alertRef = useRef();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [betaCheck, setBetaCheck] = useState(false);
-  const [warn, setWarn] = useState("");
-  const [loginFail, setLoginFail] = useState(false);
   const navigate = useNavigate();
   const store = useStore();
 
@@ -49,15 +48,26 @@ function Login() {
 
   const submit = async () => {
     if (!username) {
-      setWarn("Please enter your username.");
+      alertRef.current.setMessage("請輸入帳號");
       return;
     }
     if (!password) {
-      setWarn("Please enter your password.");
+      alertRef.current.setMessage("請輸入密碼");
       return;
     }
     if (!betaCheck) {
-      setWarn("Please enter your checkbox.");
+      alertRef.current.setMessage("請確認注意事項");
+      return;
+    }
+
+    if (!/^\w+$/.test(username) || username.length >= 50) {
+      alertRef.current.setMessage(
+        "帳號僅允許英文字母、數字底線，並限定在50字以下"
+      );
+      return;
+    }
+    if (password.length >= 50) {
+      alertRef.current.setMessage("密碼限定在50字以下");
       return;
     }
     const data = await api.login(username, password);
@@ -66,7 +76,7 @@ function Login() {
       store.user.setInfo(data.data);
       navigate("/");
     } else {
-      setLoginFail(true);
+      alertRef.current.setMessage("登入失敗，請確認帳密是否輸入正確");
     }
   };
 
@@ -75,27 +85,18 @@ function Login() {
       <div className={style.bgImgage} ref={myRef}></div>
       <Box className={style.bg}>
         <div className={style.logo}></div>
-        <h4>Welcome Back!</h4>
-        <div>
-          We're glad to see you again. Please log in to access your account and
-          continue enjoying our services.
-        </div>
-        <Alert
-          variant="filled"
-          severity="error"
-          sx={{ my: 1, display: loginFail ? "" : "none" }}
-        >
-          Login Failed. Please check your username and password and try again
-        </Alert>
+        <h4>歡迎回來</h4>
+        <div>很高興再次看到你，請登入帳號，繼續享受我們的服務。</div>
         <TextField
           fullWidth
           value={username}
           onChange={(event) => setUsername(event.target.value)}
           margin="dense"
           id="username"
-          label="username"
+          label="帳號"
           variant="outlined"
           required={true}
+          inputProps={{ maxLength: 50 }}
         />
         <TextField
           fullWidth
@@ -103,10 +104,11 @@ function Login() {
           onChange={(event) => setPassword(event.target.value)}
           margin="dense"
           id="password"
-          label="password"
+          label="密碼"
           variant="outlined"
           type="password"
           required={true}
+          inputProps={{ maxLength: 50 }}
         />
         <FormControlLabel
           required
@@ -115,23 +117,18 @@ function Login() {
               onChange={(event) => setBetaCheck(event.target.checked)}
             />
           }
-          label="Please be aware that this is a beta version"
+          label="目前網站為測試版本"
           sx={{ mr: "auto" }}
         />
         <NavLink to="/signup" className={style.extraAction}>
-          New to Our Website?
+          還沒有帳號?
         </NavLink>
         <Button variant="contained" onClick={submit} sx={{ mt: 4 }}>
-          Log in
+          登入
         </Button>
-        <Snackbar
-          open={!!warn}
-          autoHideDuration={4000}
-          onClose={() => setWarn("")}
-          message={warn}
-        />
       </Box>
       <Footer></Footer>
+      <Alert severity="error" ref={alertRef}></Alert>
     </>
   );
 }

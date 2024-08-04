@@ -1,0 +1,16 @@
+.header {
+  text-align: center;
+}
+.applyItem {
+  display: flex;
+}
+.applyItem .title {
+}
+.applyItem .desc {
+  font-size: 14px;
+}
+.applyInfo {
+  margin-left: 10px;
+  flex: 1 1 0;
+  word-break: break-all;
+}

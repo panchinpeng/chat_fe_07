@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Drawer,
   List,
@@ -16,8 +17,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { grey } from "@mui/material/colors";
-import api from "../../common/api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { useStore } from "./../../store";
 import CuAvatar from "./../avatar/avatar";
@@ -63,6 +63,7 @@ const menu = [
 function MenuRight({ open, setOpen }) {
   const store = useStore();
   const navigate = useNavigate();
+  const location = useLocation();
   return (
     <Drawer
       anchor="right"
@@ -73,6 +74,7 @@ function MenuRight({ open, setOpen }) {
           textAlign: "center",
         },
       }}
+      key={location.pathname}
     >
       {store.user.login ? (
         <>
@@ -82,7 +84,6 @@ function MenuRight({ open, setOpen }) {
               borderRadius: 1,
               width: 1,
             }}
-            key="avatar"
           >
             <CuAvatar></CuAvatar>
           </Box>
@@ -98,12 +99,12 @@ function MenuRight({ open, setOpen }) {
               {menu
                 .filter((item) => item.loginRequire)
                 .map((item) => (
-                  <>
+                  <React.Fragment key={item.title}>
                     <ListItem disablePadding key={item.title}>
                       <ListItemButton
                         onClick={() => {
-                          navigate(item.page);
                           setOpen(false);
+                          navigate(item.page);
                         }}
                       >
                         <ListItemIcon>{item.icon}</ListItemIcon>
@@ -116,7 +117,7 @@ function MenuRight({ open, setOpen }) {
                       </ListItemButton>
                     </ListItem>
                     <Divider />
-                  </>
+                  </React.Fragment>
                 ))}
             </List>
           </Box>
@@ -128,13 +129,12 @@ function MenuRight({ open, setOpen }) {
             color: grey[900],
             height: 1,
           }}
-          key="un_login_menu"
         >
           <List>
             {menu
               .filter((item) => !item.loginRequire)
               .map((item) => (
-                <>
+                <React.Fragment key={item.title}>
                   <ListItem disablePadding key={item.title}>
                     <ListItemButton
                       onClick={() => {
@@ -152,7 +152,7 @@ function MenuRight({ open, setOpen }) {
                     </ListItemButton>
                   </ListItem>
                   <Divider />
-                </>
+                </React.Fragment>
               ))}
           </List>
         </Box>

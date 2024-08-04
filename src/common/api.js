@@ -1,7 +1,7 @@
 import fetch from "./fetch";
 
-export default {
-  async logout(nevigate, cb) {
+const api = {
+  async logout() {
     try {
       const res = await fetch("/api/user/logout");
       return res;
@@ -143,7 +143,7 @@ export default {
       throw Promise.reject(e);
     }
   },
-  async AddFriend(friendUsername) {
+  async addFriend(friendUsername) {
     try {
       const res = await fetch("/api/user/addFriend", {
         method: "POST",
@@ -154,4 +154,24 @@ export default {
       throw Promise.reject(e);
     }
   },
+  async getFriendApply() {
+    try {
+      const res = await fetch("/api/user/friendApply");
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async setFriendApply(action, distUsername) {
+    try {
+      const res = await fetch("/api/user/friendApplyAction", {
+        method: "POST",
+        body: { action, distUsername },
+      });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
 };
+export default api;

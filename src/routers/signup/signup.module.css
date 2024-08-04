@@ -37,7 +37,7 @@
 }
 
 .bg::after {
-  content: "Signup";
+  content: "註冊";
   display: block;
   position: absolute;
   width: 120px;

@@ -1,15 +1,17 @@
+import React from "react";
 import { createBrowserRouter } from "react-router-dom";
-import Login from "./routers/login/login";
-import Online from "./routers/online/online";
-import Portal from "./routers/portal/portal";
 import PrivateRoutes from "./routers/privateRoute";
-import Signup from "./routers/signup/signup";
-import Info from "./routers/info/info";
-import Post from "./routers/post/post";
-import Chatroom from "./routers/chatroom/chatroom";
 import Logout from "./routers/logout/logout";
-import AddFriend from "./routers/addFriend/addFriend";
 import Error from "./routers/error/error";
+
+const AddFriend = React.lazy(() => import("./routers/addFriend/addFriend"));
+const Portal = React.lazy(() => import("./routers/portal/portal"));
+const Signup = React.lazy(() => import("./routers/signup/signup"));
+const Login = React.lazy(() => import("./routers/login/login"));
+const Post = React.lazy(() => import("./routers/post/post"));
+const Info = React.lazy(() => import("./routers/info/info"));
+const Online = React.lazy(() => import("./routers/online/online"));
+const Chatroom = React.lazy(() => import("./routers/chatroom/chatroom"));
 const router = createBrowserRouter([
   {
     path: "/member",
@@ -21,15 +23,15 @@ const router = createBrowserRouter([
       },
       {
         path: "online",
-        element: <Online />,
+        element: <Online></Online>,
       },
       {
         path: "info",
-        element: <Info />,
+        element: <Info></Info>,
       },
       {
         path: "post",
-        element: <Post />,
+        element: <Post></Post>,
       },
       {
         path: "addFriend",
@@ -39,11 +41,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: <Login />,
+    element: <Login></Login>,
   },
   {
     path: "/signup",
-    element: <Signup />,
+    element: <Signup></Signup>,
   },
   {
     path: "/logout",
@@ -59,7 +61,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <Portal />,
+        element: <Portal></Portal>,
       },
     ],
   },

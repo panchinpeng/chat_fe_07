@@ -44,8 +44,18 @@ function Portal() {
         }}
       >
         <SwiperSlide className={style.banner}>
-          <img src={banner3} width="100%" className={style.frontImg}></img>
-          <img src={banner3} width="100%" className={style.blurImg}></img>
+          <img
+            alt="banner3"
+            src={banner3}
+            width="100%"
+            className={style.frontImg}
+          ></img>
+          <img
+            alt="banner3"
+            src={banner3}
+            width="100%"
+            className={style.blurImg}
+          ></img>
           <div className={style.bannerText}>
             <h4 className={style.title}>愛情與虛擬的完美結合！</h4>
             <Box>
@@ -54,8 +64,18 @@ function Portal() {
           </div>
         </SwiperSlide>
         <SwiperSlide className={style.banner}>
-          <img src={banner1} width="100%" className={style.frontImg}></img>
-          <img src={banner1} width="100%" className={style.blurImg}></img>
+          <img
+            alt="banner1"
+            src={banner1}
+            width="100%"
+            className={style.frontImg}
+          ></img>
+          <img
+            alt="banner1"
+            src={banner1}
+            width="100%"
+            className={style.blurImg}
+          ></img>
           <div className={style.bannerText}>
             <h4 className={style.title}>開啟你的數位戀愛之旅！</h4>
             <Box>
@@ -82,8 +102,18 @@ function Portal() {
           </div>
         </SwiperSlide>
         <SwiperSlide className={style.banner}>
-          <img src={banner2} width="100%" className={style.frontImg}></img>
-          <img src={banner2} width="100%" className={style.blurImg}></img>
+          <img
+            alt="banner2"
+            src={banner2}
+            width="100%"
+            className={style.frontImg}
+          ></img>
+          <img
+            alt="banner2"
+            src={banner2}
+            width="100%"
+            className={style.blurImg}
+          ></img>
           <div className={style.bannerText}>
             <h4 className={style.title}>
               在遊戲中戀愛，用區塊鏈支付保護你的心！
