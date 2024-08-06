@@ -3,10 +3,16 @@ import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import style from "./online.module.css";
 import SendIcon from "@mui/icons-material/Send";
+import { useParams } from "react-router-dom";
+import api from "../../common/api";
+import Message from "../../component/message/message";
 
 export default function Online() {
+  const { friend } = useParams();
   const socket = useRef(null);
-  const [users, setUsers] = useState([]);
+  const [messages, setMessages] = useState([]);
+  // const [users, setUsers] = useState([]);
+  // console.log(friend);
   useEffect(() => {
     // if (!socket.current) {
     //   socket.current = io("ws://localhost:3002", {
@@ -34,15 +40,29 @@ export default function Online() {
     //     socket.current.emit("test");
     //   }, 5000);
     // }
+    (async () => {
+      // 取得歷史訊息
+      if (friend) {
+        const res = await api.getMessageHistory(friend);
+        if (res && res.status) {
+          console.log(res);
+          setMessages(res.data);
+        }
+      }
+    })();
   }, []);
   return (
     <Box className={style.box}>
-      <div className={style.history}>歷史訊息</div>
+      <div className={style.history}>
+        {messages.map((message) => (
+          <Message message={message} key={message.id}></Message>
+        ))}
+      </div>
       <div className={style.inputMessage}>
         <TextField
           fullWidth
           id="filled-multiline-static"
-          label="輸入訊息"
+          label="想說甚麼"
           multiline
           maxRows={8}
           variant="filled"

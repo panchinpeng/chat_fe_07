@@ -22,7 +22,7 @@ const router = createBrowserRouter([
         element: <Chatroom></Chatroom>,
       },
       {
-        path: "online",
+        path: "online/:friend",
         element: <Online></Online>,
       },
       {

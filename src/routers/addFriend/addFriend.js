@@ -77,6 +77,15 @@ function AddFriend() {
       alertRef.current.setSeverity("error");
     }
   };
+  const sendAddFriend = (friendItem) => {
+    if (friendItem.receiveApplying) {
+      return;
+    }
+    if (inviteUser.includes(friendItem.username) || friendItem.applying) {
+      return;
+    }
+    setSelectUser(friendItem.username);
+  };
   return (
     <>
       <Box sx={{ bgcolor: "primary.main", width: "100vw" }}>
@@ -115,7 +124,10 @@ function AddFriend() {
           <List sx={{ width: "100%", bgcolor: "background.paper" }}>
             {friend.map((friendItem, index) => (
               <Fragment key={friendItem.username}>
-                <ListItem alignItems="flex-start">
+                <ListItem
+                  alignItems="flex-start"
+                  onClick={() => sendAddFriend(friendItem)}
+                >
                   <ListItemAvatar>
                     <Avatar
                       from="Index"

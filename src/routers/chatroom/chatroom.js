@@ -3,223 +3,94 @@ import {
   List,
   ListItem,
   ListItemAvatar,
-  Avatar,
   ListItemText,
   Typography,
   Divider,
 } from "@mui/material";
+import Avatar from "../../component/avatar/avatar";
 import style from "./chatroom.module.css";
 import { useNavigate } from "react-router-dom";
-export default function Chatroom() {
+import { useEffect, useState } from "react";
+import api from "../../common/api";
+import { observer } from "mobx-react-lite";
+import { useStore } from "../../store";
+function Chatroom() {
+  const store = useStore();
+  const [friend, setFriend] = useState([]);
+  useEffect(() => {
+    (async () => {
+      const res = await api.getFriend();
+      if (res && res.status) {
+        setFriend(res.data);
+      }
+    })();
+  }, []);
   const navigator = useNavigate();
   return (
     <Box className={style.content}>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          height: "100%",
-          color: "#8d8888",
-        }}
-      >
-        哭哭，沒有好朋友
-      </Box>
-      {/* <List sx={{ width: "100vw", bgcolor: "background.paper" }}>
-        <ListItem
-          alignItems="flex-start"
-          onClick={() => navigator("/member/online")}
+      {friend.length > 0 ? (
+        <List sx={{ width: "100vw", bgcolor: "#ffffff82" }}>
+          {friend.map((item, index) => {
+            const friendUsername =
+              item.username === store.user.info.username
+                ? item.friend_username
+                : item.username;
+
+            return (
+              <>
+                <ListItem
+                  alignItems="flex-start"
+                  onClick={() => navigator(`/member/online/${friendUsername}`)}
+                >
+                  <ListItemAvatar>
+                    <Avatar
+                      from="index"
+                      friendTrends={0}
+                      friendName={friendUsername}
+                    />
+                  </ListItemAvatar>
+                  <ListItemText
+                    sx={{ ml: 1 }}
+                    primary={friendUsername}
+                    secondary={
+                      <>
+                        <Typography
+                          sx={{ display: "inline" }}
+                          component="span"
+                          variant="body2"
+                          color="text.primary"
+                        >
+                          {item.last_message || ""}
+                        </Typography>
+                      </>
+                    }
+                  ></ListItemText>
+
+                  {item.unread > 0 && (
+                    <div className={style.unread}>{item.unread}</div>
+                  )}
+                </ListItem>
+                {index !== friend.length - 1 && <Divider />}
+              </>
+            );
+          })}
+        </List>
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            height: "100%",
+            color: "#8d8888",
+          }}
         >
-          <ListItemAvatar>
-            <Avatar
-              alt="Remy Sharp"
-              src="https://picsum.photos/id/237/200/300"
-            />
-          </ListItemAvatar>
-          <ListItemText
-            primary="姓名"
-            secondary={
-              <>
-                <Typography
-                  sx={{ display: "inline" }}
-                  component="span"
-                  variant="body2"
-                  color="text.primary"
-                >
-                  訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容
-                </Typography>
-              </>
-            }
-          ></ListItemText>
-        </ListItem>
-        <Divider />
-        <ListItem alignItems="flex-start">
-          <ListItemAvatar>
-            <Avatar
-              alt="Remy Sharp"
-              src="https://picsum.photos/id/237/200/300"
-            />
-          </ListItemAvatar>
-          <ListItemText
-            primary="姓名"
-            secondary={
-              <>
-                <Typography
-                  sx={{ display: "inline" }}
-                  component="span"
-                  variant="body2"
-                  color="text.primary"
-                >
-                  訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容
-                </Typography>
-              </>
-            }
-          ></ListItemText>
-        </ListItem>
-        <Divider />
-        <ListItem alignItems="flex-start">
-          <ListItemAvatar>
-            <Avatar
-              alt="Remy Sharp"
-              src="https://picsum.photos/id/237/200/300"
-            />
-          </ListItemAvatar>
-          <ListItemText
-            primary="姓名"
-            secondary={
-              <>
-                <Typography
-                  sx={{ display: "inline" }}
-                  component="span"
-                  variant="body2"
-                  color="text.primary"
-                >
-                  訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容
-                </Typography>
-              </>
-            }
-          ></ListItemText>
-        </ListItem>
-        <Divider />
-        <ListItem alignItems="flex-start">
-          <ListItemAvatar>
-            <Avatar
-              alt="Remy Sharp"
-              src="https://picsum.photos/id/237/200/300"
-            />
-          </ListItemAvatar>
-          <ListItemText
-            primary="姓名"
-            secondary={
-              <>
-                <Typography
-                  sx={{ display: "inline" }}
-                  component="span"
-                  variant="body2"
-                  color="text.primary"
-                >
-                  訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容
-                </Typography>
-              </>
-            }
-          ></ListItemText>
-        </ListItem>
-        <Divider />
-        <ListItem alignItems="flex-start">
-          <ListItemAvatar>
-            <Avatar
-              alt="Remy Sharp"
-              src="https://picsum.photos/id/237/200/300"
-            />
-          </ListItemAvatar>
-          <ListItemText
-            primary="姓名"
-            secondary={
-              <>
-                <Typography
-                  sx={{ display: "inline" }}
-                  component="span"
-                  variant="body2"
-                  color="text.primary"
-                >
-                  訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容
-                </Typography>
-              </>
-            }
-          ></ListItemText>
-        </ListItem>
-        <Divider />
-        <ListItem alignItems="flex-start">
-          <ListItemAvatar>
-            <Avatar
-              alt="Remy Sharp"
-              src="https://picsum.photos/id/237/200/300"
-            />
-          </ListItemAvatar>
-          <ListItemText
-            primary="姓名"
-            secondary={
-              <>
-                <Typography
-                  sx={{ display: "inline" }}
-                  component="span"
-                  variant="body2"
-                  color="text.primary"
-                >
-                  訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容
-                </Typography>
-              </>
-            }
-          ></ListItemText>
-        </ListItem>
-        <Divider />
-        <ListItem alignItems="flex-start">
-          <ListItemAvatar>
-            <Avatar
-              alt="Remy Sharp"
-              src="https://picsum.photos/id/237/200/300"
-            />
-          </ListItemAvatar>
-          <ListItemText
-            primary="姓名"
-            secondary={
-              <>
-                <Typography
-                  sx={{ display: "inline" }}
-                  component="span"
-                  variant="body2"
-                  color="text.primary"
-                >
-                  訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容
-                </Typography>
-              </>
-            }
-          ></ListItemText>
-        </ListItem>
-        <Divider />
-        <ListItem alignItems="flex-start">
-          <ListItemAvatar>
-            <Avatar
-              alt="Remy Sharp"
-              src="https://picsum.photos/id/237/200/300"
-            />
-          </ListItemAvatar>
-          <ListItemText
-            primary="姓名"
-            secondary={
-              <>
-                <Typography
-                  sx={{ display: "inline" }}
-                  component="span"
-                  variant="body2"
-                  color="text.primary"
-                >
-                  訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容訊息內容
-                </Typography>
-              </>
-            }
-          ></ListItemText>
-        </ListItem>
-      </List> */}
+          哭哭，沒有好朋友
+        </Box>
+      )}
+
+      {/*  */}
     </Box>
   );
 }
+
+export default observer(Chatroom);

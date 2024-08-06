@@ -173,5 +173,24 @@ const api = {
       throw Promise.reject(e);
     }
   },
+  async getFriend() {
+    try {
+      const res = await fetch("/api/user/friend");
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getMessageHistory(friend) {
+    try {
+      const res = await fetch("/api/message/history", {
+        method: "POST",
+        body: { friend },
+      });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
 };
 export default api;
