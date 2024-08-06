@@ -8,7 +8,6 @@
   border-radius: 50%;
   padding: 2px;
   animation: bglinearGradient 2s linear alternate infinite;
-  height: 100%;
 }
 .avatarTreads.big {
   padding: 4px;

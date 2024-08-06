@@ -12,3 +12,8 @@
   padding: 3px;
   font-size: 14px;
 }
+.lastMessage {
+  word-break: break-all;
+  overflow: hidden;
+  max-height: 120px;
+}

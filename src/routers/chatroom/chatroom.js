@@ -44,7 +44,7 @@ function Chatroom() {
                 >
                   <ListItemAvatar>
                     <Avatar
-                      from="index"
+                      from="Index"
                       friendTrends={0}
                       friendName={friendUsername}
                     />
@@ -52,6 +52,7 @@ function Chatroom() {
                   <ListItemText
                     sx={{ ml: 1 }}
                     primary={friendUsername}
+                    className={style.lastMessage}
                     secondary={
                       <>
                         <Typography

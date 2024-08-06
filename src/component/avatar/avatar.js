@@ -34,13 +34,18 @@ function CuAvatar({ from, friendName, friendTrends }) {
     }
   };
 
-  const computedAvatarClassName = () => {
+  const computedAvatarClassName = (type) => {
     const styleObj =
       from !== "my"
         ? from === "Index"
           ? { width: 40, height: 40 }
           : { width: 80, height: 80 }
         : { width: 160, height: 160 };
+
+    if (type === "treads") {
+      styleObj.width += from === "my" ? 8 : 4;
+      styleObj.height += from === "my" ? 8 : 4;
+    }
     return styleObj;
   };
   const computedavatarTreadsCLassName = () => {
@@ -59,6 +64,7 @@ function CuAvatar({ from, friendName, friendTrends }) {
       <Alert ref={warnRef} severity="error"></Alert>
       <Badge
         overlap="circular"
+        sx={computedAvatarClassName("treads")}
         className={computedavatarTreadsCLassName()}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         badgeContent={

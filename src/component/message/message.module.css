@@ -1,0 +1,29 @@
+.message {
+  padding: 10px;
+  display: flex;
+}
+.message.left {
+  flex-direction: row;
+}
+.message.right {
+  flex-direction: row-reverse;
+}
+.messageContent {
+  min-height: 50px;
+  padding: 10px;
+  word-break: break-all;
+  background-color: #fff;
+}
+.messageWrap {
+  margin: 5px;
+  flex: 1 1 0;
+}
+.time {
+  font-size: 14px;
+}
+.right .time {
+  text-align: left;
+}
+.left .time {
+  text-align: right;
+}
