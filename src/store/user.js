@@ -3,7 +3,6 @@ import api from "../common/api";
 
 class User {
   login = undefined;
-  info = null;
   account = {};
   constructor() {
     makeAutoObservable(this);
@@ -11,14 +10,15 @@ class User {
   setLogin(status) {
     this.login = status;
   }
-  setInfo(info) {
-    this.info = info;
-  }
-  async setAccount() {
-    const res = await api.getAccountData();
-    if (res.status && res.data) {
+  async verify() {
+    const res = await api.getVerify();
+    if (res.status) {
+      this.login = true;
       this.account = res.data;
+    } else {
+      this.login = false;
     }
+    return res;
   }
 }
 

@@ -32,7 +32,7 @@ function Chatroom() {
         <List sx={{ width: "100vw", bgcolor: "#ffffff82" }}>
           {friend.map((item, index) => {
             const friendUsername =
-              item.username === store.user.info.username
+              item.username === store.user.account.username
                 ? item.friend_username
                 : item.username;
 

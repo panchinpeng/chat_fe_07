@@ -27,7 +27,7 @@ function FriendApply({ open, setOpen }) {
       const cApply = [...apply];
       cApply.splice(index, 1);
       setApply(cApply);
-      store.user.setAccount();
+      store.user.verify();
     } else {
       alertRef.current.setMessage("發生錯誤，請重試");
       alertRef.current.setSeverity("error");
@@ -40,7 +40,7 @@ function FriendApply({ open, setOpen }) {
       const cApply = [...apply];
       cApply.splice(index, 1);
       setApply(cApply);
-      store.user.setAccount();
+      store.user.verify();
     } else {
       alertRef.current.setMessage("發生錯誤，請重試");
       alertRef.current.setSeverity("error");

@@ -11,13 +11,10 @@ function PrivateRoutes({ forceToLogin }) {
   const intervalID = useRef();
   const store = useStore();
   const checkLogin = useCallback(async (callback) => {
-    const res = await api.getVerify();
+    const res = await store.user.verify();
     if (res.status) {
-      store.user.setLogin(true);
-      store.user.setInfo(res.data);
       callback instanceof Function && callback();
     } else {
-      store.user.setLogin(false);
       forceToLogin && navigate("/login");
     }
   }, []);
@@ -36,14 +33,6 @@ function PrivateRoutes({ forceToLogin }) {
       clearInterval(intervalID.current);
     };
   }, [location]);
-
-  useEffect(() => {
-    (async () => {
-      if (store.user.login) {
-        store.user.setAccount();
-      }
-    })();
-  }, [store.user.login]);
 
   return <Index />;
 }

@@ -4,7 +4,7 @@ import style from "./message.module.css";
 import Avatar from "./../avatar/avatar";
 function Message({ message }) {
   const store = useStore();
-  const my = store.user.info.username === message.from_username;
+  const my = store.user.account.username === message.from_username;
   const time = new Date(Date.parse(message.send_time));
   const timeString = `${(time.getMonth() + 1).toString().padStart(2, "0")}-${time.getDate().toString().padStart(2, "0")} ${time.getHours().toString().padStart(2, "0")}:${time.getMinutes().toString().padStart(2, "0")}`;
   return (

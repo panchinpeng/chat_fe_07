@@ -141,7 +141,7 @@ function Post() {
       })
     );
     if (res.status) {
-      store.user.setAccount();
+      store.user.verify();
       navigate(-1);
     }
   };

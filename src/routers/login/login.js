@@ -73,7 +73,7 @@ function Login() {
     const data = await api.login(username, password);
     if (data.status) {
       store.user.setLogin(true);
-      store.user.setInfo(data.data);
+
       navigate("/");
     } else {
       alertRef.current.setMessage("登入失敗，請確認帳密是否輸入正確");

@@ -1,4 +1,9 @@
-import { BottomNavigation, BottomNavigationAction, Paper } from "@mui/material";
+import {
+  BottomNavigation,
+  BottomNavigationAction,
+  Paper,
+  Badge,
+} from "@mui/material";
 import MessageIcon from "@mui/icons-material/Message";
 import AddCommentIcon from "@mui/icons-material/AddComment";
 import { observer } from "mobx-react-lite";
@@ -26,9 +31,18 @@ function BottomNav() {
               sx={{ flex: "1 1 0" }}
               onClick={() => navigate("/member/post")}
             />
+
             <BottomNavigationAction
               label="訊息"
-              icon={<MessageIcon />}
+              icon={
+                store.user.account.unread * 1 > 0 ? (
+                  <Badge badgeContent={store.user.account.unread} color="error">
+                    <MessageIcon />
+                  </Badge>
+                ) : (
+                  <MessageIcon />
+                )
+              }
               sx={{ flex: "1 1 0" }}
               onClick={() => navigate("/member/chatroom")}
             />

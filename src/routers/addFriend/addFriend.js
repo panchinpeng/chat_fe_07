@@ -53,11 +53,10 @@ function AddFriend() {
     const res = await api.setFriendApply("allow", username);
     if (res.status) {
       alertRef.current.setMessage("已成為好友，趕快敲他聊天吧");
-      store.user.setAccount();
       const cfriend = [...friend];
       cfriend.splice(index, 1);
       setFriend(cfriend);
-      store.user.setAccount();
+      store.user.verify();
     } else {
       alertRef.current.setMessage("發生錯誤，請重試");
       alertRef.current.setSeverity("error");
@@ -67,11 +66,10 @@ function AddFriend() {
     const res = await api.setFriendApply("reject", username);
     if (res.status) {
       alertRef.current.setMessage("成功拒絕好友邀請");
-      store.user.setAccount();
       const cfriend = [...friend];
       cfriend.splice(index, 1);
       setFriend(cfriend);
-      store.user.setAccount();
+      store.user.verify();
     } else {
       alertRef.current.setMessage("發生錯誤，請重試");
       alertRef.current.setSeverity("error");

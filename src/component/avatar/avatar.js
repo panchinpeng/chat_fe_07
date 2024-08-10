@@ -83,7 +83,7 @@ function CuAvatar({ from, friendName, friendTrends }) {
             friendName ? (
               friendName.substr(0, 1).toUpperCase()
             ) : (
-              store.user.info.username.substr(0, 1).toUpperCase()
+              store.user.account.username.substr(0, 1).toUpperCase()
             )
           ) : (
             <img
