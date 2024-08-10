@@ -12,11 +12,11 @@ function CuAvatar({ from, friendName, friendTrends }) {
   const store = useStore();
   const warnRef = useRef();
   const [avatar, setAvatar] = useState(
-    `/api/user/avatar${friendName ? "?username=" + friendName : ""}`
+    `http://192.168.50.198:3001/api/user/avatar${friendName ? "?username=" + friendName : ""}`
   );
   const handleAvatar = async (e) => {
     const file = e.target.files[0];
-    if (file.size > 1024000) {
+    if (file.size > 10024000) {
       warnRef.current.setMessage("file to large");
       return;
     }
@@ -30,7 +30,7 @@ function CuAvatar({ from, friendName, friendTrends }) {
     fd.append("type", "image");
     const res = await api.setAvatar(fd);
     if (res.status) {
-      setAvatar(`/api/user/avatar?v=${Date.now()}`);
+      setAvatar(`http://192.168.50.198:3001/api/user/avatar?v=${Date.now()}`);
     }
   };
 
@@ -91,7 +91,7 @@ function CuAvatar({ from, friendName, friendTrends }) {
               key={avatar}
               src={avatar}
               onError={() => setAvatar("")}
-              height="100%"
+              width="100%"
             ></img>
           )}
         </Avatar>

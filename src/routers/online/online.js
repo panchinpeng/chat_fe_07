@@ -10,51 +10,59 @@ import Message from "../../component/message/message";
 export default function Online() {
   const { friend } = useParams();
   const socket = useRef(null);
-  const [messages, setMessages] = useState([]);
-  // const [users, setUsers] = useState([]);
-  // console.log(friend);
+  const [history, setHistory] = useState([]);
+  const [message, setMessage] = useState("");
+
   useEffect(() => {
-    // if (!socket.current) {
-    //   socket.current = io("ws://localhost:3002", {
-    //     auth: { username: localStorage.getItem("username") },
-    //   });
-    //   socket.current.onAny((event, ...args) => {
-    //     console.log(event, args);
-    //   });
-    //   socket.current.on("connect_error", (err) => {
-    //     if (err.message === "invalid username") {
-    //       console.log("usernameAlreadySelected");
-    //     }
-    //   });
-    //   socket.current.on("user connected", (newUser) => {
-    //     setUsers((user) => [...user, newUser]);
-    //   });
-    //   socket.current.on("users", (users) => {
-    //     setUsers(users);
-    //   });
-    //   socket.current.on("private_message", ({ content, from }) => {
-    //     console.log("receive message", content);
-    //   });
-    //   setTimeout(() => {
-    //     alert("CCC");
-    //     socket.current.emit("test");
-    //   }, 5000);
-    // }
+    if (!socket.current) {
+      socket.current = io("http://192.168.50.198:3001", {
+        withCredentials: true,
+      });
+      socket.current.on("connect", () => {
+        console.log("connect ....");
+      });
+      socket.current.on("message", (message) => {
+        setHistory((history) => [{ ...message }, ...history]);
+      });
+      socket.current.on("disconnect", (reason) => {
+        if (reason.indexOf("client disconnect") === -1) {
+          alert("網路好像不太穩");
+        }
+      });
+    }
+
     (async () => {
       // 取得歷史訊息
       if (friend) {
         const res = await api.getMessageHistory(friend);
         if (res && res.status) {
-          console.log(res);
-          setMessages(res.data);
+          setHistory(res.data);
         }
       }
     })();
+    return () => {
+      socket.current.disconnect();
+    };
   }, []);
+
+  const handleInput = (e) => {
+    setMessage(e.target.value);
+  };
+  const sendMessage = () => {
+    socket.current.emit("message", message, friend, (res) => {
+      if (res.status && res.data) {
+        setHistory((history) => [{ ...res.data }, ...history]);
+        setMessage("");
+      } else {
+        alert("訊息傳送失敗");
+        console.log(res);
+      }
+    });
+  };
   return (
     <Box className={style.box}>
       <div className={style.history}>
-        {messages.map((message) => (
+        {history.map((message) => (
           <Message message={message} key={message.id}></Message>
         ))}
       </div>
@@ -66,8 +74,15 @@ export default function Online() {
           multiline
           maxRows={8}
           variant="filled"
+          onChange={handleInput}
+          value={message}
           InputProps={{
-            endAdornment: <SendIcon sx={{ fontSize: "30px" }}></SendIcon>,
+            endAdornment: (
+              <SendIcon
+                sx={{ fontSize: "30px" }}
+                onClick={sendMessage}
+              ></SendIcon>
+            ),
           }}
         />
       </div>

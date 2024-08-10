@@ -3,7 +3,7 @@ import fetch from "./fetch";
 const api = {
   async logout() {
     try {
-      const res = await fetch("/api/user/logout");
+      const res = await fetch("http://192.168.50.198:3001/api/user/logout");
       return res;
     } catch (e) {
       throw Promise.reject(e);
@@ -11,7 +11,9 @@ const api = {
   },
   async getRecommendFriend() {
     try {
-      const res = await fetch("/api/user/recommendFriend");
+      const res = await fetch(
+        "http://192.168.50.198:3001/api/user/recommendFriend"
+      );
       return res;
     } catch (e) {
       throw Promise.reject(e);
@@ -19,7 +21,7 @@ const api = {
   },
   async getVerify() {
     try {
-      const res = await fetch("/api/user/verify");
+      const res = await fetch("http://192.168.50.198:3001/api/user/verify");
       return res;
     } catch (e) {
       throw Promise.reject(e);
@@ -27,7 +29,7 @@ const api = {
   },
   async login(username, password) {
     try {
-      const res = await fetch("/api/user/login", {
+      const res = await fetch("http://192.168.50.198:3001/api/user/login", {
         body: { username, password },
         method: "POST",
       });
@@ -38,7 +40,7 @@ const api = {
   },
   async regester(username, password, birthday) {
     try {
-      const res = await fetch("/api/user/register", {
+      const res = await fetch("http://192.168.50.198:3001/api/user/register", {
         body: { username, password, birthday },
         method: "POST",
       });
@@ -56,7 +58,7 @@ const api = {
     publicData
   ) {
     try {
-      const res = await fetch("/api/user/info", {
+      const res = await fetch("http://192.168.50.198:3001/api/user/info", {
         body: {
           job,
           work_time,
@@ -74,7 +76,7 @@ const api = {
   },
   async getAccountData() {
     try {
-      const res = await fetch("/api/user/account");
+      const res = await fetch("http://192.168.50.198:3001/api/user/account");
       return res;
     } catch (e) {
       throw Promise.reject(e);
@@ -82,7 +84,7 @@ const api = {
   },
   async getUserInfo() {
     try {
-      const res = await fetch("/api/user/info");
+      const res = await fetch("http://192.168.50.198:3001/api/user/info");
       return res;
     } catch (e) {
       throw Promise.reject(e);
@@ -90,7 +92,7 @@ const api = {
   },
   async setAvatar(fd) {
     try {
-      const res = await fetch("/api/user/avatar", {
+      const res = await fetch("http://192.168.50.198:3001/api/user/avatar", {
         method: "POST",
         headers: {},
         body: fd,
@@ -102,7 +104,7 @@ const api = {
   },
   async getAvatar() {
     try {
-      const res = await fetch("/api/user/avatar");
+      const res = await fetch("http://192.168.50.198:3001/api/user/avatar");
       return res;
     } catch (e) {
       throw Promise.reject(e);
@@ -121,7 +123,7 @@ const api = {
       fd.append("color", color);
       fd.append("pos", pos);
 
-      const res = await fetch("/api/trends/add", {
+      const res = await fetch("http://192.168.50.198:3001/api/trends/add", {
         method: "POST",
         headers: {},
         body: fd,
@@ -134,10 +136,13 @@ const api = {
   async searchFriend(keyword) {
     keyword = keyword.trim();
     try {
-      const res = await fetch("/api/user/searchUser", {
-        method: "POST",
-        body: { keyword },
-      });
+      const res = await fetch(
+        "http://192.168.50.198:3001/api/user/searchUser",
+        {
+          method: "POST",
+          body: { keyword },
+        }
+      );
       return res;
     } catch (e) {
       throw Promise.reject(e);
@@ -145,7 +150,7 @@ const api = {
   },
   async addFriend(friendUsername) {
     try {
-      const res = await fetch("/api/user/addFriend", {
+      const res = await fetch("http://192.168.50.198:3001/api/user/addFriend", {
         method: "POST",
         body: { friendUsername },
       });
@@ -156,7 +161,9 @@ const api = {
   },
   async getFriendApply() {
     try {
-      const res = await fetch("/api/user/friendApply");
+      const res = await fetch(
+        "http://192.168.50.198:3001/api/user/friendApply"
+      );
       return res;
     } catch (e) {
       throw Promise.reject(e);
@@ -164,10 +171,13 @@ const api = {
   },
   async setFriendApply(action, distUsername) {
     try {
-      const res = await fetch("/api/user/friendApplyAction", {
-        method: "POST",
-        body: { action, distUsername },
-      });
+      const res = await fetch(
+        "http://192.168.50.198:3001/api/user/friendApplyAction",
+        {
+          method: "POST",
+          body: { action, distUsername },
+        }
+      );
       return res;
     } catch (e) {
       throw Promise.reject(e);
@@ -175,7 +185,7 @@ const api = {
   },
   async getFriend() {
     try {
-      const res = await fetch("/api/user/friend");
+      const res = await fetch("http://192.168.50.198:3001/api/user/friend");
       return res;
     } catch (e) {
       throw Promise.reject(e);
@@ -183,10 +193,13 @@ const api = {
   },
   async getMessageHistory(friend) {
     try {
-      const res = await fetch("/api/message/history", {
-        method: "POST",
-        body: { friend },
-      });
+      const res = await fetch(
+        "http://192.168.50.198:3001/api/message/history",
+        {
+          method: "POST",
+          body: { friend },
+        }
+      );
       return res;
     } catch (e) {
       throw Promise.reject(e);
