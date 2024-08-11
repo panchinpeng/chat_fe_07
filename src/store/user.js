@@ -10,6 +10,9 @@ class User {
   setLogin(status) {
     this.login = status;
   }
+  changeUnread(count) {
+    this.account.unread = count;
+  }
   async verify() {
     const res = await api.getVerify();
     if (res.status) {

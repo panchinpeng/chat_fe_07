@@ -1,18 +1,25 @@
 import { Box, TextField } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import style from "./online.module.css";
 import SendIcon from "@mui/icons-material/Send";
 import { useParams } from "react-router-dom";
 import api from "../../common/api";
 import Message from "../../component/message/message";
+import { useStore } from "../../store";
+import { observer } from "mobx-react-lite";
 
-export default function Online() {
+function Online() {
+  const store = useStore();
   const { friend } = useParams();
   const socket = useRef(null);
   const [history, setHistory] = useState([]);
   const [message, setMessage] = useState("");
-
+  const updateUnreadData = useCallback(() => {
+    socket.current.emit("receiveMessage", friend, (totalUnreadCount) => {
+      store.user.changeUnread(totalUnreadCount);
+    });
+  }, [friend]);
   useEffect(() => {
     if (!socket.current) {
       socket.current = io("http://192.168.50.198:3001", {
@@ -23,6 +30,7 @@ export default function Online() {
       });
       socket.current.on("message", (message) => {
         setHistory((history) => [{ ...message }, ...history]);
+        updateUnreadData();
       });
       socket.current.on("disconnect", (reason) => {
         if (reason.indexOf("client disconnect") === -1) {
@@ -36,6 +44,9 @@ export default function Online() {
       if (friend) {
         const res = await api.getMessageHistory(friend);
         if (res && res.status) {
+          setTimeout(() => {
+            updateUnreadData();
+          }, 2000);
           setHistory(res.data);
         }
       }
@@ -89,3 +100,4 @@ export default function Online() {
     </Box>
   );
 }
+export default observer(Online);
