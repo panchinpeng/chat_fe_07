@@ -78,7 +78,10 @@ function CuAvatar({ from, friendName, friendTrends }) {
           </label>
         }
       >
-        <Avatar sx={computedAvatarClassName()}>
+        <Avatar
+          sx={computedAvatarClassName()}
+          onClick={() => store.trends.getTrend(friendName ? friendName : store.user.account.username)}
+        >
           {avatar === "" ? (
             friendName ? (
               friendName.substr(0, 1).toUpperCase()

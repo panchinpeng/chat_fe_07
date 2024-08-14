@@ -205,5 +205,29 @@ const api = {
       throw Promise.reject(e);
     }
   },
+  async getAllFriendTrends() {
+    try {
+      const res = await fetch(
+        "http://192.168.50.198:3001/api/trends/allFriendTrends"
+      );
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getTrends(user) {
+    try {
+      const res = await fetch(
+        "http://192.168.50.198:3001/api/trends/getUserTrends",
+        {
+          method: "POST",
+          body: { user },
+        }
+      );
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
 };
 export default api;

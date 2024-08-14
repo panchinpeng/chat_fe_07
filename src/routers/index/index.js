@@ -10,6 +10,7 @@ import { useStore } from "../../store";
 
 import * as THREE from "three";
 import FOG from "vanta/dist/vanta.fog.min";
+import Trends from "../../component/trends/trends";
 
 function Index() {
   const store = useStore();
@@ -44,6 +45,7 @@ function Index() {
         <Footer></Footer>
       </Box>
       <div id="bg-animate" className={style.bgAnimate} ref={myRef}></div>
+      <Trends></Trends>
     </>
   );
 }

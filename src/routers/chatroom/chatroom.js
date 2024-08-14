@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import api from "../../common/api";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../store";
+import TrendOverride from "../../component/trendOverview/trendOverview";
 function Chatroom() {
   const store = useStore();
   const [friend, setFriend] = useState([]);
@@ -29,6 +30,8 @@ function Chatroom() {
   return (
     <Box className={style.content}>
       {friend.length > 0 ? (
+        <>
+        <TrendOverride></TrendOverride>
         <List sx={{ width: "100vw", bgcolor: "#ffffff82" }}>
           {friend.map((item, index) => {
             const friendUsername =
@@ -76,6 +79,8 @@ function Chatroom() {
             );
           })}
         </List>
+        </>
+        
       ) : (
         <Box
           sx={{

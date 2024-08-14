@@ -1,0 +1,11 @@
+.overviewWrap {
+  background: #fff;
+  overflow: auto;
+  white-space: nowrap;
+  width: 100vw;
+}
+.overviewWrap > div {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 10px 0;
+}

@@ -1,11 +1,14 @@
-import { makeAutoObservable } from "mobx";
+import { action, makeAutoObservable, runInAction } from "mobx";
 import api from "../common/api";
 
 class User {
   login = undefined;
   account = {};
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this, {
+      setLogin: action,
+      changeUnread: action,
+    });
   }
   setLogin(status) {
     this.login = status;
@@ -15,12 +18,14 @@ class User {
   }
   async verify() {
     const res = await api.getVerify();
-    if (res.status) {
-      this.login = true;
-      this.account = res.data;
-    } else {
-      this.login = false;
-    }
+    runInAction(() => {
+      if (res.status) {
+        this.login = true;
+        this.account = res.data;
+      } else {
+        this.login = false;
+      }
+    });
     return res;
   }
 }

@@ -138,6 +138,8 @@ function Post() {
         y: textWrap.current.dataset.y,
         r: angleScale.angle,
         s: angleScale.scale,
+        w: textarea.current.style.width,
+        h: textarea.current.style.height,
       })
     );
     if (res.status) {
