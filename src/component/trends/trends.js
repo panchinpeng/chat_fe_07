@@ -73,7 +73,10 @@ function Trends() {
   useEffect(() => {
     if (store.trends.show && story !== storyRecorded.current) {
       // call api .......
-      api.watchTrends(store.trends.trendsData[story].eid);
+      if (store.trends.trendsData[story].readed !== 1) {
+        api.watchTrends(store.trends.trendsData[story].eid);
+      }
+
       storyRecorded.current = story;
     }
   }, [story, store.trends.show]);
