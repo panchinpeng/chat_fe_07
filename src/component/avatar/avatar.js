@@ -12,7 +12,7 @@ function CuAvatar({ from, friendName, friendTrends }) {
   const store = useStore();
   const warnRef = useRef();
   const [avatar, setAvatar] = useState(
-    `http://192.168.50.198:3001/api/user/avatar${friendName ? "?username=" + friendName : ""}`
+    `${process.env.REACT_APP_API_DOMAIN}/api/user/avatar${friendName ? "?username=" + friendName : ""}`
   );
   const handleAvatar = async (e) => {
     const file = e.target.files[0];
@@ -30,7 +30,9 @@ function CuAvatar({ from, friendName, friendTrends }) {
     fd.append("type", "image");
     const res = await api.setAvatar(fd);
     if (res.status) {
-      setAvatar(`http://192.168.50.198:3001/api/user/avatar?v=${Date.now()}`);
+      setAvatar(
+        `${process.env.REACT_APP_API_DOMAIN}/api/user/avatar?v=${Date.now()}`
+      );
     }
   };
 
@@ -80,7 +82,11 @@ function CuAvatar({ from, friendName, friendTrends }) {
       >
         <Avatar
           sx={computedAvatarClassName()}
-          onClick={() => store.trends.getTrend(friendName ? friendName : store.user.account.username)}
+          onClick={() =>
+            store.trends.getTrend(
+              friendName ? friendName : store.user.account.username
+            )
+          }
         >
           {avatar === "" ? (
             friendName ? (

@@ -3,11 +3,13 @@ import { useStore } from "../../store";
 import { observer } from "mobx-react-lite";
 import style from "./trends.module.css";
 import { useEffect, useRef, useState } from "react";
+import api from "../../common/api";
 function Trends() {
   const store = useStore();
   const [progress, setProgress] = useState(0);
   const [story, setStory] = useState(0);
   const timerID = useRef();
+  const storyRecorded = useRef();
   const getComputedStyleOffset = (trend) => {
     const style = {};
     if (trend.pos.x && trend.pos.y) {
@@ -40,7 +42,7 @@ function Trends() {
   const getComputedStyleBg = (trend) => {
     const style = {};
     if (trend.image) {
-      style.backgroundImage = `url(http://192.168.50.198:3001${trend.image})`;
+      style.backgroundImage = `url(${process.env.REACT_APP_API_DOMAIN}${trend.image})`;
     }
     return style;
   };
@@ -66,7 +68,15 @@ function Trends() {
       setStory(story + 1);
       setProgress(0);
     }
-  }, [progress, store.trends]);
+  }, [progress]);
+
+  useEffect(() => {
+    if (store.trends.show && story !== storyRecorded.current) {
+      // call api .......
+      api.watchTrends(store.trends.trendsData[story].eid);
+      storyRecorded.current = story;
+    }
+  }, [story, store.trends.show]);
 
   if (!store.trends.show || store.trends.trendsData.length === 0) {
     return null;

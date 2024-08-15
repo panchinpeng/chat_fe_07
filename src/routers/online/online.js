@@ -22,7 +22,7 @@ function Online() {
   }, [friend]);
   useEffect(() => {
     if (!socket.current) {
-      socket.current = io("http://192.168.50.198:3001", {
+      socket.current = io(process.env.REACT_APP_API_DOMAIN, {
         withCredentials: true,
       });
       socket.current.on("connect", () => {
@@ -60,15 +60,17 @@ function Online() {
     setMessage(e.target.value);
   };
   const sendMessage = () => {
-    socket.current.emit("message", message, friend, (res) => {
-      if (res.status && res.data) {
-        setHistory((history) => [{ ...res.data }, ...history]);
-        setMessage("");
-      } else {
-        alert("訊息傳送失敗");
-        console.log(res);
-      }
-    });
+    if (message) {
+      socket.current.emit("message", message, friend, (res) => {
+        if (res.status && res.data) {
+          setHistory((history) => [{ ...res.data }, ...history]);
+          setMessage("");
+        } else {
+          alert("訊息傳送失敗");
+          console.log(res);
+        }
+      });
+    }
   };
   return (
     <Box className={style.box}>
@@ -90,7 +92,7 @@ function Online() {
           InputProps={{
             endAdornment: (
               <SendIcon
-                sx={{ fontSize: "30px" }}
+                sx={{ fontSize: "30px", cursor: "pointer" }}
                 onClick={sendMessage}
               ></SendIcon>
             ),
