@@ -3,7 +3,6 @@ import { observer } from "mobx-react-lite";
 import { useStore } from "../store";
 import Index from "./index";
 import { useEffect, useCallback, useRef } from "react";
-import api from "../common/api";
 
 function PrivateRoutes({ forceToLogin }) {
   const location = useLocation();
@@ -33,6 +32,9 @@ function PrivateRoutes({ forceToLogin }) {
       clearInterval(intervalID.current);
     };
   }, [location]);
+  if (forceToLogin) {
+    return store.user.login ? <Index /> : "";
+  }
 
   return <Index />;
 }

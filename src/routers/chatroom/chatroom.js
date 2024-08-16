@@ -31,56 +31,57 @@ function Chatroom() {
     <Box className={style.content}>
       {friend.length > 0 ? (
         <>
-        <TrendOverride></TrendOverride>
-        <List sx={{ width: "100vw", bgcolor: "#ffffff82" }}>
-          {friend.map((item, index) => {
-            const friendUsername =
-              item.username === store.user.account.username
-                ? item.friend_username
-                : item.username;
+          <TrendOverride></TrendOverride>
+          <List sx={{ width: "100vw", bgcolor: "#ffffff82" }}>
+            {friend.map((item, index) => {
+              const friendUsername =
+                item.username === store.user.account.username
+                  ? item.friend_username
+                  : item.username;
 
-            return (
-              <>
-                <ListItem
-                  alignItems="flex-start"
-                  onClick={() => navigator(`/member/online/${friendUsername}`)}
-                >
-                  <ListItemAvatar>
-                    <Avatar
-                      from="Index"
-                      friendTrends={0}
-                      friendName={friendUsername}
-                    />
-                  </ListItemAvatar>
-                  <ListItemText
-                    sx={{ ml: 1 }}
-                    primary={friendUsername}
-                    className={style.lastMessage}
-                    secondary={
-                      <>
-                        <Typography
-                          sx={{ display: "inline" }}
-                          component="span"
-                          variant="body2"
-                          color="text.primary"
-                        >
-                          {item.last_message || ""}
-                        </Typography>
-                      </>
+              return (
+                <>
+                  <ListItem
+                    alignItems="flex-start"
+                    onClick={() =>
+                      navigator(`/member/online/${friendUsername}`)
                     }
-                  ></ListItemText>
+                  >
+                    <ListItemAvatar>
+                      <Avatar
+                        from="Index"
+                        friendTrends={0}
+                        friendName={friendUsername}
+                      />
+                    </ListItemAvatar>
+                    <ListItemText
+                      sx={{ ml: 1 }}
+                      primary={friendUsername}
+                      className={style.lastMessage}
+                      secondary={
+                        <>
+                          <Typography
+                            sx={{ display: "inline" }}
+                            component="span"
+                            variant="body2"
+                            color="text.primary"
+                          >
+                            {item.last_message || ""}
+                          </Typography>
+                        </>
+                      }
+                    ></ListItemText>
 
-                  {item.unread > 0 && (
-                    <div className={style.unread}>{item.unread}</div>
-                  )}
-                </ListItem>
-                {index !== friend.length - 1 && <Divider />}
-              </>
-            );
-          })}
-        </List>
+                    {item.unread > 0 && (
+                      <div className={style.unread}>{item.unread}</div>
+                    )}
+                  </ListItem>
+                  {index !== friend.length - 1 && <Divider />}
+                </>
+              );
+            })}
+          </List>
         </>
-        
       ) : (
         <Box
           sx={{
