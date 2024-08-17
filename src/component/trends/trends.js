@@ -44,6 +44,12 @@ function Trends() {
     if (trend.image) {
       style.backgroundImage = `url(${process.env.REACT_APP_API_DOMAIN}${trend.image})`;
     }
+    if (trend.pos.layoutX) {
+      style.width = `${trend.pos.layoutX}px`;
+    }
+    if (trend.pos.layoutY) {
+      style.height = `${trend.pos.layoutY}px`;
+    }
     return style;
   };
 
@@ -85,30 +91,35 @@ function Trends() {
     return null;
   }
   return (
-    <div
-      className={style.wrapper}
-      style={getComputedStyleBg(store.trends.trendsData[story])}
-    >
-      {store.trends.trendsData.map((item, index) => (
-        <Box
-          sx={{ width: `${100 / store.trends.trendsData.length}%`, mr: 0.5 }}
-        >
-          <LinearProgress
-            key={item.id}
-            color="secondary"
-            variant="determinate"
-            value={index < story ? 100 : index > story ? 0 : progress}
-            className={style.timeLine}
-          />
-        </Box>
-      ))}
+    <div className={style.wrap}>
+      <div className={style.timeLineWrap}>
+        {store.trends.trendsData.map((item, index) => (
+          <Box
+            sx={{ width: `${100 / store.trends.trendsData.length}%`, mr: 0.5 }}
+          >
+            <LinearProgress
+              key={item.id}
+              color="secondary"
+              variant="determinate"
+              value={index < story ? 100 : index > story ? 0 : progress}
+              className={style.timeLine}
+            />
+          </Box>
+        ))}
+      </div>
+
       <div
-        key={store.trends.trendsData[story].id}
-        className={style.trendsArea}
-        style={getComputedStyleOffset(store.trends.trendsData[story])}
+        className={style.trendsWrapper}
+        style={getComputedStyleBg(store.trends.trendsData[story])}
       >
-        <div style={getComputedStyleSkew(store.trends.trendsData[story])}>
-          {store.trends.trendsData[story].message}
+        <div
+          key={store.trends.trendsData[story].id}
+          className={style.trendsArea}
+          style={getComputedStyleOffset(store.trends.trendsData[story])}
+        >
+          <div style={getComputedStyleSkew(store.trends.trendsData[story])}>
+            {store.trends.trendsData[story].message}
+          </div>
         </div>
       </div>
     </div>

@@ -140,6 +140,8 @@ function Post() {
         s: angleScale.scale,
         w: textarea.current.style.width,
         h: textarea.current.style.height,
+        layoutX: window.innerWidth,
+        layoutY: window.innerHeight,
       })
     );
     if (res.status) {

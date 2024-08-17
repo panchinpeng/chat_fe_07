@@ -1,16 +1,36 @@
-.wrapper {
+.wrap {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   z-index: 9999;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(99px);
+  background-image: linear-gradient(#60a8f6, #fff);
+}
+.trendsWrapper {
+  position: absolute;
   background-color: #007aff;
   font-size: "18px";
   background-position: center;
   background-size: cover;
   display: flex;
   justify-content: space-between;
+  margin: auto;
+}
+.timeLineWrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  width: 100%;
+  height: 3px;
+  z-index: 10000;
 }
 .timeLine {
   z-index: 5 !important;
