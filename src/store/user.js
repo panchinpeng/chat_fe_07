@@ -8,6 +8,7 @@ class User {
     makeAutoObservable(this, {
       setLogin: action,
       changeUnread: action,
+      clear: action,
     });
   }
   setLogin(status) {
@@ -27,6 +28,9 @@ class User {
       }
     });
     return res;
+  }
+  clear() {
+    this.account = {};
   }
 }
 

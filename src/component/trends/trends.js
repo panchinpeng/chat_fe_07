@@ -1,4 +1,4 @@
-import { Box, LinearProgress } from "@mui/material";
+import { Box, LinearProgress, CircularProgress } from "@mui/material";
 import { useStore } from "../../store";
 import { observer } from "mobx-react-lite";
 import style from "./trends.module.css";
@@ -7,9 +7,10 @@ import api from "../../common/api";
 function Trends() {
   const store = useStore();
   const [progress, setProgress] = useState(0);
-  const [story, setStory] = useState(0);
+  const [story, setStory] = useState(-1);
   const timerID = useRef();
   const storyRecorded = useRef();
+  const imgRef = useRef();
   const getComputedStyleOffset = (trend) => {
     const style = {};
     if (trend.pos.x && trend.pos.y) {
@@ -43,6 +44,7 @@ function Trends() {
     const style = {};
     if (trend.image) {
       style.backgroundImage = `url(${process.env.REACT_APP_API_DOMAIN}${trend.image})`;
+      style.backgroundColor = "transparent";
     }
     if (trend.pos.layoutX) {
       style.width = `${trend.pos.layoutX}px`;
@@ -56,7 +58,12 @@ function Trends() {
   useEffect(() => {
     if (store.trends.show) {
       timerID.current = setInterval(() => {
-        setProgress((progress) => progress + 100 / 45);
+        setProgress((progress) => {
+          if (!imgRef.current.complete) {
+            return progress;
+          }
+          return progress + 100 / 45;
+        });
       }, 250);
     }
     return () => {
@@ -66,18 +73,26 @@ function Trends() {
     };
   }, [store.trends.show]);
   useEffect(() => {
-    if (progress > 103 && store.trends.show) {
-      if (story + 1 === store.trends.trendsData.length) {
-        store.trends.closeTrend();
-        return;
+    (async () => {
+      if (progress > 103 && store.trends.show) {
+        if (story + 1 === store.trends.trendsData.length) {
+          store.trends.closeTrend();
+          return;
+        }
+        if (store.trends.trendsData[story + 1].image) {
+          imgRef.current.src = store.trends.trendsData[story + 1].image;
+          setStory((story) => story + 1);
+          setProgress(0);
+        } else {
+          setStory((story) => story + 1);
+          setProgress(0);
+        }
       }
-      setStory(story + 1);
-      setProgress(0);
-    }
+    })();
   }, [progress]);
 
   useEffect(() => {
-    if (store.trends.show && story !== storyRecorded.current) {
+    if (story !== -1 && store.trends.show && story !== storyRecorded.current) {
       // call api .......
       if (store.trends.trendsData[story].readed !== 1) {
         api.watchTrends(store.trends.trendsData[story].eid);
@@ -107,21 +122,24 @@ function Trends() {
           </Box>
         ))}
       </div>
-
-      <div
-        className={style.trendsWrapper}
-        style={getComputedStyleBg(store.trends.trendsData[story])}
-      >
+      {story > -1 && (
         <div
-          key={store.trends.trendsData[story].id}
-          className={style.trendsArea}
-          style={getComputedStyleOffset(store.trends.trendsData[story])}
+          className={style.trendsWrapper}
+          style={getComputedStyleBg(store.trends.trendsData[story])}
         >
-          <div style={getComputedStyleSkew(store.trends.trendsData[story])}>
-            {store.trends.trendsData[story].message}
+          <div
+            key={store.trends.trendsData[story].id}
+            className={style.trendsArea}
+            style={getComputedStyleOffset(store.trends.trendsData[story])}
+          >
+            <div style={getComputedStyleSkew(store.trends.trendsData[story])}>
+              {store.trends.trendsData[story].message}
+            </div>
           </div>
         </div>
-      </div>
+      )}
+      <img width="0px" height="1px" ref={imgRef}></img>
+      {progress === 0 && <CircularProgress color="primary" />}
     </div>
   );
 }
