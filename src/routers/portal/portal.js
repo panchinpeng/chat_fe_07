@@ -254,22 +254,21 @@ function Portal() {
           spacing={0}
           justifyContent="center"
           sx={{
-            maxWidth: "800px",
             width: "100%",
             overflow: "auto",
             marginX: "auto",
             padding: "0",
+            overscrollBehavior: "auto",
           }}
           className={style.scroll}
         >
-          <Grid
+          {/* <Grid
             item
             xs={11}
             md={12}
             sx={{
               borderBottomLeftRadius: "5px",
               borderBottomRightRadius: "5px",
-              background: "#fff",
               position: "absolute",
               width: "800px",
             }}
@@ -284,13 +283,14 @@ function Portal() {
             >
               金幣排行
             </Typography>
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} md={12}>
             <CoinRank></CoinRank>
           </Grid>
         </Grid>
         <div className={style.stageBg}></div>
       </Box>
+      <div>Copyright © 2024 ParryPan All rights reserved</div>
     </>
   );
 }

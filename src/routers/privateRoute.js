@@ -3,6 +3,8 @@ import { observer } from "mobx-react-lite";
 import { useStore } from "../store";
 import Index from "./index";
 import { useEffect, useCallback, useRef } from "react";
+import Header from "./../component/header/header";
+import Footer from "./../component/footer/footer";
 
 function PrivateRoutes({ forceToLogin }) {
   const location = useLocation();
@@ -33,9 +35,23 @@ function PrivateRoutes({ forceToLogin }) {
     };
   }, [location]);
   if (forceToLogin) {
-    return store.user.login ? <Index /> : "";
+    return store.user.login ? (
+      <>
+        <Header></Header>
+        <Index />
+        <Footer></Footer>
+      </>
+    ) : (
+      ""
+    );
   }
 
-  return <Index />;
+  return (
+    <>
+      <Header></Header>
+      <Index />
+      <Footer></Footer>
+    </>
+  );
 }
 export default observer(PrivateRoutes);

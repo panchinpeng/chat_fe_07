@@ -16,10 +16,7 @@ function BottomNav() {
   if (store.user.login) {
     return (
       <>
-        <Paper
-          sx={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 3 }}
-          elevation={3}
-        >
+        <Paper sx={{ width: "100%", flex: "0 0 0" }} elevation={3}>
           <BottomNavigation
             showLabels
             value=""
@@ -48,7 +45,6 @@ function BottomNav() {
             />
           </BottomNavigation>
         </Paper>
-        <div className={style.placeholder}></div>
       </>
     );
   }

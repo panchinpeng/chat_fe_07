@@ -20,7 +20,7 @@ function Header() {
 
   return (
     <>
-      <AppBar position="relative" sx={{ zIndex: 3 }}>
+      <AppBar position="static" sx={{ flex: "0 0 0" }}>
         <Toolbar>
           <div>
             <Link to="/">

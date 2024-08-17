@@ -5,6 +5,8 @@
 .winner {
   display: flex;
   justify-content: space-around;
+  max-width: 800px;
+  margin: auto;
 }
 
 .winner .player {
@@ -66,12 +68,13 @@
   }
 }
 .otherRank {
-  margin: 10px;
+  margin: 10px auto;
   padding: 5px 0;
   background: #fff9;
   border-radius: 5px;
   display: flex;
   justify-content: space-between;
+  width: 1000px;
 }
 .picSelf {
   width: 80px;
@@ -85,5 +88,6 @@
 }
 
 .rankWrap {
-  background: url(./../../public/666.png) center top / cover no-repeat;
+  background: url(./../../public/666.png) center top 29% / cover no-repeat;
+  min-width: 1000px;
 }
