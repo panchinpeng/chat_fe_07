@@ -88,7 +88,6 @@ function AddFriend() {
     <>
       <Box sx={{ bgcolor: "primary.main", width: "100vw" }}>
         <Paper
-          component="form"
           sx={{
             m: 2,
             p: "2px 4px",
