@@ -257,7 +257,7 @@ function Post() {
       ></PostCancel>
       {message.security && (
         <div className={style.security}>
-          <Chip color="primary" icon={<ShieldIcon />} label="私密" />
+          <Chip color="primary" icon={<ShieldIcon />} label="僅好友可見" />
         </div>
       )}
     </>
