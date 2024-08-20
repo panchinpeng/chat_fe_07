@@ -12,6 +12,7 @@ const Post = React.lazy(() => import("./routers/post/post"));
 const Info = React.lazy(() => import("./routers/info/info"));
 const Online = React.lazy(() => import("./routers/online/online"));
 const Chatroom = React.lazy(() => import("./routers/chatroom/chatroom"));
+const Article = React.lazy(() => import("./routers/article/article"));
 const router = createBrowserRouter([
   {
     path: "/member",
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: "post",
         element: <Post></Post>,
+      },
+      {
+        path: "article",
+        element: <Article></Article>,
       },
       {
         path: "addFriend",

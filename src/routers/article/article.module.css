@@ -1,0 +1,40 @@
+.file {
+  display: none;
+}
+.tip {
+  font-size: 12px;
+}
+/* .img {
+  width: 200px ;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid red;
+  display: block;
+} */
+.mySwipper {
+  width: 100% !important;
+}
+.imgWrap {
+  background-color: #e4e4e4;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  width: 270px !important;
+  height: 270px !important;
+}
+
+.imgWrap img {
+  display: block;
+  /* width: 200px !important; */
+  position: relative;
+}
+.removeIcon {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  background-color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+}

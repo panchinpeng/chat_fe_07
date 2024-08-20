@@ -10,9 +10,12 @@ import { observer } from "mobx-react-lite";
 import { useStore } from "../../store";
 import style from "./bottomNav.module.css";
 import { useNavigate } from "react-router-dom";
+import PostTypeDialog from "../dialog/postType/postType";
+import { useState } from "react";
 function BottomNav() {
   const store = useStore();
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
   if (store.user.login) {
     return (
       <>
@@ -26,7 +29,7 @@ function BottomNav() {
               label="動態"
               icon={<AddCommentIcon />}
               sx={{ flex: "1 1 0" }}
-              onClick={() => navigate("/member/post")}
+              onClick={() => setOpen(true)}
             />
 
             <BottomNavigationAction
@@ -45,6 +48,10 @@ function BottomNav() {
             />
           </BottomNavigation>
         </Paper>
+        <PostTypeDialog
+          open={open}
+          handleClose={() => setOpen(false)}
+        ></PostTypeDialog>
       </>
     );
   }

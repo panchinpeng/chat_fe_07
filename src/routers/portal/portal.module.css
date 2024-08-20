@@ -21,6 +21,7 @@
   justify-content: center;
 }
 .mySwiper {
+  width: 100%;
   flex: 0 0 500px;
 }
 
@@ -43,6 +44,7 @@
   min-width: 800px;
   background: url(./../../public/666.png) center top / 1152px 896px no-repeat;
 }
+
 .banner .frontImg {
   width: 100%;
   object-fit: contain;

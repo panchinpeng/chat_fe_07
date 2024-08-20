@@ -1,6 +1,11 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import style from "./post.module.css";
-import { SpeedDial, SpeedDialAction, Chip } from "@mui/material";
+import {
+  SpeedDial,
+  SpeedDialAction,
+  Chip,
+  TextareaAutosize,
+} from "@mui/material";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SendIcon from "@mui/icons-material/Send";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -113,7 +118,6 @@ function Post() {
       message: e.target.value,
     }));
 
-    e.target.style.height = `${e.target.scrollHeight}px`;
     e.target.style.width = `${e.target.scrollWidth}px`;
   };
 
@@ -160,7 +164,7 @@ function Post() {
           ></div>
         )}
         <div className={`${style.textareaWrap} textareaWrap`} ref={textWrap}>
-          <textarea
+          <TextareaAutosize
             placeholder="今天心情是..."
             value={message.message}
             className={`${style.textarea} textarea`}
@@ -172,7 +176,20 @@ function Post() {
             onTouchStart={textareaTouchStartEvent}
             onTouchEnd={textareaTouchEndEvent}
             onInput={textareaInputEvent}
-          ></textarea>
+          ></TextareaAutosize>
+          {/* <textarea
+            placeholder="今天心情是..."
+            value={message.message}
+            className={`${style.textarea} textarea`}
+            ref={textarea}
+            style={{
+              color: `${message.textColor}`,
+            }}
+            onContextMenu={textareaContextMenuEvent}
+            onTouchStart={textareaTouchStartEvent}
+            onTouchEnd={textareaTouchEndEvent}
+            onInput={textareaInputEvent}
+          ></textarea> */}
         </div>
       </div>
       {loopTouch && (

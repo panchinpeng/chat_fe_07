@@ -222,5 +222,16 @@ const api = {
       throw Promise.reject(e);
     }
   },
+  async searchPlace(q) {
+    try {
+      const res = await fetch("/api/article/place", {
+        method: "POST",
+        body: { q },
+      });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
 };
 export default api;
