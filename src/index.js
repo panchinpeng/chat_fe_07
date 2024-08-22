@@ -7,9 +7,9 @@ import Loading from "./component/loading/loading";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-  <React.StrictMode>
-    <Suspense fallback={<Loading></Loading>}>
-      <RouterProvider router={router}></RouterProvider>
-    </Suspense>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <Suspense fallback={<Loading></Loading>}>
+    <RouterProvider router={router}></RouterProvider>
+  </Suspense>
+  // </React.StrictMode>
 );

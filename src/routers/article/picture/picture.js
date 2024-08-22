@@ -43,7 +43,10 @@ export default function Picture({ emitPictureFn }) {
           fileReader.onload = (e) => {
             setPicture((p) => {
               const copyPic = [...p];
-              copyPic[index] = e.target.result;
+              copyPic[index] = {
+                src: e.target.result,
+                id: window.btoa(item.name),
+              };
               return copyPic;
             });
           };
@@ -53,9 +56,11 @@ export default function Picture({ emitPictureFn }) {
   };
 
   const handleLongTouchStart = (index) => {
-    longTouchTimer.current = setTimeout(() => {
-      setLongTouchPicture(index);
-    }, 1000);
+    if (picture.length > 1) {
+      longTouchTimer.current = setTimeout(() => {
+        setLongTouchPicture(index);
+      }, 1000);
+    }
   };
   const handleLongTouchEnd = () => {
     clearTimeout(longTouchTimer.current);
@@ -147,7 +152,7 @@ export default function Picture({ emitPictureFn }) {
               <SwiperSlide
                 key={index}
                 className={style.imgWrap}
-                onTouchStart={handleLongTouchStart}
+                onTouchStart={() => handleLongTouchStart(index)}
                 onTouchEnd={handleLongTouchEnd}
               >
                 {item === "loading" ? (
@@ -156,7 +161,7 @@ export default function Picture({ emitPictureFn }) {
                   </div>
                 ) : (
                   <div className={style.img}>
-                    <img src={item}></img>
+                    <img src={item.src}></img>
                     <div className={style.remove}>
                       <DeleteIcon
                         sx={{ fontSize: 30 }}
@@ -171,7 +176,7 @@ export default function Picture({ emitPictureFn }) {
             ))}
           </Swiper>
           <div className={style.warn}>
-            最多可上傳10張相片，長按相片可編輯順序
+            最多可上傳10張相片{picture.length > 1 && "，長按相片可編輯順序"}
           </div>
         </>
       ) : (
@@ -188,8 +193,8 @@ export default function Picture({ emitPictureFn }) {
                   >
                     {picture.map((item, index) => (
                       <Draggable
-                        key={item.substr(0, 160)}
-                        draggableId={item.substr(0, 160)}
+                        key={item.id}
+                        draggableId={item.id}
                         index={index}
                       >
                         {(provided, snapshot2) => (
@@ -202,7 +207,7 @@ export default function Picture({ emitPictureFn }) {
                               snapshot.isDraggingOver,
                               provided.draggableProps.style
                             )}
-                            src={item}
+                            src={item.src}
                             className={style.sortPicture}
                           ></img>
                         )}
