@@ -9,14 +9,19 @@
   display: flex !important;
   justify-content: center;
   align-items: center;
-  width: 270px !important;
+  width: auto !important;
   height: 270px !important;
+  user-select: none;
 }
 
 .imgWrap img {
   display: block;
-  /* width: 200px !important; */
+  width: 270px;
+  height: 270px;
   position: relative;
+  object-fit: contain;
+  pointer-events: none;
+  -webkit-touch-callout: none;
 }
 .removeIcon {
   position: absolute;
@@ -26,8 +31,33 @@
   border-radius: 6px;
   cursor: pointer;
 }
+.sortWrap {
+  /* background: #fff; */
+  display: flex;
+  padding: 8px;
+  overflow: auto;
+  height: 300px;
+  align-items: center;
+  background-color: #fff;
+}
+.sortPicture {
+  flex: 0 0 0;
+  width: 270px;
+  height: 270px;
+  object-fit: contain;
+  background-color: #e4e4e4;
+  user-select: none;
+  margin-right: 16px;
+  touch-action: none;
+}
 .warn {
   font-size: 14px;
   margin: 10px;
   float: right;
+}
+.warnSort {
+  font-size: 14px;
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
 }
