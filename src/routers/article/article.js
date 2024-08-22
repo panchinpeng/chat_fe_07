@@ -4,6 +4,9 @@ import { useRef, useState } from "react";
 import style from "./article.module.css";
 import Picture from "./picture/picture";
 import Place from "./place/place";
+import { useEffect } from "react";
+
+import usePageLeaveWarn from "../../hooks/usePageLeaveWarn";
 
 export default function Article() {
   const [message, setMessage] = useState("");
@@ -16,6 +19,8 @@ export default function Article() {
 
   const setPlace = (data) => (place.current = data);
   const setPicture = (data) => (picture.current = data);
+
+  usePageLeaveWarn();
 
   const submitArticle = () => {
     if (!message) {
