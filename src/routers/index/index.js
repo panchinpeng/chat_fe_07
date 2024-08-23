@@ -15,26 +15,25 @@ function Index() {
   const store = useStore();
   const myRef = useRef(null);
 
-  useEffect(() => {
-    const vantaEffect = FOG({
-      el: myRef.current,
-      mouseControls: false,
-      touchControls: false,
-      gyroControls: false,
-      highlightColor: 0x1976d2,
-      midtoneColor: 0x1976d2,
-      baseColor: 0xfff8f8,
-      blurFactor: 0.24,
-      speed: 0.0,
-      zoom: 0.1,
-      THREE: THREE,
-    });
-    window.vantaEffect = vantaEffect;
-
-    return () => {
-      if (vantaEffect) vantaEffect.destroy();
-    };
-  }, []);
+  // useEffect(() => {
+  //   const vantaEffect = FOG({
+  //     el: myRef.current,
+  //     mouseControls: false,
+  //     touchControls: false,
+  //     gyroControls: false,
+  //     highlightColor: 0x1976d2,
+  //     midtoneColor: 0x1976d2,
+  //     baseColor: 0xfff8f8,
+  //     blurFactor: 0.24,
+  //     speed: 0.0,
+  //     zoom: 0.1,
+  //     THREE: THREE,
+  //   });
+  //   window.vantaEffect = vantaEffect;
+  //   return () => {
+  //     if (vantaEffect) vantaEffect.destroy();
+  //   };
+  // }, []);
 
   return (
     <>

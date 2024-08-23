@@ -127,7 +127,11 @@ export default function Picture({ emitPictureFn }) {
     }
   };
 
-  const getListStyle = (isDraggingOver) => ({});
+  const getListStyle = (isDraggingOver) => ({
+    display: "flex",
+    padding: "16px",
+    overflow: "auto",
+  });
 
   const getItemStyle = (isDragging, isDraggingOver, draggableStyle) => {
     if (!isDraggingOver) {
@@ -138,6 +142,11 @@ export default function Picture({ emitPictureFn }) {
     return {
       filter: isDragging ? "" : "opacity(0.5)",
       ...draggableStyle,
+      transitionDuration: ".2s",
+      transitionTimingFunction: "ease",
+      touchAction: "none",
+      willChange: "transform",
+      opacity: 1,
     };
   };
 

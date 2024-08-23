@@ -39,6 +39,8 @@
   height: 300px;
   align-items: center;
   background-color: #fff;
+  position: relative;
+  -webkit-overflow-scrolling: touch;
 }
 .sortPicture {
   flex: 0 0 0;
@@ -49,6 +51,8 @@
   user-select: none;
   margin-right: 16px;
   touch-action: none;
+  -webkit-touch-callout: none;
+  transition-duration: 0.3s;
 }
 .warn {
   font-size: 14px;
