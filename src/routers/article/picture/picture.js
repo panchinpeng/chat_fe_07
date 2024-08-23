@@ -10,6 +10,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCoverflow } from "swiper/modules";
 
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { Base64 } from "js-base64";
 
 export default function Picture({ emitPictureFn }) {
   const [picture, setPicture] = useState([]);
@@ -29,29 +30,69 @@ export default function Picture({ emitPictureFn }) {
 
   const handlerImage = (e) => {
     if (e.target.files.length > 0) {
-      files.current = [...e.target.files].slice(0, 10);
-      emitPictureFn([...files.current]);
-      [...files.current]
+      const filesAry = [...e.target.files]
         .filter((item) => /^image\//.test(item.type))
-        .map((item, index) => {
+        .slice(0, 10);
+      files.current = filesAry;
+      emitPictureFn([...files.current]);
+
+      filesAry.map((item, index) => {
+        setPicture((p) => {
+          const copyPic = [...p];
+          copyPic[index] = "loading";
+          return copyPic;
+        });
+        const fileReader = new FileReader();
+        fileReader.onload = (e) => {
           setPicture((p) => {
             const copyPic = [...p];
-            copyPic[index] = "loading";
+            copyPic[index] = {
+              src: e.target.result,
+              id: Base64.encode(item.name),
+            };
             return copyPic;
           });
-          const fileReader = new FileReader();
-          fileReader.onload = (e) => {
-            setPicture((p) => {
-              const copyPic = [...p];
-              copyPic[index] = {
-                src: e.target.result,
-                id: window.btoa(item.name),
-              };
-              return copyPic;
-            });
-          };
-          fileReader.readAsDataURL(item);
+        };
+        fileReader.readAsDataURL(item);
+      });
+    }
+  };
+
+  const handleAppendImage = (e) => {
+    if (e.target.files.length > 0) {
+      const alreadyFilesLength = picture.length;
+      let filesAry = [...e.target.files]
+        .filter((item) => /^image\//.test(item.type))
+        .filter(
+          (item) =>
+            !files.current.find((alreadyFile) => alreadyFile.name === item.name)
+        );
+      const totalSize = alreadyFilesLength + filesAry.length;
+
+      if (totalSize > 10) {
+        filesAry = filesAry.slice(0, 10 - alreadyFilesLength);
+      }
+      files.current = [...files.current, ...filesAry];
+      emitPictureFn([...files.current]);
+      files.current.map((item, index) => {
+        setPicture((p) => {
+          const copyPic = [...p];
+          copyPic[index] = "loading";
+          return copyPic;
         });
+        const fileReader = new FileReader();
+        fileReader.onload = (e) => {
+          setPicture((p) => {
+            const copyPic = [...p];
+            copyPic[index] = {
+              src: e.target.result,
+              id: Base64.encode(item.name),
+            };
+            return copyPic;
+          });
+        };
+        fileReader.readAsDataURL(item);
+      });
     }
   };
 
@@ -126,6 +167,7 @@ export default function Picture({ emitPictureFn }) {
           onChange={handlerImage}
         ></input>
       </Paper>
+
       <div className={style.warn}>最多挑選10張照片</div>
     </>
   ) : (
@@ -175,6 +217,21 @@ export default function Picture({ emitPictureFn }) {
               </SwiperSlide>
             ))}
           </Swiper>
+          <div className={style.pickInfo}>
+            <label className={style.info} htmlFor="AppendImg">
+              已選 {picture.length} / 10 {picture.length < 10 && "，添加相片"}
+            </label>
+            {picture.length < 10 && (
+              <input
+                type="file"
+                id="AppendImg"
+                className={style.file}
+                accept="image/*"
+                multiple
+                onChange={handleAppendImage}
+              ></input>
+            )}
+          </div>
           <div className={style.warn}>
             最多可上傳10張相片{picture.length > 1 && "，長按相片可編輯順序"}
           </div>

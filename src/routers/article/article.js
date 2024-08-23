@@ -50,21 +50,33 @@ export default function Article() {
         <Box sx={{ mt: 1, p: 1, fontSize: 16, borderBottom: "1px solid #ccc" }}>
           <div>
             開放回覆
-            <Switch defaultChecked checked={isReply} />
+            <Switch
+              defaultChecked
+              checked={isReply}
+              onChange={(e) => setIsReply(e.target.checked)}
+            />
           </div>
           <div className={style.tip}>當發佈貼文後，將允許好友留言</div>
         </Box>
         <Box sx={{ mt: 1, p: 1, fontSize: 16, borderBottom: "1px solid #ccc" }}>
           <div>
             開放按讚
-            <Switch defaultChecked checked={isThumb} />
+            <Switch
+              defaultChecked
+              checked={isThumb}
+              onChange={(e) => setIsThumb(e.target.checked)}
+            />
           </div>
           <div className={style.tip}>當發佈貼文後，將允許好友按讚</div>
         </Box>
         <Box sx={{ mt: 1, p: 1, fontSize: 16, borderBottom: "1px solid #ccc" }}>
           <div>
             僅允許好友看見
-            <Switch defaultChecked checked={isPrivate} />
+            <Switch
+              defaultChecked
+              checked={isPrivate}
+              onChange={(e) => setIsPrivate(e.target.checked)}
+            />
           </div>
           <div className={style.tip}>
             選擇僅好友看見時，僅開放好友互動，其他人看不見唷

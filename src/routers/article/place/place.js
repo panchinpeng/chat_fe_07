@@ -11,6 +11,7 @@ import {
   ListItemIcon,
 } from "@mui/material";
 import FmdGoodIcon from "@mui/icons-material/FmdGood";
+import CancelSharpIcon from "@mui/icons-material/CancelSharp";
 
 import api from "../../../common/api";
 export default function Place({ emitSelectPlaceFn }) {
@@ -41,16 +42,33 @@ export default function Place({ emitSelectPlaceFn }) {
   }, [selectPlace]);
   return (
     <Box sx={{ mt: 1, p: 1, fontSize: 16, borderBottom: "1px solid #ccc" }}>
-      <TextField
-        multiline
-        label="標記地點"
-        variant="standard"
-        color="primary"
-        placeholder="請輸入關鍵字"
-        fullWidth
-        onChange={handlePlaceChange}
-        value={selectPlace.name ? selectPlace.name : selectPlace}
-      />
+      {typeof selectPlace === "string" ? (
+        <TextField
+          multiline
+          label="標記地點"
+          variant="standard"
+          color="primary"
+          placeholder="請輸入關鍵字"
+          fullWidth
+          onChange={handlePlaceChange}
+          value={selectPlace.name ? selectPlace.name : selectPlace}
+        />
+      ) : (
+        <>
+          <div>標記地點</div>
+          <div className={style.showSelectPlace}>
+            <FmdGoodIcon></FmdGoodIcon>
+            <div className={style.placeDesc}>
+              <div>{selectPlace.name}</div>
+              <div className={style.placeDesc}>{selectPlace.display_name}</div>
+            </div>
+            <div className={style.close} onClick={() => setSelectPlace("")}>
+              <CancelSharpIcon sx={{ color: "#fff" }}></CancelSharpIcon>
+            </div>
+          </div>
+        </>
+      )}
+
       {places.length > 0 && (
         <List dense={true}>
           {places === "loading" && (

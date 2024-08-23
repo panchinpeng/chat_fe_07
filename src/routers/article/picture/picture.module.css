@@ -61,3 +61,20 @@
   display: flex;
   flex-direction: column;
 }
+
+.pickInfo {
+  margin: 10px 0 5px 0;
+  color: #fff;
+  display: flex;
+  justify-content: right;
+  overflow: hidden;
+}
+.pickInfo > .info {
+  font-size: 14px;
+  padding: 10px 10px;
+  background-color: #1976d2;
+  width: 250px;
+  margin-right: -10px;
+  transform: skewX(-10deg);
+  text-align: center;
+}
