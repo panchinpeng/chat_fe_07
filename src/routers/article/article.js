@@ -7,8 +7,11 @@ import Place from "./place/place";
 import { useEffect } from "react";
 
 import usePageLeaveWarn from "../../hooks/usePageLeaveWarn";
+import api from "../../common/api";
 
 export default function Article() {
+  usePageLeaveWarn();
+
   const [message, setMessage] = useState("");
   const place = useRef({}); // 值可能是字串
   const picture = useRef([]);
@@ -20,12 +23,26 @@ export default function Article() {
   const setPlace = (data) => (place.current = data);
   const setPicture = (data) => (picture.current = data);
 
-  usePageLeaveWarn();
-
-  const submitArticle = () => {
+  const submitArticle = async () => {
     if (!message) {
       setError({ message: true });
+      return;
     }
+
+    // 如果區域找不到，替換成物件
+    if (typeof place.current === "string") {
+      place.current = { name: place.current };
+    }
+
+    const postResult = await api.addPostArticle(
+      message,
+      place.current,
+      isReply,
+      isThumb,
+      isPrivate,
+      picture.current,
+      1
+    );
   };
 
   return (
