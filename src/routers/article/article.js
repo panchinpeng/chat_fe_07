@@ -1,16 +1,18 @@
 import { Box, Paper, Switch, Button, TextField } from "@mui/material";
 import { useRef, useState } from "react";
-
+import { useNavigate } from "react-router-dom";
+import { useStore } from "../../store";
 import style from "./article.module.css";
 import Picture from "./picture/picture";
 import Place from "./place/place";
-import { useEffect } from "react";
 
 import usePageLeaveWarn from "../../hooks/usePageLeaveWarn";
 import api from "../../common/api";
 
 export default function Article() {
   usePageLeaveWarn();
+  const navigate = useNavigate();
+  const store = useStore();
 
   const [message, setMessage] = useState("");
   const place = useRef({}); // 值可能是字串
@@ -28,7 +30,7 @@ export default function Article() {
       setError({ message: true });
       return;
     }
-
+    store.loading.setLoading(true);
     // 如果區域找不到，替換成物件
     if (typeof place.current === "string") {
       place.current = { name: place.current };
@@ -43,6 +45,14 @@ export default function Article() {
       picture.current,
       1
     );
+    store.loading.setLoading(false);
+    if (postResult.status) {
+      window.passLeavePrompt = true;
+      navigate("/");
+      setTimeout(() => {
+        window.passLeavePrompt = false;
+      }, 1000);
+    }
   };
 
   return (

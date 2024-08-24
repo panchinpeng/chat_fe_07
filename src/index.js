@@ -8,7 +8,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   // <React.StrictMode>
-  <Suspense fallback={<Loading></Loading>}>
+  <Suspense fallback={<Loading from="Suspense"></Loading>}>
     <RouterProvider router={router}></RouterProvider>
   </Suspense>
   // </React.StrictMode>

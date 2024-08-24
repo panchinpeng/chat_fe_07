@@ -62,7 +62,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: <PrivateRoutes forceToLogin={false}></PrivateRoutes>,
+    element: <PrivateRoutes forceToLogin={true}></PrivateRoutes>,
     children: [
       {
         path: "",

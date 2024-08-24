@@ -10,10 +10,11 @@ import { useStore } from "../../store";
 import * as THREE from "three";
 import FOG from "vanta/dist/vanta.fog.min";
 import Trends from "../../component/trends/trends";
+import Loading from "../../component/loading/loading";
 
 function Index() {
   const store = useStore();
-  const myRef = useRef(null);
+  // const myRef = useRef(null);
 
   // useEffect(() => {
   //   const vantaEffect = FOG({
@@ -41,7 +42,8 @@ function Index() {
         {store.user.login !== undefined && <Outlet />}
       </Box>
       <Trends></Trends>
-      <div id="bg-animate" className={style.bgAnimate} ref={myRef}></div>
+      <Loading></Loading>
+      {/* <div id="bg-animate" className={style.bgAnimate} ref={myRef}></div> */}
     </>
   );
 }
