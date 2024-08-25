@@ -128,82 +128,90 @@ function Portal() {
 
   return (
     <Box sx={{ padding: "10px" }}>
-      {articles.map((article, index) => (
-        <Card
-          sx={{ width: "100%", maxWidth: "360px", margin: "10px auto 0 auto" }}
-        >
-          <CardHeader
-            avatar={
-              <Avatar from="Index" friendName={article.username}></Avatar>
-            }
-            action={
-              <IconButton aria-label="settings">
-                <MoreVertIcon />
-              </IconButton>
-            }
-            title={article.username}
-            subheader={
-              <div className={style.subheader}>
-                <div>{renderTime(article.time)}</div>
-              </div>
-            }
-          />
+      {articles.length > 0 ? (
+        articles.map((article, index) => (
+          <Card
+            sx={{
+              width: "100%",
+              maxWidth: "360px",
+              margin: "10px auto 0 auto",
+            }}
+          >
+            <CardHeader
+              avatar={
+                <Avatar from="Index" friendName={article.username}></Avatar>
+              }
+              action={
+                <IconButton aria-label="settings">
+                  <MoreVertIcon />
+                </IconButton>
+              }
+              title={article.username}
+              subheader={
+                <div className={style.subheader}>
+                  <div>{renderTime(article.time)}</div>
+                </div>
+              }
+            />
 
-          <CardMedia
-            children={
-              <div
-                className={style.imageGallery}
-                onScroll={(e) => loadingRestImage(e, index)}
-              >
-                {images[index] &&
-                  images[index].map((img, index) =>
-                    img === 0 ? (
-                      <Skeleton
-                        key={index}
-                        animation="wave"
-                        sx={{
-                          height: "320px",
-                          width: "300px",
-                          transform: "none",
-                          flex: "0 0 300px",
-                        }}
-                        className={style.articleImg}
-                      />
-                    ) : (
-                      <img
-                        className={style.articleImg}
-                        key={img}
-                        src={img}
-                        height="320px"
-                        alt="article picture"
-                      ></img>
-                    )
-                  )}
-              </div>
-            }
-          />
-          <CardContent>
-            <Typography variant="body2" color="text.secondary">
-              <div className={style.interactive}>
-                <ThumbUpIcon sx={{ mr: 2 }}></ThumbUpIcon>
-                <CommentIcon sx={{ mr: 2 }}></CommentIcon>
-                <a
-                  target="_BLANK"
-                  rel="noreferrer"
-                  className={style.address}
-                  href={`https://www.google.com/maps/dir//google+map+${article.place.name}`}
+            <CardMedia
+              children={
+                <div
+                  className={style.imageGallery}
+                  onScroll={(e) => loadingRestImage(e, index)}
                 >
-                  <FmdGoodIcon sx={{ fontSize: "13px" }}></FmdGoodIcon>
-                  <div className={style.addressDetail}>
-                    <div className={style.nowrap}>{article.place.name}</div>
-                  </div>
-                </a>
-              </div>
-              <div className={style.message}>{article.message}</div>
-            </Typography>
-          </CardContent>
-        </Card>
-      ))}
+                  {images[index] &&
+                    images[index].map((img, index) =>
+                      img === 0 ? (
+                        <Skeleton
+                          key={index}
+                          animation="wave"
+                          sx={{
+                            height: "320px",
+                            width: "300px",
+                            transform: "none",
+                            flex: "0 0 300px",
+                          }}
+                          className={style.articleImg}
+                        />
+                      ) : (
+                        <img
+                          className={style.articleImg}
+                          key={img}
+                          src={img}
+                          height="320px"
+                          alt="article picture"
+                        ></img>
+                      )
+                    )}
+                </div>
+              }
+            />
+            <CardContent>
+              <Typography variant="body2" color="text.secondary">
+                <div className={style.interactive}>
+                  <ThumbUpIcon sx={{ mr: 2 }}></ThumbUpIcon>
+                  <CommentIcon sx={{ mr: 2 }}></CommentIcon>
+                  <a
+                    target="_BLANK"
+                    rel="noreferrer"
+                    className={style.address}
+                    href={`https://www.google.com/maps/dir//google+map+${article.place.name}`}
+                  >
+                    <FmdGoodIcon sx={{ fontSize: "13px" }}></FmdGoodIcon>
+                    <div className={style.addressDetail}>
+                      <div className={style.nowrap}>{article.place.name}</div>
+                    </div>
+                  </a>
+                </div>
+                <div className={style.message}>{article.message}</div>
+              </Typography>
+            </CardContent>
+          </Card>
+        ))
+      ) : (
+        <div className={style.noFriend}>哭哭，沒有好朋友</div>
+      )}
       <div ref={loadingNextPageDOM}></div>
     </Box>
   );
