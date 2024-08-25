@@ -30,6 +30,7 @@ function PrivateRoutes({ forceToLogin }) {
     }
     checkLogin(() => {
       intervalID.current = setInterval(() => {
+        store.trends.getAllFriendTrends();
         checkLogin();
       }, 60000);
     });

@@ -126,11 +126,7 @@ function AddFriend() {
                   onClick={() => sendAddFriend(friendItem)}
                 >
                   <ListItemAvatar>
-                    <Avatar
-                      from="Index"
-                      friendName={friendItem.username}
-                      friendTrends={friendItem.trends}
-                    />
+                    <Avatar from="Index" friendName={friendItem.username} />
                   </ListItemAvatar>
                   <ListItemText
                     primary={friendItem.username}

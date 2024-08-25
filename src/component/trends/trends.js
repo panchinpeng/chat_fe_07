@@ -77,6 +77,7 @@ function Trends() {
       if (progress > 103 && store.trends.show) {
         if (story + 1 === store.trends.trendsData.length) {
           store.trends.closeTrend();
+          store.trends.getAllFriendTrends();
           return;
         }
         if (store.trends.trendsData[story + 1].image) {

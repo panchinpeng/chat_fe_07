@@ -48,11 +48,7 @@ function Chatroom() {
                     }
                   >
                     <ListItemAvatar sx={{ minWidth: 0 }}>
-                      <Avatar
-                        from="Index"
-                        friendTrends={0}
-                        friendName={friendUsername}
-                      />
+                      <Avatar from="Index" friendName={friendUsername} />
                     </ListItemAvatar>
                     <ListItemText
                       sx={{ ml: 1 }}

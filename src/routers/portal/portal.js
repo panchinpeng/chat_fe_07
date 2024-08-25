@@ -16,7 +16,10 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import style from "./portal.module.css";
 import api from "../../common/api";
 import Avatar from "../../component/avatar/avatar";
-export default function Portal() {
+import { observer } from "mobx-react-lite";
+import { useStore } from "../../store";
+function Portal() {
+  const store = useStore();
   const [articles, setArticles] = useState([]);
   const [images, setImages] = useState([]);
   const loadingNextPageDOM = useRef();
@@ -24,11 +27,12 @@ export default function Portal() {
   const totalPage = useRef();
   useEffect(() => {
     (async () => {
+      store.trends.getAllFriendTrends();
       const articlesRes = await api.getArticle(nowPage.current);
       if (articlesRes.status) {
         totalPage.current = articlesRes.data.totalPage;
         setArticles(articlesRes.data.results);
-        const observer = new IntersectionObserver(
+        let observer = new IntersectionObserver(
           async (entries) => {
             const entry = entries[0];
             if (entry.isIntersecting) {
@@ -38,11 +42,13 @@ export default function Portal() {
               nowPage.current = nowPage.current + 1;
               const articlesNextRes = await api.getArticle(nowPage.current);
               if (articlesNextRes.status) {
-                const existsIds = articles.map((item) => item.id);
-                const excludeRepeatData = articlesNextRes.data.results.filter(
-                  (item) => !existsIds.includes(item.id)
-                );
-                setArticles((articles) => [...articles, ...excludeRepeatData]);
+                setArticles((articles) => {
+                  const existsIds = articles.map((item) => item.id);
+                  const excludeRepeatData = articlesNextRes.data.results.filter(
+                    (item) => !existsIds.includes(item.id)
+                  );
+                  return [...articles, ...excludeRepeatData];
+                });
               }
             }
           },
@@ -78,7 +84,9 @@ export default function Portal() {
             });
           };
           imgObj.src = `${process.env.REACT_APP_API_DOMAIN}/api/article/img?t=${img}`;
+          return undefined;
         });
+        return undefined;
       });
       const loadingImgs = articles.map((article) =>
         new Array(article.img_names.length).fill(0)
@@ -112,10 +120,12 @@ export default function Portal() {
           });
         };
         imgObj.src = `${process.env.REACT_APP_API_DOMAIN}/api/article/img?t=${img}`;
+        return undefined;
       });
     }
     e.target.dataset.loading = "loading";
   };
+
   return (
     <Box sx={{ padding: "10px" }}>
       {articles.map((article, index) => (
@@ -165,6 +175,7 @@ export default function Portal() {
                         key={img}
                         src={img}
                         height="320px"
+                        alt="article picture"
                       ></img>
                     )
                   )}
@@ -178,6 +189,7 @@ export default function Portal() {
                 <CommentIcon sx={{ mr: 2 }}></CommentIcon>
                 <a
                   target="_BLANK"
+                  rel="noreferrer"
                   className={style.address}
                   href={`https://www.google.com/maps/dir//google+map+${article.place.name}`}
                 >
@@ -196,3 +208,4 @@ export default function Portal() {
     </Box>
   );
 }
+export default observer(Portal);
