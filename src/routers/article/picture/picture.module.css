@@ -39,6 +39,8 @@
   height: 300px;
   align-items: center;
   background-color: #fff;
+  position: relative;
+  -webkit-overflow-scrolling: touch;
 }
 .sortPicture {
   flex: 0 0 0;
@@ -49,6 +51,8 @@
   user-select: none;
   margin-right: 16px;
   touch-action: none;
+  -webkit-touch-callout: none;
+  transition-duration: 0.3s;
 }
 .warn {
   font-size: 14px;
@@ -60,4 +64,21 @@
   margin: 10px;
   display: flex;
   flex-direction: column;
+}
+
+.pickInfo {
+  margin: 10px 0 5px 0;
+  color: #fff;
+  display: flex;
+  justify-content: right;
+  overflow: hidden;
+}
+.pickInfo > .info {
+  font-size: 14px;
+  padding: 10px 10px;
+  background-color: #1976d2;
+  width: 250px;
+  margin-right: -10px;
+  transform: skewX(-10deg);
+  text-align: center;
 }

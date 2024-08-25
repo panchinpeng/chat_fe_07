@@ -8,7 +8,7 @@ import api from "../../common/api";
 import Alert from "../alert/alert";
 import { useRef, useState } from "react";
 
-function CuAvatar({ from, friendName, friendTrends }) {
+function CuAvatar({ from, friendName }) {
   const store = useStore();
   const warnRef = useRef();
   const [avatar, setAvatar] = useState(
@@ -52,7 +52,10 @@ function CuAvatar({ from, friendName, friendTrends }) {
   };
   const computedavatarTreadsCLassName = () => {
     if (friendName) {
-      return friendTrends * 1 > 0
+      const friendInfo = store.trends.friendTrends.find(
+        (friend) => friend.username === friendName
+      );
+      return friendInfo && friendInfo.readed * 1 === 0
         ? `${style.avatarTreads} ${from === "my" ? style.big : ""}`
         : "";
     } else {

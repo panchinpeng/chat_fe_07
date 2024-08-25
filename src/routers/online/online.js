@@ -86,7 +86,7 @@ function Online() {
           label="想說甚麼"
           multiline
           maxRows={8}
-          variant="filled"
+          variant="standard"
           onChange={handleInput}
           value={message}
           InputProps={{

@@ -17,3 +17,7 @@
   overflow: hidden;
   max-height: 120px;
 }
+.noFriend {
+  padding-top: 10px;
+  color: #8d8888;
+}

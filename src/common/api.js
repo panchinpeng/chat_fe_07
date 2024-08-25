@@ -131,6 +131,51 @@ const api = {
       throw Promise.reject(e);
     }
   },
+  async addPostArticle(
+    message,
+    place,
+    isReply,
+    isThumb,
+    isPrivate,
+    images,
+    status
+  ) {
+    if (
+      !message ||
+      !place ||
+      typeof isReply !== "boolean" ||
+      typeof isThumb !== "boolean" ||
+      typeof isPrivate !== "boolean" ||
+      !Array.isArray(images)
+    ) {
+      return;
+    }
+    if (![0, 1].includes(status)) {
+      return;
+    }
+
+    const fd = new FormData();
+    fd.append("message", message);
+    fd.append("place", JSON.stringify(place));
+    fd.append("isReply", isReply);
+    fd.append("isThumb", isThumb);
+    fd.append("isPrivate", isPrivate);
+    fd.append("status", status);
+    images.map((image) => {
+      fd.append("images", image);
+    });
+
+    const res = await fetch("/api/article/add", {
+      method: "POST",
+      headers: {},
+      body: fd,
+    });
+    return res;
+    try {
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
   async searchFriend(keyword) {
     keyword = keyword.trim();
     try {
@@ -228,6 +273,14 @@ const api = {
         method: "POST",
         body: { q },
       });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getArticle(page) {
+    try {
+      const res = await fetch(`/api/article?page=${page}`);
       return res;
     } catch (e) {
       throw Promise.reject(e);

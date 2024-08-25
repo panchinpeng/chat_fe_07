@@ -15,4 +15,6 @@
 .inputMessage {
   width: 100%;
   flex: 0 0;
+  background-color: #fff;
+  padding: 0 10px;
 }

@@ -8,11 +8,13 @@ function Logout() {
   const store = useStore();
   useEffect(() => {
     (async () => {
+      store.user.clear();
+      store.trends.closeTrend();
       const res = await api.logout();
-      if (res.status) {
+      if (res && res.status) {
         store.user.setLogin(false);
       }
-      navigate("/");
+      navigate("/login");
     })();
   }, []);
   return <div></div>;

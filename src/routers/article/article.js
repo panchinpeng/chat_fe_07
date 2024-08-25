@@ -1,14 +1,19 @@
 import { Box, Paper, Switch, Button, TextField } from "@mui/material";
 import { useRef, useState } from "react";
-
+import { useNavigate } from "react-router-dom";
+import { useStore } from "../../store";
 import style from "./article.module.css";
 import Picture from "./picture/picture";
 import Place from "./place/place";
-import { useEffect } from "react";
 
 import usePageLeaveWarn from "../../hooks/usePageLeaveWarn";
+import api from "../../common/api";
 
 export default function Article() {
+  usePageLeaveWarn();
+  const navigate = useNavigate();
+  const store = useStore();
+
   const [message, setMessage] = useState("");
   const place = useRef({}); // 值可能是字串
   const picture = useRef([]);
@@ -20,11 +25,33 @@ export default function Article() {
   const setPlace = (data) => (place.current = data);
   const setPicture = (data) => (picture.current = data);
 
-  usePageLeaveWarn();
-
-  const submitArticle = () => {
+  const submitArticle = async () => {
     if (!message) {
       setError({ message: true });
+      return;
+    }
+    store.loading.setLoading(true);
+    // 如果區域找不到，替換成物件
+    if (typeof place.current === "string") {
+      place.current = { name: place.current };
+    }
+
+    const postResult = await api.addPostArticle(
+      message,
+      place.current,
+      isReply,
+      isThumb,
+      isPrivate,
+      picture.current,
+      1
+    );
+    store.loading.setLoading(false);
+    if (postResult.status) {
+      window.passLeavePrompt = true;
+      navigate("/");
+      setTimeout(() => {
+        window.passLeavePrompt = false;
+      }, 1000);
     }
   };
 
@@ -50,21 +77,33 @@ export default function Article() {
         <Box sx={{ mt: 1, p: 1, fontSize: 16, borderBottom: "1px solid #ccc" }}>
           <div>
             開放回覆
-            <Switch defaultChecked checked={isReply} />
+            <Switch
+              defaultChecked
+              checked={isReply}
+              onChange={(e) => setIsReply(e.target.checked)}
+            />
           </div>
           <div className={style.tip}>當發佈貼文後，將允許好友留言</div>
         </Box>
         <Box sx={{ mt: 1, p: 1, fontSize: 16, borderBottom: "1px solid #ccc" }}>
           <div>
             開放按讚
-            <Switch defaultChecked checked={isThumb} />
+            <Switch
+              defaultChecked
+              checked={isThumb}
+              onChange={(e) => setIsThumb(e.target.checked)}
+            />
           </div>
           <div className={style.tip}>當發佈貼文後，將允許好友按讚</div>
         </Box>
         <Box sx={{ mt: 1, p: 1, fontSize: 16, borderBottom: "1px solid #ccc" }}>
           <div>
             僅允許好友看見
-            <Switch defaultChecked checked={isPrivate} />
+            <Switch
+              defaultChecked
+              checked={isPrivate}
+              onChange={(e) => setIsPrivate(e.target.checked)}
+            />
           </div>
           <div className={style.tip}>
             選擇僅好友看見時，僅開放好友互動，其他人看不見唷

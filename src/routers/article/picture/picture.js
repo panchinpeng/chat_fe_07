@@ -10,6 +10,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCoverflow } from "swiper/modules";
 
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { Base64 } from "js-base64";
 
 export default function Picture({ emitPictureFn }) {
   const [picture, setPicture] = useState([]);
@@ -29,33 +30,78 @@ export default function Picture({ emitPictureFn }) {
 
   const handlerImage = (e) => {
     if (e.target.files.length > 0) {
-      files.current = [...e.target.files].slice(0, 10);
-      emitPictureFn([...files.current]);
-      [...files.current]
+      const filesAry = [...e.target.files]
         .filter((item) => /^image\//.test(item.type))
-        .map((item, index) => {
+        .slice(0, 10);
+      files.current = filesAry;
+      emitPictureFn([...files.current]);
+
+      filesAry.map((item, index) => {
+        setPicture((p) => {
+          const copyPic = [...p];
+          copyPic[index] = "loading";
+          return copyPic;
+        });
+        const fileReader = new FileReader();
+        fileReader.onload = (e) => {
           setPicture((p) => {
             const copyPic = [...p];
-            copyPic[index] = "loading";
+            copyPic[index] = {
+              src: e.target.result,
+              id: Base64.encode(item.name),
+            };
             return copyPic;
           });
-          const fileReader = new FileReader();
-          fileReader.onload = (e) => {
-            setPicture((p) => {
-              const copyPic = [...p];
-              copyPic[index] = e.target.result;
-              return copyPic;
-            });
-          };
-          fileReader.readAsDataURL(item);
+        };
+        fileReader.readAsDataURL(item);
+      });
+    }
+  };
+
+  const handleAppendImage = (e) => {
+    if (e.target.files.length > 0) {
+      const alreadyFilesLength = picture.length;
+      let filesAry = [...e.target.files]
+        .filter((item) => /^image\//.test(item.type))
+        .filter(
+          (item) =>
+            !files.current.find((alreadyFile) => alreadyFile.name === item.name)
+        );
+      const totalSize = alreadyFilesLength + filesAry.length;
+
+      if (totalSize > 10) {
+        filesAry = filesAry.slice(0, 10 - alreadyFilesLength);
+      }
+      files.current = [...files.current, ...filesAry];
+      emitPictureFn([...files.current]);
+      files.current.map((item, index) => {
+        setPicture((p) => {
+          const copyPic = [...p];
+          copyPic[index] = "loading";
+          return copyPic;
         });
+        const fileReader = new FileReader();
+        fileReader.onload = (e) => {
+          setPicture((p) => {
+            const copyPic = [...p];
+            copyPic[index] = {
+              src: e.target.result,
+              id: Base64.encode(item.name),
+            };
+            return copyPic;
+          });
+        };
+        fileReader.readAsDataURL(item);
+      });
     }
   };
 
   const handleLongTouchStart = (index) => {
-    longTouchTimer.current = setTimeout(() => {
-      setLongTouchPicture(index);
-    }, 1000);
+    if (picture.length > 1) {
+      longTouchTimer.current = setTimeout(() => {
+        setLongTouchPicture(index);
+      }, 1000);
+    }
   };
   const handleLongTouchEnd = () => {
     clearTimeout(longTouchTimer.current);
@@ -81,7 +127,11 @@ export default function Picture({ emitPictureFn }) {
     }
   };
 
-  const getListStyle = (isDraggingOver) => ({});
+  const getListStyle = (isDraggingOver) => ({
+    display: "flex",
+    padding: "16px",
+    overflow: "auto",
+  });
 
   const getItemStyle = (isDragging, isDraggingOver, draggableStyle) => {
     if (!isDraggingOver) {
@@ -92,6 +142,11 @@ export default function Picture({ emitPictureFn }) {
     return {
       filter: isDragging ? "" : "opacity(0.5)",
       ...draggableStyle,
+      transitionDuration: ".2s",
+      transitionTimingFunction: "ease",
+      touchAction: "none",
+      willChange: "transform",
+      opacity: 1,
     };
   };
 
@@ -121,6 +176,7 @@ export default function Picture({ emitPictureFn }) {
           onChange={handlerImage}
         ></input>
       </Paper>
+
       <div className={style.warn}>最多挑選10張照片</div>
     </>
   ) : (
@@ -147,7 +203,7 @@ export default function Picture({ emitPictureFn }) {
               <SwiperSlide
                 key={index}
                 className={style.imgWrap}
-                onTouchStart={handleLongTouchStart}
+                onTouchStart={() => handleLongTouchStart(index)}
                 onTouchEnd={handleLongTouchEnd}
               >
                 {item === "loading" ? (
@@ -156,7 +212,7 @@ export default function Picture({ emitPictureFn }) {
                   </div>
                 ) : (
                   <div className={style.img}>
-                    <img src={item}></img>
+                    <img src={item.src}></img>
                     <div className={style.remove}>
                       <DeleteIcon
                         sx={{ fontSize: 30 }}
@@ -170,8 +226,23 @@ export default function Picture({ emitPictureFn }) {
               </SwiperSlide>
             ))}
           </Swiper>
+          <div className={style.pickInfo}>
+            <label className={style.info} htmlFor="AppendImg">
+              已選 {picture.length} / 10 {picture.length < 10 && "，添加相片"}
+            </label>
+            {picture.length < 10 && (
+              <input
+                type="file"
+                id="AppendImg"
+                className={style.file}
+                accept="image/*"
+                multiple
+                onChange={handleAppendImage}
+              ></input>
+            )}
+          </div>
           <div className={style.warn}>
-            最多可上傳10張相片，長按相片可編輯順序
+            最多可上傳10張相片{picture.length > 1 && "，長按相片可編輯順序"}
           </div>
         </>
       ) : (
@@ -188,8 +259,8 @@ export default function Picture({ emitPictureFn }) {
                   >
                     {picture.map((item, index) => (
                       <Draggable
-                        key={item.substr(0, 160)}
-                        draggableId={item.substr(0, 160)}
+                        key={item.id}
+                        draggableId={item.id}
                         index={index}
                       >
                         {(provided, snapshot2) => (
@@ -202,7 +273,7 @@ export default function Picture({ emitPictureFn }) {
                               snapshot.isDraggingOver,
                               provided.draggableProps.style
                             )}
-                            src={item}
+                            src={item.src}
                             className={style.sortPicture}
                           ></img>
                         )}

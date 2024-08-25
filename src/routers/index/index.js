@@ -10,39 +10,40 @@ import { useStore } from "../../store";
 import * as THREE from "three";
 import FOG from "vanta/dist/vanta.fog.min";
 import Trends from "../../component/trends/trends";
+import Loading from "../../component/loading/loading";
 
 function Index() {
   const store = useStore();
-  const myRef = useRef(null);
+  // const myRef = useRef(null);
 
-  useEffect(() => {
-    const vantaEffect = FOG({
-      el: myRef.current,
-      mouseControls: false,
-      touchControls: false,
-      gyroControls: false,
-      highlightColor: 0x1976d2,
-      midtoneColor: 0x1976d2,
-      baseColor: 0xfff8f8,
-      blurFactor: 0.24,
-      speed: 0.0,
-      zoom: 0.1,
-      THREE: THREE,
-    });
-    window.vantaEffect = vantaEffect;
-
-    return () => {
-      if (vantaEffect) vantaEffect.destroy();
-    };
-  }, []);
+  // useEffect(() => {
+  //   const vantaEffect = FOG({
+  //     el: myRef.current,
+  //     mouseControls: false,
+  //     touchControls: false,
+  //     gyroControls: false,
+  //     highlightColor: 0x1976d2,
+  //     midtoneColor: 0x1976d2,
+  //     baseColor: 0xfff8f8,
+  //     blurFactor: 0.24,
+  //     speed: 0.0,
+  //     zoom: 0.1,
+  //     THREE: THREE,
+  //   });
+  //   window.vantaEffect = vantaEffect;
+  //   return () => {
+  //     if (vantaEffect) vantaEffect.destroy();
+  //   };
+  // }, []);
 
   return (
     <>
-      <Box component="section" className={style.content}>
+      <Box component="section" className={style.content} id="interactionWrap">
         {store.user.login !== undefined && <Outlet />}
       </Box>
       <Trends></Trends>
-      <div id="bg-animate" className={style.bgAnimate} ref={myRef}></div>
+      <Loading></Loading>
+      {/* <div id="bg-animate" className={style.bgAnimate} ref={myRef}></div> */}
     </>
   );
 }

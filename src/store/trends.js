@@ -8,6 +8,7 @@ class Trends {
   }
   show = false;
   trendsData = [];
+  friendTrends = [];
   async getTrend(username) {
     const res = await api.getTrends(username);
     if (res && res.status && res.data.length) {
@@ -15,6 +16,12 @@ class Trends {
         this.trendsData = res.data;
         this.show = true;
       });
+    }
+  }
+  async getAllFriendTrends() {
+    const res = await api.getAllFriendTrends();
+    if (res && res.status) {
+      this.friendTrends = res.data;
     }
   }
   closeTrend() {

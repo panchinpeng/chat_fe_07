@@ -47,12 +47,8 @@ function Chatroom() {
                       navigator(`/member/online/${friendUsername}`)
                     }
                   >
-                    <ListItemAvatar>
-                      <Avatar
-                        from="Index"
-                        friendTrends={0}
-                        friendName={friendUsername}
-                      />
+                    <ListItemAvatar sx={{ minWidth: 0 }}>
+                      <Avatar from="Index" friendName={friendUsername} />
                     </ListItemAvatar>
                     <ListItemText
                       sx={{ ml: 1 }}
@@ -83,19 +79,8 @@ function Chatroom() {
           </List>
         </>
       ) : (
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            height: "100%",
-            color: "#8d8888",
-          }}
-        >
-          哭哭，沒有好朋友
-        </Box>
+        <div className={style.noFriend}>哭哭，沒有好朋友</div>
       )}
-
-      {/*  */}
     </Box>
   );
 }

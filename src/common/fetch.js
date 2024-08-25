@@ -24,7 +24,8 @@ export default async function (url, settings) {
     if (
       data.status === false &&
       data.msg === "verify fail" &&
-      !/\/user\/verify/.test(url)
+      !/\/user\/verify/.test(url) &&
+      !/\/user\/logout/.test(url)
     ) {
       // 打api，但狀態已被登出
       window.location = "/login";
