@@ -38,7 +38,7 @@ function Index() {
 
   return (
     <>
-      <Box component="section" className={style.content}>
+      <Box component="section" className={style.content} id="interactionWrap">
         {store.user.login !== undefined && <Outlet />}
       </Box>
       <Trends></Trends>
