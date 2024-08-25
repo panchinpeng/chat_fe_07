@@ -36,7 +36,15 @@ function BottomNav() {
               label="訊息"
               icon={
                 store.user.account.unread * 1 > 0 ? (
-                  <Badge badgeContent={store.user.account.unread} color="error">
+                  <Badge
+                    badgeContent={store.user.account.unread}
+                    color="error"
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    max={999}
+                  >
                     <MessageIcon />
                   </Badge>
                 ) : (

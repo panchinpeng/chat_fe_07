@@ -39,3 +39,7 @@ a {
 .MuiCardHeader-avatar {
   margin-right: 8px !important;
 }
+
+.MuiBadge-badge {
+  height: 14px !important;
+}

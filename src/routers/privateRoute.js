@@ -16,16 +16,12 @@ function PrivateRoutes({ forceToLogin }) {
     if (res.status) {
       callback instanceof Function && callback();
     } else {
-      store.user.clear();
-      store.trends.closeTrend();
-      forceToLogin && navigate("/login");
+      forceToLogin && navigate("/logout");
     }
   }, []);
 
   useEffect(() => {
     if (location.pathname === "/logout") {
-      store.user.clear();
-      store.trends.closeTrend();
       return;
     }
     checkLogin(() => {
