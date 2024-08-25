@@ -32,7 +32,7 @@ function Chatroom() {
       {friend.length > 0 ? (
         <>
           <TrendOverride></TrendOverride>
-          <List sx={{ width: "100vw", bgcolor: "#ffffff82" }}>
+          <List sx={{ width: "100vw", bgcolor: "#ffffff82", padding: "0" }}>
             {friend.map((item, index) => {
               const friendUsername =
                 item.username === store.user.account.username
@@ -46,6 +46,7 @@ function Chatroom() {
                     onClick={() =>
                       navigator(`/member/online/${friendUsername}`)
                     }
+                    sx={{ padding: "0px 8px 0 8px" }}
                   >
                     <ListItemAvatar sx={{ minWidth: 0 }}>
                       <Avatar from="Index" friendName={friendUsername} />

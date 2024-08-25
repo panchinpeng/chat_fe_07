@@ -23,7 +23,7 @@ function Header() {
       <AppBar position="static" sx={{ flex: "0 0 0", zIndex: "9" }}>
         <Toolbar>
           <div>
-            <Link to="/">
+            <Link to="/" reloadDocument>
               <img
                 alt="logo"
                 src={logo}

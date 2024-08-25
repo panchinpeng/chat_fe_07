@@ -3,6 +3,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import style from "./online.module.css";
 import SendIcon from "@mui/icons-material/Send";
+import ReplyAllSharpIcon from "@mui/icons-material/ReplyAllSharp";
+import HighlightOffSharpIcon from "@mui/icons-material/HighlightOffSharp";
 import { useParams } from "react-router-dom";
 import api from "../../common/api";
 import Message from "../../component/message/message";
@@ -15,6 +17,12 @@ function Online() {
   const socket = useRef(null);
   const [history, setHistory] = useState([]);
   const [message, setMessage] = useState("");
+  const [reply, setReply] = useState(null);
+  const renderReplyMessage = () => {
+    const msgObj = history.find((msg) => msg.id === reply);
+    return msgObj.message;
+  };
+
   const updateUnreadData = useCallback(() => {
     socket.current.emit("receiveMessage", friend, (totalUnreadCount) => {
       store.user.changeUnread(totalUnreadCount);
@@ -76,10 +84,27 @@ function Online() {
     <Box className={style.box}>
       <div className={style.history}>
         {history.map((message) => (
-          <Message message={message} key={message.id}></Message>
+          <Message
+            message={message}
+            key={message.id}
+            setReply={setReply}
+          ></Message>
         ))}
       </div>
       <div className={style.inputMessage}>
+        {reply && (
+          <div className={style.replyWrap}>
+            <ReplyAllSharpIcon className={style.replyMark}></ReplyAllSharpIcon>
+            <div className={style.replyContent}>
+              {renderReplyMessage()}
+              <HighlightOffSharpIcon
+                color="primary"
+                className={style.close}
+                onClick={() => setReply(null)}
+              ></HighlightOffSharpIcon>
+            </div>
+          </div>
+        )}
         <TextField
           fullWidth
           id="filled-multiline-static"

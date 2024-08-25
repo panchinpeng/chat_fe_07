@@ -1,5 +1,5 @@
 .message {
-  padding: 10px;
+  padding: 0;
   display: flex;
 }
 .message.left {
@@ -12,17 +12,32 @@
   padding: 10px;
   word-break: break-all;
   background-color: #f8f6f6;
+  user-select: none;
 }
 .messageWrap {
   margin: 5px;
   flex: 1 1 0;
 }
+
 .time {
-  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-.right .time {
-  text-align: left;
+.time * {
+  font-size: 16px;
 }
 .left .time {
-  text-align: right;
+  flex-direction: row;
+}
+.right .time {
+  flex-direction: row-reverse;
+}
+.timeData {
+  font-size: 12px;
+  color: #ccc;
+}
+.left .more {
+  display: flex;
+  flex-direction: row-reverse;
 }
