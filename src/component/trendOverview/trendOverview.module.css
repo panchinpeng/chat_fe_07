@@ -3,6 +3,7 @@
   overflow: auto;
   white-space: nowrap;
   width: 100vw;
+  border-bottom: 1px solid #e3e2e2;
 }
 .overviewWrap > div {
   display: inline-block;

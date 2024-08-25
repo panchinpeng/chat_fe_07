@@ -47,7 +47,7 @@ function Chatroom() {
                       navigator(`/member/online/${friendUsername}`)
                     }
                   >
-                    <ListItemAvatar>
+                    <ListItemAvatar sx={{ minWidth: 0 }}>
                       <Avatar
                         from="Index"
                         friendTrends={0}
