@@ -10,12 +10,15 @@ import api from "../../common/api";
 import Message from "../../component/message/message";
 import { useStore } from "../../store";
 import { observer } from "mobx-react-lite";
+import { useNavigate } from "react-router-dom";
 
 function Online() {
   const store = useStore();
+  const navigate = useNavigate();
   const { friend } = useParams();
   const socket = useRef(null);
   const [history, setHistory] = useState([]);
+  const [networkError, setNetworkError] = useState(false);
   const [message, setMessage] = useState("");
   const [reply, setReply] = useState(null);
   const renderReplyMessage = () => {
@@ -35,15 +38,31 @@ function Online() {
       });
       socket.current.on("connect", () => {
         console.log("connect ....");
+        setNetworkError(false);
       });
       socket.current.on("message", (message) => {
-        setHistory((history) => [{ ...message }, ...history]);
+        setHistory((history) => [
+          {
+            ...message,
+            reply_message: message.reply_id
+              ? history.find((item) => item.id === message.reply_id).message
+              : "",
+          },
+          ...history,
+        ]);
         updateUnreadData();
       });
       socket.current.on("disconnect", (reason) => {
         if (reason.indexOf("client disconnect") === -1) {
-          alert("網路好像不太穩");
+          setNetworkError(true);
         }
+      });
+
+      socket.current.on("connect_error", (error) => {
+        if (error.message === "login fail") {
+          navigate("/logout");
+        }
+        console.log("connect_error", error, error.message);
       });
     }
 
@@ -69,10 +88,20 @@ function Online() {
   };
   const sendMessage = () => {
     if (message) {
-      socket.current.emit("message", message, friend, (res) => {
+      socket.current.emit("message", message, friend, reply, (res) => {
         if (res.status && res.data) {
-          setHistory((history) => [{ ...res.data }, ...history]);
+          setHistory((history) => [
+            {
+              ...res.data,
+              reply_id: reply ? reply : null,
+              reply_message: reply
+                ? history.find((item) => item.id === reply).message
+                : "",
+            },
+            ...history,
+          ]);
           setMessage("");
+          setReply(null);
         } else {
           alert("訊息傳送失敗");
           console.log(res);
@@ -83,6 +112,9 @@ function Online() {
   return (
     <Box className={style.box}>
       <div className={style.history}>
+        {networkError && (
+          <div className={style.disconnectNetwork}>網路好像不太給力...</div>
+        )}
         {history.map((message) => (
           <Message
             message={message}
@@ -114,6 +146,7 @@ function Online() {
           variant="standard"
           onChange={handleInput}
           value={message}
+          sx={{ mt: 1 }}
           InputProps={{
             endAdornment: (
               <SendIcon

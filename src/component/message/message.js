@@ -34,7 +34,17 @@ function Message({ message, setReply }) {
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        <div className={style.messageContent}>{message.message}</div>
+        <div className={style.messageContent} id={`message${message.id}`}>
+          {message.reply_id && (
+            <a
+              className={style.replyMessage}
+              href={`#message${message.reply_id}`}
+            >
+              {message.reply_message}
+            </a>
+          )}
+          {message.message}
+        </div>
         <div className={style.time}>
           {showMore ? (
             <div className={style.more}>
