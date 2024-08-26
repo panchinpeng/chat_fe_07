@@ -237,6 +237,17 @@ const api = {
       throw Promise.reject(e);
     }
   },
+  async getSingleHistory(friend, q) {
+    try {
+      const res = await fetch("/api/message/singleHistory", {
+        method: "POST",
+        body: { friend, q },
+      });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
   async getAllFriendTrends() {
     try {
       const res = await fetch("/api/trends/allFriendTrends");

@@ -17,6 +17,7 @@ function Online() {
   const navigate = useNavigate();
   const { friend } = useParams();
   const socket = useRef(null);
+  const messageIds = useRef([]);
   const [history, setHistory] = useState([]);
   const [networkError, setNetworkError] = useState(false);
   const [message, setMessage] = useState("");
@@ -38,15 +39,48 @@ function Online() {
       });
       socket.current.on("connect", () => {
         console.log("connect ....");
-        setNetworkError(false);
+        setNetworkError((networkError) => {
+          (async () => {
+            if (networkError) {
+              const res = await api.getMessageHistory(friend);
+              if (res && res.status) {
+                setTimeout(() => {
+                  updateUnreadData();
+                }, 2000);
+                setHistory(res.data);
+              }
+            }
+          })();
+
+          return false;
+        });
       });
-      socket.current.on("message", (message) => {
+      socket.current.on("message", async (message) => {
+        let historyMsgObj;
+        if (message.reply_id) {
+          historyMsgObj = messageIds.current.findIndex(
+            (item) => item === message.reply_id
+          );
+          if (historyMsgObj <= -1) {
+            // 對方已經滾到上方，本地尚未有資料
+            const replyMessage = await api.getSingleHistory(
+              friend,
+              message.reply_id
+            );
+            if (replyMessage) {
+              historyMsgObj = replyMessage.data.message;
+            }
+          }
+        }
         setHistory((history) => [
           {
             ...message,
-            reply_message: message.reply_id
-              ? history.find((item) => item.id === message.reply_id).message
-              : "",
+            reply_message:
+              historyMsgObj === undefined || historyMsgObj === -1
+                ? ""
+                : typeof historyMsgObj === "string"
+                  ? historyMsgObj
+                  : history[historyMsgObj].message,
           },
           ...history,
         ]);
@@ -82,6 +116,10 @@ function Online() {
       socket.current.disconnect();
     };
   }, []);
+
+  useEffect(() => {
+    messageIds.current = history.map((item) => item.id);
+  }, [history]);
 
   const handleInput = (e) => {
     setMessage(e.target.value);
