@@ -8,7 +8,7 @@ export default function Emoji({ sendReaction, open }) {
     sendReaction(e.unified);
   };
   return (
-    <Box sx={{ mt: 1 }}>
+    <Box sx={{ mt: open ? 1 : 0 }}>
       <EmojiPicker
         open={open}
         reactionsDefaultOpen={true}

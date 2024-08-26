@@ -243,7 +243,7 @@ function Online() {
         />
       </div>
       <div className={style.preloadEmoji}>
-        <Emoji></Emoji>
+        <Emoji open={true}></Emoji>
       </div>
     </Box>
   );

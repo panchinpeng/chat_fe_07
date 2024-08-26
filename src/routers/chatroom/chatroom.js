@@ -58,7 +58,7 @@ function Chatroom() {
                       secondary={
                         <>
                           <Typography
-                            sx={{ display: "inline" }}
+                            sx={{ display: "inline", fontSize: "13px" }}
                             component="span"
                             variant="body2"
                             color="text.primary"

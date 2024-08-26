@@ -115,6 +115,7 @@ export default function Interest() {
         mb: 2,
         borderRadius: 3,
       }}
+      className={style.wrap}
     >
       <Paper elevation="2" sx={{ p: 2, bgcolor: "#ffffff78" }}>
         <h3>Interest</h3>
