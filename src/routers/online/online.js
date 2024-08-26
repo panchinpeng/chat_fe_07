@@ -11,6 +11,7 @@ import Message from "../../component/message/message";
 import { useStore } from "../../store";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
+import Emoji from "../../component/emoji/emoji";
 
 function Online() {
   const store = useStore();
@@ -86,6 +87,23 @@ function Online() {
         ]);
         updateUnreadData();
       });
+      socket.current.on("reaction", (reaction) => {
+        setHistory((history) => {
+          const cpHistory = [...history];
+          const targetMessageIndex = cpHistory.findIndex(
+            (item) => item.id === reaction.id
+          );
+          if (targetMessageIndex > -1) {
+            cpHistory[targetMessageIndex].reaction = {
+              ...(cpHistory[targetMessageIndex].reaction
+                ? cpHistory[targetMessageIndex].reaction
+                : {}),
+              ...reaction.reaction,
+            };
+          }
+          return cpHistory;
+        });
+      });
       socket.current.on("disconnect", (reason) => {
         if (reason.indexOf("client disconnect") === -1) {
           setNetworkError(true);
@@ -124,6 +142,33 @@ function Online() {
   const handleInput = (e) => {
     setMessage(e.target.value);
   };
+  const sendReaction = (unified, id, room) => {
+    if (unified) {
+      socket.current.emit("reaction", unified, room, id, (res) => {
+        if (res.status) {
+          setHistory((history) => {
+            const cpHistory = [...history];
+            const targetMessageIndex = history.findIndex(
+              (item) => item.id === id
+            );
+            if (targetMessageIndex > -1) {
+              if (cpHistory[targetMessageIndex].reaction) {
+                cpHistory[targetMessageIndex].reaction[
+                  store.user.account.username
+                ] = unified;
+              } else {
+                cpHistory[targetMessageIndex].reaction = {
+                  [store.user.account.username]: unified,
+                };
+              }
+            }
+
+            return cpHistory;
+          });
+        }
+      });
+    }
+  };
   const sendMessage = () => {
     if (message) {
       socket.current.emit("message", message, friend, reply, (res) => {
@@ -147,6 +192,7 @@ function Online() {
       });
     }
   };
+
   return (
     <Box className={style.box}>
       <div className={style.history}>
@@ -158,6 +204,7 @@ function Online() {
             message={message}
             key={message.id}
             setReply={setReply}
+            sendReaction={sendReaction}
           ></Message>
         ))}
       </div>
@@ -194,6 +241,9 @@ function Online() {
             ),
           }}
         />
+      </div>
+      <div className={style.preloadEmoji}>
+        <Emoji></Emoji>
       </div>
     </Box>
   );

@@ -43,3 +43,6 @@ a {
 .MuiBadge-badge {
   height: 14px !important;
 }
+.EmojiPickerReact {
+  --epr-emoji-size: 23px !important;
+}

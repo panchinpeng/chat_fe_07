@@ -43,7 +43,10 @@ function CuAvatar({ from, friendName }) {
           ? { width: 40, height: 40 }
           : { width: 80, height: 80 }
         : { width: 160, height: 160 };
-
+    if (from === "Message") {
+      styleObj.width = 30;
+      styleObj.height = 30;
+    }
     if (type === "treads") {
       styleObj.width += from === "my" ? 8 : 4;
       styleObj.height += from === "my" ? 8 : 4;
