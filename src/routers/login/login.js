@@ -6,7 +6,6 @@ import {
   Button,
   FormControlLabel,
   Checkbox,
-  Snackbar,
 } from "@mui/material";
 import api from "../../common/api";
 import { NavLink, useNavigate } from "react-router-dom";

@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, forwardRef, useImperativeHandle } from "react";
 import { Paper, CircularProgress, Button } from "@mui/material";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 
@@ -12,18 +12,26 @@ import { EffectCoverflow } from "swiper/modules";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Base64 } from "js-base64";
 
-export default function Picture({ emitPictureFn }) {
+function Picture(props, ref) {
   const [picture, setPicture] = useState([]);
   const [longTouchPicture, setLongTouchPicture] = useState(null);
   const longTouchTimer = useState();
   const files = useRef([]);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      getPictures: () => files.current,
+      longTouchPicture: longTouchPicture,
+    }),
+    [longTouchPicture]
+  );
 
   const removePicture = (index) => {
     setPicture((pics) => {
       const cpPics = [...pics];
       cpPics.splice(index, 1);
       files.current.splice(index, 1);
-      emitPictureFn([...files.current]);
       return cpPics;
     });
   };
@@ -34,7 +42,6 @@ export default function Picture({ emitPictureFn }) {
         .filter((item) => /^image\//.test(item.type))
         .slice(0, 10);
       files.current = filesAry;
-      emitPictureFn([...files.current]);
 
       filesAry.forEach((item, index) => {
         setPicture((p) => {
@@ -73,7 +80,6 @@ export default function Picture({ emitPictureFn }) {
         filesAry = filesAry.slice(0, 10 - alreadyFilesLength);
       }
       files.current = [...files.current, ...filesAry];
-      emitPictureFn([...files.current]);
       files.current.forEach((item, index) => {
         setPicture((p) => {
           const copyPic = [...p];
@@ -96,10 +102,10 @@ export default function Picture({ emitPictureFn }) {
     }
   };
 
-  const handleLongTouchStart = (index) => {
+  const handleLongTouchStart = () => {
     if (picture.length > 1) {
       longTouchTimer.current = setTimeout(() => {
-        setLongTouchPicture(index);
+        setLongTouchPicture(true);
       }, 1000);
     }
   };
@@ -155,7 +161,6 @@ export default function Picture({ emitPictureFn }) {
       return files.current.find((file) => Base64.encode(file.name) === p.id);
     });
     files.current = sortedFiles;
-    emitPictureFn([...files.current]);
     setLongTouchPicture(null);
   };
 
@@ -212,7 +217,7 @@ export default function Picture({ emitPictureFn }) {
               <SwiperSlide
                 key={index}
                 className={style.imgWrap}
-                onTouchStart={() => handleLongTouchStart(index)}
+                onTouchStart={handleLongTouchStart}
                 onTouchEnd={handleLongTouchEnd}
               >
                 {item === "loading" ? (
@@ -307,3 +312,4 @@ export default function Picture({ emitPictureFn }) {
     </>
   );
 }
+export default forwardRef(Picture);

@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../store";
 import Index from "./index";
-import { useEffect, useCallback, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Header from "./../component/header/header";
 import Footer from "./../component/footer/footer";
 
@@ -11,16 +11,16 @@ function PrivateRoutes({ forceToLogin }) {
   const navigate = useNavigate();
   const intervalID = useRef();
   const store = useStore();
-  const checkLogin = useCallback(async (callback) => {
-    const res = await store.user.verify();
-    if (res.status) {
-      callback instanceof Function && callback();
-    } else {
-      forceToLogin && navigate("/logout");
-    }
-  }, []);
 
   useEffect(() => {
+    const checkLogin = async (callback) => {
+      const res = await store.user.verify();
+      if (res.status) {
+        callback instanceof Function && callback();
+      } else {
+        forceToLogin && navigate("/logout");
+      }
+    };
     if (location.pathname === "/logout") {
       return;
     }

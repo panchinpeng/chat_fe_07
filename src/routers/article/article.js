@@ -16,19 +16,24 @@ export default function Article() {
 
   const [message, setMessage] = useState("");
   const place = useRef({}); // 值可能是字串
-  const picture = useRef([]);
+  const pictureInfo = useRef();
   const [isReply, setIsReply] = useState(true);
   const [isThumb, setIsThumb] = useState(true);
   const [isPrivate, setIsPrivate] = useState(false);
   const [error, setError] = useState({ message: false });
 
   const setPlace = (data) => (place.current = data);
-  const setPicture = (data) => (picture.current = data);
 
   const submitArticle = async () => {
     if (!message) {
       setError({ message: true });
       return;
+    }
+    if (pictureInfo.current.longTouchPicture) {
+      const userCheck = window.confirm("圖片順序尚未確定，確定要送出嗎");
+      if (!userCheck) {
+        return;
+      }
     }
     store.loading.setLoading(true);
     // 如果區域找不到，替換成物件
@@ -42,7 +47,7 @@ export default function Article() {
       isReply,
       isThumb,
       isPrivate,
-      picture.current,
+      pictureInfo.current.getPictures(),
       1
     );
     store.loading.setLoading(false);
@@ -58,7 +63,7 @@ export default function Article() {
   return (
     <Box sx={{ p: 1, width: 1 }} className={style.wrap}>
       <Paper elevation="1" sx={{ pt: 5 }}>
-        <Picture emitPictureFn={setPicture}></Picture>
+        <Picture ref={pictureInfo}></Picture>
         <Box sx={{ mt: 6, p: 1, fontSize: 16, borderBottom: "1px solid #ccc" }}>
           <TextField
             error={error.message}

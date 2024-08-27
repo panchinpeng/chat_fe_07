@@ -74,8 +74,7 @@ function Post() {
             const currentAngle = event.angle + angleScale.angle;
             const currentScale = event.scale * angleScale.scale;
 
-            textarea.current.style.transform =
-              "rotate(" + currentAngle + "deg)" + "scale(" + currentScale + ")";
+            textarea.current.style.transform = `rotate(${currentAngle}deg) scale(${currentScale})`;
 
             window.dragMoveListener(event);
           },
@@ -263,6 +262,8 @@ function Post() {
                     security: !message.security,
                   }));
                   break;
+                default:
+                  console.log("no action");
               }
             }}
           />
