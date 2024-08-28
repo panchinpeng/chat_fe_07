@@ -10,7 +10,7 @@ import {
   Divider,
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
-
+import HistoryIcon from "@mui/icons-material/History";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PaymentIcon from "@mui/icons-material/Payment";
 import LoginIcon from "@mui/icons-material/Login";
@@ -29,6 +29,12 @@ const menu = [
     page: "/member/info",
     loginRequire: true,
     icon: <PersonIcon></PersonIcon>,
+  },
+  {
+    title: "歷史",
+    page: "/history",
+    loginRequire: true,
+    icon: <HistoryIcon></HistoryIcon>,
   },
   {
     title: "支付",

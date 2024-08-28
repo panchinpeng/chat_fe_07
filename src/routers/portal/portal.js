@@ -132,8 +132,8 @@ function Portal() {
         articles.map((article, index) => (
           <Card
             sx={{
-              width: "100%",
-              maxWidth: "360px",
+              width: "calc(100vw - 20px)",
+              maxWidth: "500px",
               margin: "10px auto 0 auto",
             }}
           >

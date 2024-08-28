@@ -16,6 +16,8 @@ class Trends {
         this.trendsData = res.data;
         this.show = true;
       });
+    } else {
+      return "noTrend";
     }
   }
   async getAllFriendTrends() {

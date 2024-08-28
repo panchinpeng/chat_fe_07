@@ -46,3 +46,7 @@ a {
 .EmojiPickerReact {
   --epr-emoji-size: 23px !important;
 }
+@font-face {
+  font-family: Counter;
+  src: url(./../public/fonts/Counter.ttf);
+}
