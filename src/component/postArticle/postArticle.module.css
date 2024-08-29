@@ -1,0 +1,43 @@
+.interactive {
+  display: flex;
+  align-items: center;
+  border-left: 4px solid #1976d2;
+  padding-left: 10px;
+  margin-left: -16px;
+  margin-top: -16px;
+  height: 50px;
+}
+.address {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  background-color: #1976d2;
+  margin-left: auto;
+  color: #fff;
+  padding: 3px 5px;
+  border-radius: 5px;
+  max-width: 250px;
+}
+.addressDetail * {
+  font-size: 11px;
+}
+.nowrap {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.message {
+  /* border-top: 1px solid #ccc; */
+  margin-top: 10px;
+  font-size: 14px;
+}
+.articleImg {
+  margin-right: 5px;
+}
+.imageGallery {
+  overflow: auto;
+  display: flex;
+  flex-direction: row;
+  overscroll-behavior-y: auto;
+}

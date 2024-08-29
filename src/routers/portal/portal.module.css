@@ -1,66 +1,7 @@
-/* .coinBg {
-  position: relative;
-}
-
-.stageBg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: -1;
-  width: 100vw;
-  padding-top: 100%;
-  min-width: 800px;
-  background: url(./../../public/666.png) center top / 1152px 896px no-repeat;
-} */
-
-.imageGallery {
-  overflow: auto;
-  display: flex;
-  flex-direction: row;
-  overscroll-behavior-y: auto;
-}
-.articleImg {
-  margin-right: 5px;
-}
 .subheader * {
   font-size: 11px;
 }
-.interactive {
-  display: flex;
-  align-items: center;
-  border-left: 4px solid #1976d2;
-  padding-left: 10px;
-  margin-left: -16px;
-  margin-top: -16px;
-  height: 50px;
-}
-.address {
-  display: flex;
-  align-items: center;
-  font-size: 12px;
-  background-color: #1976d2;
-  margin-left: auto;
-  color: #fff;
-  padding: 3px 5px;
-  border-radius: 5px;
-  max-width: 250px;
-}
-.nowrap {
-  max-width: 200px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 
-.addressDetail * {
-  font-size: 11px;
-}
-.message {
-  /* border-top: 1px solid #ccc; */
-  margin-top: 10px;
-  font-size: 14px;
-}
 .noFriend {
   color: #8d8888;
 }
