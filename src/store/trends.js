@@ -16,7 +16,7 @@ class Trends {
         this.trendsData = res.data;
         this.show = true;
       });
-    } else {
+    } else if (res.status) {
       return "noTrend";
     }
   }

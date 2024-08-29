@@ -91,7 +91,9 @@ function MenuRight({ open, setOpen }) {
               width: 1,
             }}
           >
-            <CuAvatar></CuAvatar>
+            <div onClick={() => setOpen(false)}>
+              <CuAvatar></CuAvatar>
+            </div>
           </Box>
           <Box
             sx={{

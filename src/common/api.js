@@ -289,9 +289,11 @@ const api = {
       throw Promise.reject(e);
     }
   },
-  async getArticle(page) {
+  async getArticle(page, fid) {
     try {
-      const res = await fetch(`/api/article?page=${page}`);
+      const res = await fetch(
+        `/api/article?page=${page}${fid ? "&fid=" + fid : ""}`
+      );
       return res;
     } catch (e) {
       throw Promise.reject(e);

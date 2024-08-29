@@ -164,8 +164,13 @@ function AddFriend() {
                     }
                   />
                   {(inviteUser.includes(friendItem.username) ||
-                    friendItem.applying) && (
+                    friendItem.applying * 1 === 1) && (
                     <div className={style.AddFriendWait}>等待回復</div>
+                  )}
+
+                  {(inviteUser.includes(friendItem.username) ||
+                    friendItem.applying * 1 === 2) && (
+                    <div className={style.AddFriendWait}>已成為好友</div>
                   )}
                   {friendItem.receiveApplying && (
                     <div className={style.AddFriendWait}>已邀請你</div>

@@ -3,5 +3,9 @@
 }
 
 .noFriend {
-  color: #8d8888;
+  margin: 40px auto;
+
+  font-size: 28px;
+  text-align: center;
+  color: #757575;
 }

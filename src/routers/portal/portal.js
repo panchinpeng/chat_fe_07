@@ -12,13 +12,14 @@ function Portal() {
   const nowPage = useRef(1);
   const totalPage = useRef();
   useEffect(() => {
+    let observer = null;
     (async () => {
       store.trends.getAllFriendTrends();
       const articlesRes = await api.getArticle(nowPage.current);
       if (articlesRes.status) {
         totalPage.current = articlesRes.data.totalPage;
         setArticles(articlesRes.data.results);
-        let observer = new IntersectionObserver(
+        observer = new IntersectionObserver(
           async (entries) => {
             const entry = entries[0];
             if (entry.isIntersecting) {
@@ -44,12 +45,12 @@ function Portal() {
           }
         );
         observer.observe(loadingNextPageDOM.current);
-        return () => {
-          observer.disconnect();
-          observer = null;
-        };
       }
     })();
+    return () => {
+      observer && observer.disconnect();
+      observer = null;
+    };
   }, []);
 
   return (
