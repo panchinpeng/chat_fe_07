@@ -299,5 +299,29 @@ const api = {
       throw Promise.reject(e);
     }
   },
+  async getThumb(id) {
+    try {
+      const res = await fetch("/api/article/getThumb", {
+        method: "POST",
+        body: { id },
+      });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async setThumb(id) {
+    try {
+      const res = await fetch("/api/article/setThumb", {
+        method: "POST",
+        body: {
+          id,
+        },
+      });
+      return res.data;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
 };
 export default api;

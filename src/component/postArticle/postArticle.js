@@ -9,12 +9,12 @@ import {
 } from "@mui/material";
 import Avatar from "../avatar/avatar";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import CommentIcon from "@mui/icons-material/Comment";
 import FmdGoodIcon from "@mui/icons-material/FmdGood";
 
 import style from "./postArticle.module.css";
 import { useEffect, useState } from "react";
+import Thumb from "../thumb/thumb";
 
 export default function PortArticle({ article }) {
   const [images, setImages] = useState(() =>
@@ -130,8 +130,15 @@ export default function PortArticle({ article }) {
       <CardContent>
         <Typography variant="body2" color="text.secondary">
           <div className={style.interactive}>
-            <ThumbUpIcon sx={{ mr: 2 }}></ThumbUpIcon>
-            <CommentIcon sx={{ mr: 2 }}></CommentIcon>
+            <Thumb
+              articleID={article.id}
+              show={article.is_thumb * 1 === 1}
+            ></Thumb>
+
+            {article.is_reply * 1 === 1 && (
+              <CommentIcon sx={{ mr: 2 }}></CommentIcon>
+            )}
+
             <a
               target="_BLANK"
               rel="noreferrer"

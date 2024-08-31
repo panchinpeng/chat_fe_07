@@ -15,6 +15,7 @@
 }
 .disconnectNetwork {
   position: fixed;
+  z-index: 3;
   top: 70px;
   left: 50%;
   transform: translateX(-50%);
