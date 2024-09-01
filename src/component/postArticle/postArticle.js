@@ -15,8 +15,11 @@ import FmdGoodIcon from "@mui/icons-material/FmdGood";
 import style from "./postArticle.module.css";
 import { useEffect, useState } from "react";
 import Thumb from "../thumb/thumb";
+import { observer } from "mobx-react-lite";
+import { useStore } from "../../store";
 
-export default function PortArticle({ article }) {
+function PortArticle({ article }) {
+  const store = useStore();
   const [images, setImages] = useState(() =>
     article ? new Array(article.img_names.length).fill(0) : []
   );
@@ -132,6 +135,7 @@ export default function PortArticle({ article }) {
             <Thumb
               articleID={article.id}
               show={article.is_thumb * 1 === 1}
+              selfArticle={store.user.account.username === article.username}
             ></Thumb>
 
             {article.is_reply * 1 === 1 && (
@@ -156,3 +160,4 @@ export default function PortArticle({ article }) {
     </Card>
   );
 }
+export default observer(PortArticle);

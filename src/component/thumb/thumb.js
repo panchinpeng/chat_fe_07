@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import api from "../../common/api";
 import style from "./thumb.module.css";
 
-export default function Thumb({ articleID, show }) {
+export default function Thumb({ articleID, show, selfArticle }) {
   const [isActive, setIsActive] = useState(false);
   const [thumbSum, setThumbSum] = useState(0);
   useEffect(() => {
@@ -21,6 +21,11 @@ export default function Thumb({ articleID, show }) {
     if (isActive) {
       return;
     }
+    if (selfArticle) {
+      alert("不可以按讚自己的貼文唷");
+      return;
+    }
+
     const res = await api.setThumb(articleID);
     if (res) {
       setThumbSum((thumbSum) => thumbSum + 1);
