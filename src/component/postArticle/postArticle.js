@@ -54,7 +54,6 @@ export default function PortArticle({ article }) {
     if (article) {
       // 先載入動態前兩張圖片
       const preRenderImages = article.img_names.slice(0, 2);
-      console.log("preRenderImages", preRenderImages);
       preRenderImages.map((img, index) => {
         const imgObj = new Image();
         imgObj.onload = () => {

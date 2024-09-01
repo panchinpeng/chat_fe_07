@@ -11,14 +11,22 @@ export default function FriendMain() {
   const nowPage = useRef(1);
   const totalPage = useRef();
   const loadingNextPageDOM = useRef();
+  const maxArticleId = useRef(0);
   const [articles, setArticles] = useState([]);
+
+  useEffect(() => {
+    if (articles.length) {
+      maxArticleId.current = articles[articles.length - 1].id;
+    }
+  }, [articles]);
   useEffect(() => {
     let observer = null;
     (async () => {
-      const articlesRes = await api.getArticle(nowPage.current, user);
+      const articlesRes = await api.getArticle(user);
       if (!articlesRes.status) {
         alert("發生錯誤");
         navigate("/");
+        return;
       }
       totalPage.current = articlesRes.data.totalPage;
       setArticles(articlesRes.data.results);
@@ -30,15 +38,15 @@ export default function FriendMain() {
               return;
             }
             nowPage.current = nowPage.current + 1;
-            const articlesNextRes = await api.getArticle(nowPage.current);
+            const articlesNextRes = await api.getArticle(
+              user,
+              maxArticleId.current
+            );
             if (articlesNextRes.status) {
-              setArticles((articles) => {
-                const existsIds = articles.map((item) => item.id);
-                const excludeRepeatData = articlesNextRes.data.results.filter(
-                  (item) => !existsIds.includes(item.id)
-                );
-                return [...articles, ...excludeRepeatData];
-              });
+              setArticles((articles) => [
+                ...articles,
+                ...articlesNextRes.data.results,
+              ]);
             }
           }
         },

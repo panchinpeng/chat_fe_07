@@ -149,7 +149,7 @@ function Post() {
     );
     if (res.status) {
       store.user.verify();
-      navigate(-1);
+      navigate("/");
     }
   };
 

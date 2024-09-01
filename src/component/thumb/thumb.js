@@ -10,7 +10,7 @@ export default function Thumb({ articleID, show }) {
     (async () => {
       if (show) {
         const res = await api.getThumb(articleID);
-        if (res.status) {
+        if (res && res.status) {
           setThumbSum(res.data.sum);
           setIsActive(res.data.isThumb);
         }

@@ -289,10 +289,10 @@ const api = {
       throw Promise.reject(e);
     }
   },
-  async getArticle(page, fid) {
+  async getArticle(fid, last) {
     try {
       const res = await fetch(
-        `/api/article?page=${page}${fid ? "&fid=" + fid : ""}`
+        `/api/article?pre=${fid ? "&fid=" + fid : ""}${last ? "&last=" + last : ""}`
       );
       return res;
     } catch (e) {
@@ -319,6 +319,16 @@ const api = {
         },
       });
       return res.data;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getRecommendArticle(last) {
+    try {
+      const res = await fetch(
+        `/api/article/recommend${last ? "?last=" + last : ""}`
+      );
+      return res;
     } catch (e) {
       throw Promise.reject(e);
     }
