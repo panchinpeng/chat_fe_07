@@ -1,0 +1,27 @@
+.commitsWrap * {
+  font-size: 12px;
+}
+.commitsWrap {
+  position: relative;
+}
+.commitsWrap::before {
+  content: "";
+  display: block;
+  width: 3px;
+  height: 100%;
+  background-color: black;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: -5px;
+  border-radius: 5px;
+}
+
+.placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  color: #fff;
+}

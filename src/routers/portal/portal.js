@@ -4,7 +4,7 @@ import style from "./portal.module.css";
 import api from "../../common/api";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../store";
-import PortArticle from "../../component/postArticle/postArticle";
+import PostArticle from "../../component/postArticle/postArticle";
 import RecommendArticle from "../../component/recommendArticle/recommendArticle";
 function Portal() {
   const store = useStore();
@@ -68,7 +68,7 @@ function Portal() {
   return (
     <Box sx={{ padding: "10px" }}>
       {articles.map((article) => (
-        <PortArticle key={article.id} article={article}></PortArticle>
+        <PostArticle key={article.id} article={article}></PostArticle>
       ))}
       {nowPage.current === totalPage.current && (
         <div className={style.friendEnd}>已看完所有好友動態</div>

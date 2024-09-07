@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import api from "../../common/api";
-import PortArticle from "../postArticle/postArticle";
+import PostArticle from "../postArticle/postArticle";
 import style from "./recommendArticle.module.css";
 export default function RecommendArticle() {
   const [articles, setArticles] = useState([]);
@@ -61,7 +61,7 @@ export default function RecommendArticle() {
     <>
       <div className={style.title}>熱門動態</div>
       {articles.map((article) => (
-        <PortArticle key={article.id} article={article}></PortArticle>
+        <PostArticle key={article.id} article={article}></PostArticle>
       ))}
       {isEnd && <div className={style.end}>到底了QQ</div>}
       <div ref={loadingNextPageDOM}></div>

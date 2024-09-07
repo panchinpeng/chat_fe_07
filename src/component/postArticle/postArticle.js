@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Card,
   CardHeader,
@@ -17,12 +18,15 @@ import { useEffect, useState } from "react";
 import Thumb from "../thumb/thumb";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../store";
+import Commits from "../commits/commits";
 
-function PortArticle({ article }) {
+function PostArticle({ article }) {
   const store = useStore();
   const [images, setImages] = useState(() =>
     article ? new Array(article.img_names.length).fill(0) : []
   );
+  const [showCommits, setShowCommits] = useState(false);
+
   const renderTime = (time) => {
     const d = new Date(Date.parse(time));
     return `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, 0)}-${d.getDate().toString().padStart(2, 0)} ${d.getHours().toString().padStart(2, 0)}:${d.getMinutes().toString().padStart(2, 0)}`;
@@ -131,33 +135,43 @@ function PortArticle({ article }) {
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          <div className={style.interactive}>
-            <Thumb
-              articleID={article.id}
-              show={article.is_thumb * 1 === 1}
-              selfArticle={store.user.account.username === article.username}
-            ></Thumb>
+          {(article.is_thumb * 1 === 1 ||
+            article.is_reply * 1 === 1 ||
+            article.place.name !== "未設定") && (
+            <div className={style.interactive}>
+              <Thumb
+                articleID={article.id}
+                show={article.is_thumb * 1 === 1}
+                selfArticle={store.user.account.username === article.username}
+              ></Thumb>
 
-            {article.is_reply * 1 === 1 && (
-              <CommentIcon sx={{ mr: 2 }}></CommentIcon>
-            )}
+              {article.is_reply * 1 === 1 && (
+                <CommentIcon
+                  sx={{ mr: 2 }}
+                  onClick={() => setShowCommits((showCommits) => !showCommits)}
+                ></CommentIcon>
+              )}
+              {article.place.name !== "未設定" && (
+                <a
+                  target="_BLANK"
+                  rel="noreferrer"
+                  className={style.address}
+                  href={`https://www.google.com/maps/dir//google+map+${article.place.name}`}
+                >
+                  <FmdGoodIcon sx={{ fontSize: "13px" }}></FmdGoodIcon>
+                  <div className={style.addressDetail}>
+                    <div className={style.nowrap}>{article.place.name}</div>
+                  </div>
+                </a>
+              )}
+            </div>
+          )}
 
-            <a
-              target="_BLANK"
-              rel="noreferrer"
-              className={style.address}
-              href={`https://www.google.com/maps/dir//google+map+${article.place.name}`}
-            >
-              <FmdGoodIcon sx={{ fontSize: "13px" }}></FmdGoodIcon>
-              <div className={style.addressDetail}>
-                <div className={style.nowrap}>{article.place.name}</div>
-              </div>
-            </a>
-          </div>
           <div className={style.message}>{article.message}</div>
+          {showCommits && <Commits></Commits>}
         </Typography>
       </CardContent>
     </Card>
   );
 }
-export default observer(PortArticle);
+export default observer(PostArticle);

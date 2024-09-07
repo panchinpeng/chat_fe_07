@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import api from "../../common/api";
 import man from "./../../public/man.png";
-import PortArticle from "../../component/postArticle/postArticle";
+import PostArticle from "../../component/postArticle/postArticle";
 export default function FriendMain() {
   const navigate = useNavigate();
   const { user } = useParams();
@@ -94,7 +94,7 @@ export default function FriendMain() {
       <Box sx={{ p: 1 }}>
         {articles.length > 0 ? (
           articles.map((article) => (
-            <PortArticle key={article.id} article={article}></PortArticle>
+            <PostArticle key={article.id} article={article}></PostArticle>
           ))
         ) : (
           <div className={style.empty}>很懶 ... 沒有任何貼文</div>

@@ -82,7 +82,7 @@ function CuAvatar({ from, friendName }) {
             <AddPhotoAlternateIcon
               sx={{
                 color: grey[900],
-                fontSize: from !== "my" ? 0 : "40px !important",
+                fontSize: from !== "my" ? "0 !important" : "40px !important",
               }}
             ></AddPhotoAlternateIcon>
           </label>
