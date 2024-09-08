@@ -4,18 +4,6 @@
 .commitsWrap {
   position: relative;
 }
-.commitsWrap::before {
-  content: "";
-  display: block;
-  width: 3px;
-  height: 100%;
-  background-color: black;
-  position: absolute;
-  z-index: 1;
-  top: 0;
-  left: -5px;
-  border-radius: 5px;
-}
 
 .placeholder {
   display: flex;
@@ -24,4 +12,29 @@
   width: 100%;
   height: 100%;
   color: #fff;
+}
+.commit {
+  background-color: #000;
+  border-radius: 10px;
+  padding: 2px;
+  margin-top: 2px;
+  animation: slideLeft 0.1s ease-in-out forwards;
+  transform: translateX(-50px);
+  opacity: 0;
+}
+.commit * {
+  color: #fff;
+}
+.title {
+  margin-top: 5px;
+}
+@keyframes slideLeft {
+  0% {
+    transform: translateX(0px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(-50px);
+    opacity: 1;
+  }
 }

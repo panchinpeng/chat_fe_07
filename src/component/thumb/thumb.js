@@ -3,20 +3,16 @@ import { useEffect, useState } from "react";
 import api from "../../common/api";
 import style from "./thumb.module.css";
 
-export default function Thumb({ articleID, show, selfArticle }) {
-  const [isActive, setIsActive] = useState(false);
-  const [thumbSum, setThumbSum] = useState(0);
-  useEffect(() => {
-    (async () => {
-      if (show) {
-        const res = await api.getThumb(articleID);
-        if (res && res.status) {
-          setThumbSum(res.data.sum);
-          setIsActive(res.data.isThumb);
-        }
-      }
-    })();
-  }, [show]);
+export default function Thumb({
+  articleID,
+  show,
+  selfArticle,
+  thumbNum,
+  hasBeenThumb,
+}) {
+  const [isActive, setIsActive] = useState(hasBeenThumb * 1 === 1);
+  const [thumbSum, setThumbSum] = useState(thumbNum);
+
   const doThumb = async () => {
     if (isActive) {
       return;

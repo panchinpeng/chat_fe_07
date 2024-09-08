@@ -143,13 +143,20 @@ function PostArticle({ article }) {
                 articleID={article.id}
                 show={article.is_thumb * 1 === 1}
                 selfArticle={store.user.account.username === article.username}
+                thumbNum={article.thumbTotal}
+                hasBeenThumb={article.thumbSelf}
               ></Thumb>
 
               {article.is_reply * 1 === 1 && (
-                <CommentIcon
-                  sx={{ mr: 2 }}
-                  onClick={() => setShowCommits((showCommits) => !showCommits)}
-                ></CommentIcon>
+                <>
+                  <CommentIcon
+                    sx={{ mr: 1 }}
+                    onClick={() =>
+                      setShowCommits((showCommits) => !showCommits)
+                    }
+                  ></CommentIcon>
+                  <span>{article.replyTotal}</span>
+                </>
               )}
               {article.place.name !== "未設定" && (
                 <a
@@ -168,7 +175,7 @@ function PostArticle({ article }) {
           )}
 
           <div className={style.message}>{article.message}</div>
-          {showCommits && <Commits></Commits>}
+          {showCommits && <Commits id={article.id}></Commits>}
         </Typography>
       </CardContent>
     </Card>

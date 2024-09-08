@@ -323,6 +323,30 @@ const api = {
       throw Promise.reject(e);
     }
   },
+  async setCommits(id, message) {
+    try {
+      const res = await fetch("/api/article/commits", {
+        method: "POST",
+        body: {
+          id,
+          message,
+        },
+      });
+      return res.data;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getCommits(id, lastId) {
+    try {
+      const res = await fetch(
+        `/api/article/commits?id=${id}${lastId ? "&lastId=" + lastId : ""}`
+      );
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
   async getRecommendArticle(last) {
     try {
       const res = await fetch(
