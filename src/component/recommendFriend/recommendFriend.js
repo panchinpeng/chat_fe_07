@@ -1,28 +1,29 @@
 import { Box } from "@mui/material";
+
+import UserSlide from "../userSlide/userSlide";
 import { useEffect, useState } from "react";
 import api from "../../common/api";
-import style from "./recommendFriend.module.css";
-export default function RecommendedFriend({ open }) {
-  const [persons, setPersons] = useState([]);
+
+export default function RecommendedFriend() {
+  const [recommend, setRecommend] = useState(null);
   useEffect(() => {
     (async () => {
-      if (open) {
-        const res = await api.getRecommendFriend();
-        if (res.status && res.data.length > 0) {
-          setPersons(res.data);
-        }
+      const res = await api.getRecommendFriend();
+      if (res.status) {
+        setRecommend(res.data);
       }
     })();
-  }, [open]);
+  }, []);
   return (
     <Box>
-      {persons.length > 0 ? (
-        <div></div>
-      ) : (
-        <div className={style.notfoundUser}>
-          <div className={style.cryIcon}>😢</div>
-          <div>Oh no, there's no one.</div>
-        </div>
+      {recommend && (
+        <>
+          <UserSlide type="history" data={recommend.history}></UserSlide>
+          <UserSlide type="new" data={recommend.latest}></UserSlide>
+          <UserSlide type="popular" data={recommend.popular}></UserSlide>
+          {/* <UserSlide type="online"></UserSlide> */}
+          <UserSlide type="article" data={recommend.topPoster}></UserSlide>
+        </>
       )}
     </Box>
   );

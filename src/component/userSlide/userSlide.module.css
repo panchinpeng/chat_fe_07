@@ -1,0 +1,19 @@
+.wrap {
+  border-right: 0;
+}
+.member {
+  padding: 10px;
+  height: 100px;
+  text-align: center;
+  position: relative;
+}
+.member::after {
+  content: "";
+  position: absolute;
+  top: 20%;
+  right: 0;
+  width: 2px;
+  height: 40px;
+  background-color: rgba(62, 140, 208, 0.376);
+  display: block;
+}

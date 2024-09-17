@@ -21,6 +21,7 @@ import FriendInvite from "../../component/dialog/friendInvite/friendInvite";
 import Alert from "./../../component/alert/alert";
 import { useStore } from "../../store";
 import { observer } from "mobx-react-lite";
+import RecommendedFriend from "../../component/recommendFriend/recommendFriend";
 
 function AddFriend() {
   const [keyword, setKeyword] = useState("");
@@ -31,8 +32,16 @@ function AddFriend() {
   const store = useStore();
   const searchHandler = async () => {
     setFriend(false);
+    if (!keyword) {
+      setFriend([]);
+      return false;
+    }
     const res = await api.searchFriend(keyword);
     if (res.status) {
+      if (res.data.length === 0) {
+        alertRef.current.setMessage("找不到用戶");
+        alertRef.current.setSeverity("error");
+      }
       setFriend(res.data);
     }
   };
@@ -114,78 +123,81 @@ function AddFriend() {
         </Paper>
       </Box>
       <Box sx={{ flex: "1 1 0", p: 1, width: "100%" }}>
-        <Typography variant="h6" gutterBottom>
-          搜尋結果
-        </Typography>
         {friend.length > 0 && friend.map ? (
-          <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-            {friend.map((friendItem, index) => (
-              <Fragment key={friendItem.username}>
-                <ListItem
-                  alignItems="flex-start"
-                  onClick={() => sendAddFriend(friendItem)}
-                >
-                  <ListItemAvatar>
-                    <Avatar from="Index" friendName={friendItem.username} />
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={friendItem.username}
-                    secondary={
-                      <div>
-                        {friendItem.self_introd
-                          ? friendItem.self_introd
-                          : "這個人很懶，沒有個人簡介"}
+          <>
+            <Typography variant="h6" gutterBottom>
+              搜尋結果
+            </Typography>
+            <List sx={{ width: "100%", bgcolor: "background.paper", px: 0 }}>
+              {friend.map((friendItem, index) => (
+                <Fragment key={friendItem.username}>
+                  <ListItem
+                    sx={{ px: 0 }}
+                    alignItems="flex-start"
+                    onClick={() => sendAddFriend(friendItem)}
+                  >
+                    <ListItemAvatar>
+                      <Avatar from="Index" friendName={friendItem.username} />
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={friendItem.username}
+                      secondary={
+                        <div>
+                          {friendItem.self_introd
+                            ? friendItem.self_introd
+                            : "這個人很懶，沒有個人簡介"}
 
-                        {friendItem.receiveApplying && (
-                          <div className={style.replyAction}>
-                            <Button
-                              size="medium"
-                              variant="contained"
-                              color="success"
-                              onClick={() =>
-                                handleAccept(friendItem.username, index)
-                              }
-                            >
-                              允許
-                            </Button>
-                            <Button
-                              size="medium"
-                              variant="contained"
-                              color="error"
-                              onClick={() =>
-                                handleReject(friendItem.username, index)
-                              }
-                            >
-                              拒絕
-                            </Button>
-                          </div>
-                        )}
-                      </div>
-                    }
-                  />
-                  {(inviteUser.includes(friendItem.username) ||
-                    friendItem.applying * 1 === 1) && (
-                    <div className={style.AddFriendWait}>等待回復</div>
-                  )}
+                          {friendItem.receiveApplying && (
+                            <div className={style.replyAction}>
+                              <Button
+                                size="medium"
+                                variant="contained"
+                                color="success"
+                                onClick={() =>
+                                  handleAccept(friendItem.username, index)
+                                }
+                              >
+                                允許
+                              </Button>
+                              <Button
+                                size="medium"
+                                variant="contained"
+                                color="error"
+                                onClick={() =>
+                                  handleReject(friendItem.username, index)
+                                }
+                              >
+                                拒絕
+                              </Button>
+                            </div>
+                          )}
+                        </div>
+                      }
+                    />
+                    {(inviteUser.includes(friendItem.username) ||
+                      friendItem.applying * 1 === 1) && (
+                      <div className={style.AddFriendWait}>等待回復</div>
+                    )}
 
-                  {(inviteUser.includes(friendItem.username) ||
-                    friendItem.applying * 1 === 2) && (
-                    <div className={style.AddFriendWait}>已成為好友</div>
-                  )}
-                  {friendItem.receiveApplying && (
-                    <div className={style.AddFriendWait}>已邀請你</div>
-                  )}
-                </ListItem>
-                {friend.length !== index + 1 && <Divider />}
-              </Fragment>
-            ))}
-          </List>
+                    {(inviteUser.includes(friendItem.username) ||
+                      friendItem.applying * 1 === 2) && (
+                      <div className={style.AddFriendWait}>已成為好友</div>
+                    )}
+                    {friendItem.receiveApplying && (
+                      <div className={style.AddFriendWait}>已邀請你</div>
+                    )}
+                  </ListItem>
+                  {friend.length !== index + 1 && <Divider />}
+                </Fragment>
+              ))}
+            </List>
+          </>
         ) : friend === false ? (
           <div className={style.textCenter}>
             <CircularProgress />
           </div>
         ) : (
-          <div>無資料</div>
+          <RecommendedFriend></RecommendedFriend>
         )}
       </Box>
       <FriendInvite

@@ -9,14 +9,7 @@ const api = {
       throw Promise.reject(e);
     }
   },
-  async getRecommendFriend() {
-    try {
-      const res = await fetch("/api/user/recommendFriend");
-      return res;
-    } catch (e) {
-      throw Promise.reject(e);
-    }
-  },
+
   async getVerify() {
     try {
       const res = await fetch("/api/user/verify");
@@ -352,6 +345,14 @@ const api = {
       const res = await fetch(
         `/api/article/recommend${last ? "?last=" + last : ""}`
       );
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getRecommendFriend() {
+    try {
+      const res = await fetch("/api/user/recommendFriend");
       return res;
     } catch (e) {
       throw Promise.reject(e);
