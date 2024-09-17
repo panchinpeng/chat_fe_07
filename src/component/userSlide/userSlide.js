@@ -16,7 +16,7 @@ const titles = {
 export default function UserSlide({ type, data }) {
   return (
     <>
-      <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
+      <Typography variant="h7" gutterBottom sx={{ mt: 0 }}>
         {titles[type]}
       </Typography>
       <Swiper
@@ -35,7 +35,7 @@ export default function UserSlide({ type, data }) {
           },
         }}
       >
-        {data &&
+        {data && data.length > 0 ? (
           data.map((username) => (
             <SwiperSlide>
               <div className={style.member}>
@@ -43,7 +43,10 @@ export default function UserSlide({ type, data }) {
                 <div>{username}</div>
               </div>
             </SwiperSlide>
-          ))}
+          ))
+        ) : (
+          <div className={style.center}>無紀錄</div>
+        )}
       </Swiper>
     </>
   );
