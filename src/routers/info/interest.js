@@ -118,11 +118,10 @@ export default function Interest() {
       className={style.wrap}
     >
       <Paper elevation="2" sx={{ p: 2, bgcolor: "#ffffff78" }}>
-        <h3>Interest</h3>
+        <h3>興趣</h3>
         <FormControl>
           <FormLabel>
-            Please share your interests and hobbies with us so we can better
-            understand you and recommend suitable activities and resources.
+            請與我們分享您的興趣和愛好，以便我們更好地了解您並推薦合適的活動和資源。
           </FormLabel>
           <div className={style.interestWrap}>
             {interests
@@ -149,7 +148,7 @@ export default function Interest() {
           </div>
         </FormControl>
 
-        <h5>Selected ({person.interests.length})</h5>
+        <h5>已選澤 ({person.interests.length})</h5>
         <div className={style.interestWrap}>
           {person.interests.map((item, index) => (
             <Chip

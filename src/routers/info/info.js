@@ -1,16 +1,13 @@
-import { Box, Stepper, Step, StepLabel, Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import style from "./info.module.css";
 import Alert from "../../component/alert/alert.js";
 import My from "./my";
 import { useEffect, useRef, useState } from "react";
-import Friend from "./friend";
 import InfoContext from "./infoContext.js";
 import api from "../../common/api.js";
 
 export default function Info() {
-  const [step, setStep] = useState(0);
-  const warnRef = useRef();
-  const successRef = useRef();
+  const alertRef = useRef();
   const [person, setPerson] = useState({
     interests: [],
     job: "",
@@ -43,9 +40,8 @@ export default function Info() {
       person.intro === "" ||
       typeof person.public !== "boolean"
     ) {
-      warnRef.current.setMessage(
-        "Your information is incomplete. Please check and fill out all required fields."
-      );
+      alertRef.current.setMessage("請正確填寫資料");
+      alertRef.current.setSeverity("error");
     } else {
       const res = await api.setUserInfo(
         person.job,
@@ -56,43 +52,25 @@ export default function Info() {
         person.public
       );
       if (res.status) {
-        successRef.current.setMessage("Saved");
+        alertRef.current.setMessage("Saved");
+        alertRef.current.setSeverity("success");
       } else {
-        warnRef.current.setMessage("Save Failed");
+        alertRef.current.setMessage("Save Failed");
+        alertRef.current.setSeverity("error");
       }
     }
   };
   return (
     <InfoContext.Provider value={{ person, setPerson }}>
-      <Box className={style.box} sx={{ width: 1, pt: 1 }}>
-        <Stepper
-          activeStep={step}
-          alternativeLabel
-          sx={{ maxWidth: "600px", margin: "auto" }}
-        >
-          {["My", "Friend's"].map((label, index) => (
-            <Step key={label} onClick={checkPersonData}>
-              <StepLabel>{label}</StepLabel>
-            </Step>
-          ))}
-        </Stepper>
-        <Box
-          sx={{
-            margin: "10px auto",
-            maxWidth: "800px",
-          }}
-        >
-          {step === 0 && <My></My>}
-          {step === 1 && <Friend></Friend>}
-          <div className={style.sendWrap}>
-            <Button variant="contained" onClick={checkPersonData}>
-              save
-            </Button>
-          </div>
-        </Box>
+      <Box className={style.box} sx={{ width: 1, p: 1 }}>
+        <My></My>
+        <div className={style.sendWrap}>
+          <Button variant="contained" onClick={checkPersonData}>
+            save
+          </Button>
+        </div>
 
-        <Alert ref={warnRef} severity="error"></Alert>
-        <Alert ref={successRef} severity="success"></Alert>
+        <Alert ref={alertRef} severity="success"></Alert>
       </Box>
     </InfoContext.Provider>
   );

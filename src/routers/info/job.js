@@ -75,11 +75,10 @@ export default function Job() {
       className={style.wrap}
     >
       <Paper elevation="2" sx={{ p: 2, bgcolor: "#ffffff78" }}>
-        <h3>What Do You Do?</h3>
+        <h3>職業</h3>
         <FormControl sx={{ mb: 4, width: "100%" }}>
           <FormLabel id="job">
-            Please choose your profession so we can offer tailored content and
-            recommendations.
+            請選擇您的職業，以便我們提供量身定制的內容和推薦。
           </FormLabel>
           <select
             className={style.select}
@@ -97,7 +96,8 @@ export default function Job() {
           </select>
         </FormControl>
         <FormControl sx={{ mb: 4, width: "100%" }}>
-          <FormLabel id="job_time">Choose Your Working Hours</FormLabel>
+          <h3>工作時間</h3>
+          <FormLabel id="job_time"></FormLabel>
           <RadioGroup
             row
             name="job_time"
@@ -113,9 +113,9 @@ export default function Job() {
           </RadioGroup>
         </FormControl>
         <FormControl sx={{ width: "100%" }}>
+          <h3>薪資</h3>
           <FormLabel id="job_time">
-            Providing your salary range helps us offer you more relevant content
-            and services
+            提供您的薪資範圍有助於我們為您提供更相關的內容和服務。
           </FormLabel>
           <select
             className={style.select}
