@@ -35,7 +35,7 @@
   margin: auto;
   max-width: 450px;
   max-height: 450px;
-  border-radius: 50%;
+  border-radius: 10px;
   object-fit: cover;
 }
 .name {

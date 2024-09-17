@@ -4,7 +4,6 @@ import { useStore } from "../store";
 import Index from "./index";
 import { useEffect, useRef } from "react";
 import Header from "./../component/header/header";
-import Footer from "./../component/footer/footer";
 
 function PrivateRoutes({ forceToLogin }) {
   const location = useLocation();
@@ -40,7 +39,6 @@ function PrivateRoutes({ forceToLogin }) {
       <>
         <Header></Header>
         <Index />
-        <Footer></Footer>
       </>
     ) : (
       ""
@@ -51,7 +49,6 @@ function PrivateRoutes({ forceToLogin }) {
     <>
       <Header></Header>
       <Index />
-      <Footer></Footer>
     </>
   );
 }

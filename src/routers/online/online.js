@@ -30,7 +30,7 @@ function Online() {
 
   const updateUnreadData = useCallback(() => {
     socket.current.emit("receiveMessage", friend, (totalUnreadCount) => {
-      store.user.changeUnread(totalUnreadCount);
+      store.user.changeUnread(totalUnreadCount.unread);
     });
   }, [friend]);
   useEffect(() => {

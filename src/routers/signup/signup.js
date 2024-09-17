@@ -10,7 +10,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import style from "./signup.module.css";
-import Footer from "../../component/footer/footer";
 import Alert from "./../../component/alert/alert";
 import * as THREE from "three";
 
@@ -137,7 +136,6 @@ export default function Signup() {
           註冊
         </Button>
       </Box>
-      <Footer></Footer>
       <Alert severity="error" ref={alertRef}></Alert>
     </>
   );
