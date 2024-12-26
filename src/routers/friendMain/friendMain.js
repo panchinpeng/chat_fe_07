@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import style from "./friendMain.module.css";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
@@ -91,7 +91,7 @@ export default function FriendMain() {
           </div>
         </div>
       </div>
-      <Box sx={{ p: 1 }}>
+      {/* <Box sx={{ p: 1 }}>
         {articles.length > 0 ? (
           articles.map((article) => (
             <PostArticle key={article.id} article={article}></PostArticle>
@@ -99,6 +99,20 @@ export default function FriendMain() {
         ) : (
           <div className={style.empty}>很懶 ... 沒有任何貼文</div>
         )}
+        <div ref={loadingNextPageDOM}></div>
+      </Box> */}
+      <Box sx={{ p: 1, maxWidth: "960px", margin: "auto" }}>
+        <Grid container spacing={2}>
+          {articles.length > 0 ? (
+            articles.map((article) => (
+              <Grid item md={4} xs={12}>
+                <PostArticle key={article.id} article={article}></PostArticle>
+              </Grid>
+            ))
+          ) : (
+            <div className={style.empty}>很懶 ... 沒有任何貼文</div>
+          )}
+        </Grid>
         <div ref={loadingNextPageDOM}></div>
       </Box>
     </Box>

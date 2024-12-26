@@ -86,7 +86,7 @@ function Commits({ id }) {
             sx={{
               width: "100%",
               bgcolor: "background.paper",
-              p: 0,
+              p: 1,
               transform: "translateX(50px)",
             }}
           >

@@ -24,39 +24,45 @@ export default function RecommendArticle() {
       }
       totalPage.current = res.data.totalPage;
       setArticles(res.data.results);
-      observer = new IntersectionObserver(
-        async (entries) => {
-          const entry = entries[0];
-          if (entry.isIntersecting) {
-            if (totalPage.current <= nowPage.current) {
-              observer.disconnect();
-              setIsEnd(true);
-              return;
+      if (res.data.results.length > 0) {
+        observer = new IntersectionObserver(
+          async (entries) => {
+            const entry = entries[0];
+            if (entry.isIntersecting) {
+              if (totalPage.current <= nowPage.current) {
+                observer.disconnect();
+                setIsEnd(true);
+                return;
+              }
+              nowPage.current = nowPage.current + 1;
+              const recommendRes = await api.getRecommendArticle(
+                maxArticleId.current
+              );
+              if (recommendRes.status) {
+                setArticles((articles) => [
+                  ...articles,
+                  ...recommendRes.data.results,
+                ]);
+              }
             }
-            nowPage.current = nowPage.current + 1;
-            const recommendRes = await api.getRecommendArticle(
-              maxArticleId.current
-            );
-            if (recommendRes.status) {
-              setArticles((articles) => [
-                ...articles,
-                ...recommendRes.data.results,
-              ]);
-            }
+          },
+          {
+            root: document.getElementById("interactionWrap"),
+            rootMargin: "0px 0px 100px 0px",
           }
-        },
-        {
-          root: document.getElementById("interactionWrap"),
-          rootMargin: "0px 0px 100px 0px",
-        }
-      );
-      observer.observe(loadingNextPageDOM.current);
+        );
+        observer.observe(loadingNextPageDOM.current);
+      }
     })();
     return () => {
       observer && observer.disconnect();
       observer = null;
     };
   }, []);
+
+  if (articles.length === 0) {
+    return null;
+  }
   return (
     <>
       <div className={style.title}>熱門動態</div>

@@ -1,3 +1,8 @@
+.postWarp {
+  @media screen and (min-width: 960px) {
+    width: 960px;
+  }
+}
 .subheader * {
   font-size: 11px;
 }

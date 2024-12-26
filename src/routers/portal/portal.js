@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Box } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import style from "./portal.module.css";
 import api from "../../common/api";
 import { observer } from "mobx-react-lite";
@@ -66,15 +66,29 @@ function Portal() {
   }, []);
 
   return (
-    <Box sx={{ padding: "10px" }}>
-      {articles.map((article) => (
-        <PostArticle key={article.id} article={article}></PostArticle>
-      ))}
-      {nowPage.current === totalPage.current && (
-        <div className={style.friendEnd}>已看完所有好友動態</div>
-      )}
-      {isEnd && <RecommendArticle></RecommendArticle>}
-      <div ref={loadingNextPageDOM}></div>
+    <Box
+      sx={{
+        width: "100%",
+        paddingTop: "16px",
+        "@media (min-width: 960px)": {
+          width: "960px",
+        },
+      }}
+    >
+      <Grid container spacing={2}>
+        {articles.map((article) => (
+          <Grid item md={4} xs={12}>
+            <PostArticle key={article.id} article={article}></PostArticle>
+          </Grid>
+        ))}
+        {nowPage.current === totalPage.current && (
+          <Grid item xs={12}>
+            <div className={style.friendEnd}>已看完所有好友動態</div>
+          </Grid>
+        )}
+        {isEnd && <RecommendArticle></RecommendArticle>}
+        <div ref={loadingNextPageDOM}></div>
+      </Grid>
     </Box>
   );
 }

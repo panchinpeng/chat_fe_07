@@ -78,13 +78,7 @@ function PostArticle({ article }) {
   }, []);
 
   return (
-    <Card
-      sx={{
-        width: "calc(100vw - 20px)",
-        maxWidth: "500px",
-        margin: "10px auto 0 auto",
-      }}
-    >
+    <Card>
       <CardHeader
         avatar={<Avatar from="Index" friendName={article.username}></Avatar>}
         action={
@@ -103,6 +97,7 @@ function PostArticle({ article }) {
       <CardMedia
         children={
           <div
+            id="adsawsd"
             className={style.imageGallery}
             onScroll={(e) => loadingRestImage(e)}
           >
@@ -113,7 +108,6 @@ function PostArticle({ article }) {
                     key={index}
                     animation="wave"
                     sx={{
-                      height: "320px",
                       width: "300px",
                       transform: "none",
                       flex: "0 0 300px",
@@ -125,7 +119,6 @@ function PostArticle({ article }) {
                     className={style.articleImg}
                     key={img}
                     src={img}
-                    height="320px"
                     alt="article picture"
                   ></img>
                 )
@@ -133,7 +126,7 @@ function PostArticle({ article }) {
           </div>
         }
       />
-      <CardContent>
+      <CardContent sx={{ padding: "0px" }}>
         <Typography variant="body2" color="text.secondary">
           {(article.is_thumb * 1 === 1 ||
             article.is_reply * 1 === 1 ||
