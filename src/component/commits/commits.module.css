@@ -18,23 +18,11 @@
   border-radius: 10px;
   padding: 2px;
   margin-top: 2px;
-  animation: slideLeft 0.1s ease-in-out forwards;
-  transform: translateX(-50px);
-  opacity: 0;
+  opacity: 1;
 }
 .commit * {
   color: #fff;
 }
 .title {
   margin-top: 5px;
-}
-@keyframes slideLeft {
-  0% {
-    transform: translateX(0px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(-50px);
-    opacity: 1;
-  }
 }

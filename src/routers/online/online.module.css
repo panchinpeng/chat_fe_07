@@ -27,6 +27,7 @@
 .inputMessage {
   width: 100%;
   flex: 0 0;
+  padding: 10px;
   background-color: #fff;
 }
 .replyWrap {

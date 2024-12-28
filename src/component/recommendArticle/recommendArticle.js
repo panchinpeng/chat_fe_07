@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import api from "../../common/api";
 import PostArticle from "../postArticle/postArticle";
 import style from "./recommendArticle.module.css";
+import Masonry from "masonry-layout";
 export default function RecommendArticle() {
   const [articles, setArticles] = useState([]);
   const [isEnd, setIsEnd] = useState(false);
@@ -9,19 +10,24 @@ export default function RecommendArticle() {
   const totalPage = useRef(null);
   const loadingNextPageDOM = useRef();
   const maxArticleId = useRef(0);
+  const [masonry, setMasonry] = useState(null);
+  const waterFallDOM = useRef();
   useEffect(() => {
     if (articles.length) {
       maxArticleId.current = articles[articles.length - 1].id;
+      setMasonry(
+        new Masonry(waterFallDOM.current, {
+          columnWidth: 300,
+          itemSelector: ".waterFallItem2",
+          gutter: 10,
+        })
+      );
     }
   }, [articles]);
   useEffect(() => {
     let observer = null;
     (async () => {
       const res = await api.getRecommendArticle();
-      if (!res.status) {
-        alert("發生錯誤");
-        // navigate("/");
-      }
       totalPage.current = res.data.totalPage;
       setArticles(res.data.results);
       if (res.data.results.length > 0) {
@@ -60,15 +66,28 @@ export default function RecommendArticle() {
     };
   }, []);
 
-  if (articles.length === 0) {
-    return null;
-  }
+  useEffect(() => {
+    setTimeout(() => {
+      if (masonry) {
+        masonry.layout();
+      }
+    }, 200);
+  }, [masonry]);
   return (
     <>
       <div className={style.title}>熱門動態</div>
-      {articles.map((article) => (
-        <PostArticle key={article.id} article={article}></PostArticle>
-      ))}
+      <div className="waterFall" ref={waterFallDOM}>
+        {articles.map((article) => (
+          <div className={`waterFallItem2 ${style.waterFallItem}`}>
+            <PostArticle
+              key={article.id}
+              article={article}
+              renderFn={() => masonry && masonry.layout()}
+            ></PostArticle>
+          </div>
+        ))}
+      </div>
+
       {isEnd && <div className={style.end}>到底了QQ</div>}
       <div ref={loadingNextPageDOM}></div>
     </>

@@ -66,7 +66,7 @@ export default function Article() {
 
   return (
     <Box sx={{ p: 1, width: 1 }} className={style.wrap}>
-      <Paper elevation="1" sx={{ pt: 5 }}>
+      <Paper elevation={1} sx={{ pt: 5 }}>
         <Picture ref={pictureInfo}></Picture>
         <Box sx={{ mt: 6, p: 1, fontSize: 16, borderBottom: "1px solid #ccc" }}>
           <TextField

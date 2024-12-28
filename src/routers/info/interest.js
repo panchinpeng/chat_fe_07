@@ -117,7 +117,7 @@ export default function Interest() {
       }}
       className={style.wrap}
     >
-      <Paper elevation="2" sx={{ p: 2, bgcolor: "#ffffff78" }}>
+      <Paper elevation={2} sx={{ p: 2, bgcolor: "#ffffff78" }}>
         <h3>興趣</h3>
         <FormControl>
           <FormLabel>

@@ -1,11 +1,13 @@
 import { useEffect, useState, useRef } from "react";
-import { Box, Grid } from "@mui/material";
+import { Box } from "@mui/material";
 import style from "./portal.module.css";
 import api from "../../common/api";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../store";
 import PostArticle from "../../component/postArticle/postArticle";
 import RecommendArticle from "../../component/recommendArticle/recommendArticle";
+import Masonry from "masonry-layout";
+
 function Portal() {
   const store = useStore();
   const [articles, setArticles] = useState([]);
@@ -14,19 +16,38 @@ function Portal() {
   const nowPage = useRef(1);
   const totalPage = useRef(null);
   const maxArticleId = useRef(0);
+  const [masonry, setMasonry] = useState(null);
 
   useEffect(() => {
     if (articles.length) {
       maxArticleId.current = articles[articles.length - 1].id;
+      setMasonry(
+        new Masonry(
+          document.querySelector(".waterFall", {
+            columnWidth: 300,
+            itemSelector: ".waterFallItem",
+            gutter: 10,
+          })
+        )
+      );
     }
   }, [articles]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (masonry) {
+        masonry.layout();
+      }
+    }, 200);
+  }, [masonry]);
 
   useEffect(() => {
     let observer = null;
     (async () => {
       store.trends.getAllFriendTrends();
       const articlesRes = await api.getArticle();
-      if (articlesRes.status) {
+
+      if (articlesRes.data.results.length) {
         totalPage.current = articlesRes.data.totalPage;
         setArticles(articlesRes.data.results);
         observer = new IntersectionObserver(
@@ -57,9 +78,12 @@ function Portal() {
           }
         );
         observer.observe(loadingNextPageDOM.current);
+      } else {
+        setIsEnd(true);
       }
     })();
     return () => {
+      masonry && masonry.destroy();
       observer && observer.disconnect();
       observer = null;
     };
@@ -75,20 +99,26 @@ function Portal() {
         },
       }}
     >
-      <Grid container spacing={2}>
+      <div className="waterFall">
         {articles.map((article) => (
-          <Grid item md={4} xs={12}>
-            <PostArticle key={article.id} article={article}></PostArticle>
-          </Grid>
+          <div
+            key={article.id}
+            className={`waterFallItem ${style.waterFallItem}`}
+          >
+            <PostArticle
+              article={article}
+              renderFn={() => masonry && masonry.layout()}
+            ></PostArticle>
+          </div>
         ))}
-        {nowPage.current === totalPage.current && (
-          <Grid item xs={12}>
-            <div className={style.friendEnd}>已看完所有好友動態</div>
-          </Grid>
-        )}
-        {isEnd && <RecommendArticle></RecommendArticle>}
-        <div ref={loadingNextPageDOM}></div>
-      </Grid>
+      </div>
+      {nowPage.current === totalPage.current && (
+        <div>
+          <div className={style.friendEnd}>已看完所有好友動態</div>
+        </div>
+      )}
+      {isEnd && <RecommendArticle></RecommendArticle>}
+      <div ref={loadingNextPageDOM}></div>
     </Box>
   );
 }

@@ -5,7 +5,6 @@ import {
   IconButton,
   CardMedia,
   CardContent,
-  Typography,
   Skeleton,
 } from "@mui/material";
 import Avatar from "../avatar/avatar";
@@ -20,7 +19,7 @@ import { observer } from "mobx-react-lite";
 import { useStore } from "../../store";
 import Commits from "../commits/commits";
 
-function PostArticle({ article }) {
+function PostArticle({ article, renderFn }) {
   const store = useStore();
   const [images, setImages] = useState(() =>
     article ? new Array(article.img_names.length).fill(0) : []
@@ -76,6 +75,15 @@ function PostArticle({ article }) {
       });
     }
   }, []);
+  useEffect(() => {
+    if (showCommits) {
+      setTimeout(() => {
+        renderFn && renderFn();
+      }, 200);
+    } else {
+      renderFn && renderFn();
+    }
+  }, [showCommits]);
 
   return (
     <Card>
@@ -127,7 +135,7 @@ function PostArticle({ article }) {
         }
       />
       <CardContent sx={{ padding: "0px" }}>
-        <Typography variant="body2" color="text.secondary">
+        <div variant="body2" color="text.secondary">
           {(article.is_thumb * 1 === 1 ||
             article.is_reply * 1 === 1 ||
             article.place.name !== "未設定") && (
@@ -168,8 +176,10 @@ function PostArticle({ article }) {
           )}
 
           <div className={style.message}>{article.message}</div>
-          {showCommits && <Commits id={article.id}></Commits>}
-        </Typography>
+          {showCommits && (
+            <Commits id={article.id} renderFn={renderFn}></Commits>
+          )}
+        </div>
       </CardContent>
     </Card>
   );

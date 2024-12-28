@@ -24,7 +24,7 @@ export default function Intro() {
       }}
       className={style.wrap}
     >
-      <Paper elevation="2" sx={{ p: 2, bgcolor: "#ffffff78" }}>
+      <Paper elevation={2} sx={{ p: 2, bgcolor: "#ffffff78" }}>
         <h3>個人介紹</h3>
         <Box sx={{ textAlign: "center" }}>
           <CuAvatar from="my"></CuAvatar>

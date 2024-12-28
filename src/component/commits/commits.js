@@ -15,7 +15,7 @@ import api from "../../common/api";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../store";
 
-function Commits({ id }) {
+function Commits({ id, renderFn }) {
   const store = useStore();
   const [history, setHistory] = useState([]);
   const [commitMsg, setCommitMsg] = useState("");
@@ -55,6 +55,10 @@ function Commits({ id }) {
       }
     }
   };
+
+  useEffect(() => {
+    renderFn && renderFn();
+  }, [history]);
   return (
     <Box sx={{ mt: 1 }} className={style.commitsWrap}>
       <Box sx={{ p: 1, pb: 0 }}>
@@ -87,7 +91,6 @@ function Commits({ id }) {
               width: "100%",
               bgcolor: "background.paper",
               p: 1,
-              transform: "translateX(50px)",
             }}
           >
             {history.map((item, index) => (
