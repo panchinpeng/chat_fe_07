@@ -3,6 +3,7 @@ import api from "../../common/api";
 import PostArticle from "../postArticle/postArticle";
 import style from "./recommendArticle.module.css";
 import Masonry from "masonry-layout";
+import useIntersectionObserver from "./../../hooks/useIntersectionObserver.js";
 export default function RecommendArticle() {
   const [articles, setArticles] = useState([]);
   const [isEnd, setIsEnd] = useState(false);
@@ -12,6 +13,7 @@ export default function RecommendArticle() {
   const maxArticleId = useRef(0);
   const [masonry, setMasonry] = useState(null);
   const waterFallDOM = useRef();
+  const { startObserve, isIntersecting } = useIntersectionObserver();
   useEffect(() => {
     if (articles.length) {
       maxArticleId.current = articles[articles.length - 1].id;
@@ -25,46 +27,36 @@ export default function RecommendArticle() {
     }
   }, [articles]);
   useEffect(() => {
-    let observer = null;
     (async () => {
       const res = await api.getRecommendArticle();
-      totalPage.current = res.data.totalPage;
-      setArticles(res.data.results);
       if (res.data.results.length > 0) {
-        observer = new IntersectionObserver(
-          async (entries) => {
-            const entry = entries[0];
-            if (entry.isIntersecting) {
-              if (totalPage.current <= nowPage.current) {
-                observer.disconnect();
-                setIsEnd(true);
-                return;
-              }
-              nowPage.current = nowPage.current + 1;
-              const recommendRes = await api.getRecommendArticle(
-                maxArticleId.current
-              );
-              if (recommendRes.status) {
-                setArticles((articles) => [
-                  ...articles,
-                  ...recommendRes.data.results,
-                ]);
-              }
-            }
-          },
-          {
-            root: document.getElementById("interactionWrap"),
-            rootMargin: "0px 0px 100px 0px",
-          }
-        );
-        observer.observe(loadingNextPageDOM.current);
+        totalPage.current = res.data.totalPage;
+        setArticles(res.data.results);
+        startObserve(loadingNextPageDOM.current);
       }
     })();
-    return () => {
-      observer && observer.disconnect();
-      observer = null;
-    };
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      if (isIntersecting) {
+        if (totalPage.current <= nowPage.current) {
+          setIsEnd(true);
+          return;
+        }
+        nowPage.current = nowPage.current + 1;
+        const recommendRes = await api.getRecommendArticle(
+          maxArticleId.current
+        );
+        if (recommendRes.status) {
+          setArticles((articles) => [
+            ...articles,
+            ...recommendRes.data.results,
+          ]);
+        }
+      }
+    })();
+  }, [isIntersecting]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -78,9 +70,11 @@ export default function RecommendArticle() {
       <div className={style.title}>熱門動態</div>
       <div className="waterFall" ref={waterFallDOM}>
         {articles.map((article) => (
-          <div className={`waterFallItem2 ${style.waterFallItem}`}>
+          <div
+            key={article.id}
+            className={`waterFallItem2 ${style.waterFallItem}`}
+          >
             <PostArticle
-              key={article.id}
               article={article}
               renderFn={() => masonry && masonry.layout()}
             ></PostArticle>
