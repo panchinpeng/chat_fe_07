@@ -92,8 +92,8 @@ export default function FriendMain() {
         <Grid container spacing={2}>
           {articles.length > 0 ? (
             articles.map((article) => (
-              <Grid item md={4} xs={12}>
-                <PostArticle key={article.id} article={article}></PostArticle>
+              <Grid item md={4} xs={12} key={article.id}>
+                <PostArticle article={article}></PostArticle>
               </Grid>
             ))
           ) : (
