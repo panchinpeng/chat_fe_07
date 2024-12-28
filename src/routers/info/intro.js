@@ -22,15 +22,17 @@ export default function Intro() {
         mb: 2,
         borderRadius: 3,
       }}
+      className={style.wrap}
     >
-      <Paper elevation="2" sx={{ p: 2, bgcolor: "#ffffff78" }}>
+      <Paper elevation={2} sx={{ p: 2, bgcolor: "#ffffff78" }}>
         <h3>個人介紹</h3>
         <Box sx={{ textAlign: "center" }}>
           <CuAvatar from="my"></CuAvatar>
 
           <Box sx={{ mt: 4, textAlign: "left" }}>
             <FormControl sx={{ width: "100%" }}>
-              <FormLabel>關於自己</FormLabel>
+              <h3>關於自己</h3>
+
               <textarea
                 rows={3}
                 className={style.textarea}
@@ -48,11 +50,9 @@ export default function Intro() {
           </Box>
           <Box sx={{ mt: 4, textAlign: "left" }}>
             <FormControl sx={{ width: "100%" }}>
+              <h3>是否開放被搜尋</h3>
               <FormLabel>
-                是否開放被搜尋
-                <div className={style.memo}>
-                  當開放被搜尋後，其他人將能透過搜尋功能找尋到你
-                </div>
+                當開放被搜尋後，其他人將能透過搜尋功能找尋到你
               </FormLabel>
               <RadioGroup
                 aria-labelledby="開放搜尋"

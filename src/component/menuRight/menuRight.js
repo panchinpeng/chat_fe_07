@@ -10,25 +10,45 @@ import {
   Divider,
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
-
+import HistoryIcon from "@mui/icons-material/History";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PaymentIcon from "@mui/icons-material/Payment";
 import LoginIcon from "@mui/icons-material/Login";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
+import PostAddIcon from "@mui/icons-material/PostAdd";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { grey } from "@mui/material/colors";
 import { useNavigate, useLocation } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { useStore } from "./../../store";
 import CuAvatar from "./../avatar/avatar";
-import style from "./menuRight.module.css";
 
 const menu = [
+  {
+    title: "新增限動",
+    page: "/member/post",
+    loginRequire: true,
+    icon: <AddCircleOutlineIcon></AddCircleOutlineIcon>,
+  },
+  {
+    title: "新增貼文",
+    page: "/member/article",
+    loginRequire: true,
+    icon: <PostAddIcon></PostAddIcon>,
+  },
   {
     title: "資訊",
     page: "/member/info",
     loginRequire: true,
     icon: <PersonIcon></PersonIcon>,
+  },
+  {
+    title: "歷史",
+    page: "/history",
+    loginRequire: true,
+    icon: <HistoryIcon></HistoryIcon>,
   },
   {
     title: "支付",
@@ -85,7 +105,9 @@ function MenuRight({ open, setOpen }) {
               width: 1,
             }}
           >
-            <CuAvatar></CuAvatar>
+            <div onClick={() => setOpen(false)}>
+              <CuAvatar></CuAvatar>
+            </div>
           </Box>
           <Box
             sx={{

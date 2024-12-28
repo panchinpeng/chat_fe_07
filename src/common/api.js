@@ -9,14 +9,7 @@ const api = {
       throw Promise.reject(e);
     }
   },
-  async getRecommendFriend() {
-    try {
-      const res = await fetch("/api/user/recommendFriend");
-      return res;
-    } catch (e) {
-      throw Promise.reject(e);
-    }
-  },
+
   async getVerify() {
     try {
       const res = await fetch("/api/user/verify");
@@ -237,6 +230,17 @@ const api = {
       throw Promise.reject(e);
     }
   },
+  async getSingleHistory(friend, q) {
+    try {
+      const res = await fetch("/api/message/singleHistory", {
+        method: "POST",
+        body: { friend, q },
+      });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
   async getAllFriendTrends() {
     try {
       const res = await fetch("/api/trends/allFriendTrends");
@@ -278,9 +282,77 @@ const api = {
       throw Promise.reject(e);
     }
   },
-  async getArticle(page) {
+  async getArticle(fid, last) {
     try {
-      const res = await fetch(`/api/article?page=${page}`);
+      const res = await fetch(
+        `/api/article?pre=${fid ? "&fid=" + fid : ""}${last ? "&last=" + last : ""}`
+      );
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getThumb(id) {
+    try {
+      const res = await fetch("/api/article/getThumb", {
+        method: "POST",
+        body: { id },
+      });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async setThumb(id) {
+    try {
+      const res = await fetch("/api/article/setThumb", {
+        method: "POST",
+        body: {
+          id,
+        },
+      });
+      return res.data;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async setCommits(id, message) {
+    try {
+      const res = await fetch("/api/article/commits", {
+        method: "POST",
+        body: {
+          id,
+          message,
+        },
+      });
+      return res.data;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getCommits(id, lastId) {
+    try {
+      const res = await fetch(
+        `/api/article/commits?id=${id}${lastId ? "&lastId=" + lastId : ""}`
+      );
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getRecommendArticle(last) {
+    try {
+      const res = await fetch(
+        `/api/article/recommend${last ? "?last=" + last : ""}`
+      );
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getRecommendFriend() {
+    try {
+      const res = await fetch("/api/user/recommendFriend");
       return res;
     } catch (e) {
       throw Promise.reject(e);

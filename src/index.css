@@ -9,7 +9,7 @@ body {
 }
 
 body * {
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.4;
   overscroll-behavior-y: contain;
   box-sizing: border-box;
@@ -42,4 +42,11 @@ a {
 
 .MuiBadge-badge {
   height: 14px !important;
+}
+.EmojiPickerReact {
+  --epr-emoji-size: 23px !important;
+}
+@font-face {
+  font-family: Counter;
+  src: url(./../public/fonts/Counter.ttf);
 }

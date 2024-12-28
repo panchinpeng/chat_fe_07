@@ -6,9 +6,11 @@ import { observer } from "mobx-react-lite";
 import style from "./avatar.module.css";
 import api from "../../common/api";
 import Alert from "../alert/alert";
+import { useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
 
 function CuAvatar({ from, friendName }) {
+  const navigate = useNavigate();
   const store = useStore();
   const warnRef = useRef();
   const [avatar, setAvatar] = useState(
@@ -43,7 +45,10 @@ function CuAvatar({ from, friendName }) {
           ? { width: 40, height: 40 }
           : { width: 80, height: 80 }
         : { width: 160, height: 160 };
-
+    if (from === "Message") {
+      styleObj.width = 30;
+      styleObj.height = 30;
+    }
     if (type === "treads") {
       styleObj.width += from === "my" ? 8 : 4;
       styleObj.height += from === "my" ? 8 : 4;
@@ -77,7 +82,7 @@ function CuAvatar({ from, friendName }) {
             <AddPhotoAlternateIcon
               sx={{
                 color: grey[900],
-                fontSize: from !== "my" ? 0 : 40,
+                fontSize: from !== "my" ? "0 !important" : "40px !important",
               }}
             ></AddPhotoAlternateIcon>
           </label>
@@ -85,11 +90,16 @@ function CuAvatar({ from, friendName }) {
       >
         <Avatar
           sx={computedAvatarClassName()}
-          onClick={() =>
-            store.trends.getTrend(
+          onClick={async () => {
+            const getTrendRes = await store.trends.getTrend(
               friendName ? friendName : store.user.account.username
-            )
-          }
+            );
+            if (getTrendRes === "noTrend") {
+              navigate(
+                `/member/friendMain/${friendName ? friendName : store.user.account.username}`
+              );
+            }
+          }}
         >
           {avatar === "" ? (
             friendName ? (

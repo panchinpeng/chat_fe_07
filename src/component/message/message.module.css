@@ -1,5 +1,5 @@
 .message {
-  padding: 10px;
+  padding: 0;
   display: flex;
 }
 .message.left {
@@ -12,17 +12,60 @@
   padding: 10px;
   word-break: break-all;
   background-color: #f8f6f6;
+  user-select: none;
+  position: relative;
+  white-space: pre;
 }
 .messageWrap {
   margin: 5px;
   flex: 1 1 0;
 }
+
 .time {
-  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-.right .time {
-  text-align: left;
+.time * {
+  font-size: 20px;
 }
 .left .time {
-  text-align: right;
+  flex-direction: row;
+}
+.right .time {
+  flex-direction: row-reverse;
+}
+.timeData {
+  font-size: 12px;
+  color: #ccc;
+  user-select: none;
+}
+.left .more {
+  display: flex;
+  flex-direction: row-reverse;
+}
+.replyMessage {
+  background: #fff;
+  padding: 5px;
+  border-left: 1px solid;
+  margin-bottom: 5px;
+  display: block;
+  color: #000;
+}
+.reactionWrap {
+  display: inline-flex;
+  padding: 2px 10px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+.reactionWrap img {
+  margin-right: 5px;
+}
+
+.right .reactionWrap {
+  left: 0;
+}
+.fake {
+  height: 20px;
 }

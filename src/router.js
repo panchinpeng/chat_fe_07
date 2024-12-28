@@ -3,6 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 import PrivateRoutes from "./routers/privateRoute";
 import Logout from "./routers/logout/logout";
 import Error from "./routers/error/error";
+import History from "./routers/history/history";
 
 const AddFriend = React.lazy(() => import("./routers/addFriend/addFriend"));
 const Portal = React.lazy(() => import("./routers/portal/portal"));
@@ -13,6 +14,7 @@ const Info = React.lazy(() => import("./routers/info/info"));
 const Online = React.lazy(() => import("./routers/online/online"));
 const Chatroom = React.lazy(() => import("./routers/chatroom/chatroom"));
 const Article = React.lazy(() => import("./routers/article/article"));
+const FriendMain = React.lazy(() => import("./routers/friendMain/friendMain"));
 const router = createBrowserRouter([
   {
     path: "/member",
@@ -42,6 +44,10 @@ const router = createBrowserRouter([
         path: "addFriend",
         element: <AddFriend></AddFriend>,
       },
+      {
+        path: "friendMain/:user",
+        element: <FriendMain></FriendMain>,
+      },
     ],
   },
   {
@@ -64,6 +70,10 @@ const router = createBrowserRouter([
     path: "/",
     element: <PrivateRoutes forceToLogin={true}></PrivateRoutes>,
     children: [
+      {
+        path: "/history",
+        element: <History></History>,
+      },
       {
         path: "",
         element: <Portal></Portal>,

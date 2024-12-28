@@ -8,7 +8,6 @@ import Place from "./place/place";
 
 import usePageLeaveWarn from "../../hooks/usePageLeaveWarn";
 import api from "../../common/api";
-
 export default function Article() {
   usePageLeaveWarn();
   const navigate = useNavigate();
@@ -16,18 +15,28 @@ export default function Article() {
 
   const [message, setMessage] = useState("");
   const place = useRef({}); // 值可能是字串
-  const picture = useRef([]);
+  const pictureInfo = useRef();
   const [isReply, setIsReply] = useState(true);
   const [isThumb, setIsThumb] = useState(true);
   const [isPrivate, setIsPrivate] = useState(false);
   const [error, setError] = useState({ message: false });
 
   const setPlace = (data) => (place.current = data);
-  const setPicture = (data) => (picture.current = data);
 
   const submitArticle = async () => {
     if (!message) {
       setError({ message: true });
+      return;
+    }
+    if (pictureInfo.current.longTouchPicture) {
+      const userCheck = window.confirm("圖片順序尚未確定，確定要送出嗎");
+      if (!userCheck) {
+        return;
+      }
+    }
+    const images = pictureInfo.current.getPictures();
+    if (images.length === 0) {
+      alert("請至少選擇一張照片");
       return;
     }
     store.loading.setLoading(true);
@@ -41,8 +50,8 @@ export default function Article() {
       place.current,
       isReply,
       isThumb,
-      isPrivate,
-      picture.current,
+      store.user.account.public * 1 > 0 ? isPrivate : true,
+      images,
       1
     );
     store.loading.setLoading(false);
@@ -57,8 +66,8 @@ export default function Article() {
 
   return (
     <Box sx={{ p: 1, width: 1 }} className={style.wrap}>
-      <Paper elevation="1" sx={{ pt: 5 }}>
-        <Picture emitPictureFn={setPicture}></Picture>
+      <Paper elevation={1} sx={{ pt: 5 }}>
+        <Picture ref={pictureInfo}></Picture>
         <Box sx={{ mt: 6, p: 1, fontSize: 16, borderBottom: "1px solid #ccc" }}>
           <TextField
             error={error.message}
@@ -83,7 +92,7 @@ export default function Article() {
               onChange={(e) => setIsReply(e.target.checked)}
             />
           </div>
-          <div className={style.tip}>當發佈貼文後，將允許好友留言</div>
+          <div className={style.tip}>發佈貼文後，將允許留言</div>
         </Box>
         <Box sx={{ mt: 1, p: 1, fontSize: 16, borderBottom: "1px solid #ccc" }}>
           <div>
@@ -94,21 +103,26 @@ export default function Article() {
               onChange={(e) => setIsThumb(e.target.checked)}
             />
           </div>
-          <div className={style.tip}>當發佈貼文後，將允許好友按讚</div>
+          <div className={style.tip}>發佈貼文後，允許按讚</div>
         </Box>
-        <Box sx={{ mt: 1, p: 1, fontSize: 16, borderBottom: "1px solid #ccc" }}>
-          <div>
-            僅允許好友看見
-            <Switch
-              defaultChecked
-              checked={isPrivate}
-              onChange={(e) => setIsPrivate(e.target.checked)}
-            />
-          </div>
-          <div className={style.tip}>
-            選擇僅好友看見時，僅開放好友互動，其他人看不見唷
-          </div>
-        </Box>
+        {store.user.account.public > 0 && (
+          <Box
+            sx={{ mt: 1, p: 1, fontSize: 16, borderBottom: "1px solid #ccc" }}
+          >
+            <div>
+              僅允許好友看見
+              <Switch
+                defaultChecked
+                checked={isPrivate}
+                onChange={(e) => setIsPrivate(e.target.checked)}
+              />
+            </div>
+            <div className={style.tip}>
+              選擇僅好友看見時，僅開放好友互動，其他人看不見唷
+            </div>
+          </Box>
+        )}
+
         <Box sx={{ mt: 1, textAlign: "right", p: 1, fontSize: 16 }}>
           <Button variant="contained" color="error">
             儲存草稿

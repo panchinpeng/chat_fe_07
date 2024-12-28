@@ -24,6 +24,7 @@
       })
 
       window.addEventListener("unhandledrejection", function(e) {
+        console.log("err", e);
         window.location = "/error";
       });
 

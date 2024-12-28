@@ -6,11 +6,9 @@ import {
   Button,
   FormControlLabel,
   Checkbox,
-  Snackbar,
 } from "@mui/material";
 import api from "../../common/api";
 import { NavLink, useNavigate } from "react-router-dom";
-import Footer from "../../component/footer/footer";
 import Alert from "./../../component/alert/alert";
 import * as THREE from "three";
 
@@ -127,7 +125,6 @@ function Login() {
           登入
         </Button>
       </Box>
-      <Footer></Footer>
       <Alert severity="error" ref={alertRef}></Alert>
     </>
   );

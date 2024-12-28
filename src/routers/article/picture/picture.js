@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, forwardRef, useImperativeHandle } from "react";
 import { Paper, CircularProgress, Button } from "@mui/material";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 
@@ -12,18 +12,26 @@ import { EffectCoverflow } from "swiper/modules";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Base64 } from "js-base64";
 
-export default function Picture({ emitPictureFn }) {
+function Picture(props, ref) {
   const [picture, setPicture] = useState([]);
   const [longTouchPicture, setLongTouchPicture] = useState(null);
   const longTouchTimer = useState();
   const files = useRef([]);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      getPictures: () => files.current,
+      longTouchPicture: longTouchPicture,
+    }),
+    [longTouchPicture]
+  );
 
   const removePicture = (index) => {
     setPicture((pics) => {
       const cpPics = [...pics];
       cpPics.splice(index, 1);
       files.current.splice(index, 1);
-      emitPictureFn([...files.current]);
       return cpPics;
     });
   };
@@ -34,9 +42,8 @@ export default function Picture({ emitPictureFn }) {
         .filter((item) => /^image\//.test(item.type))
         .slice(0, 10);
       files.current = filesAry;
-      emitPictureFn([...files.current]);
 
-      filesAry.map((item, index) => {
+      filesAry.forEach((item, index) => {
         setPicture((p) => {
           const copyPic = [...p];
           copyPic[index] = "loading";
@@ -73,8 +80,7 @@ export default function Picture({ emitPictureFn }) {
         filesAry = filesAry.slice(0, 10 - alreadyFilesLength);
       }
       files.current = [...files.current, ...filesAry];
-      emitPictureFn([...files.current]);
-      files.current.map((item, index) => {
+      files.current.forEach((item, index) => {
         setPicture((p) => {
           const copyPic = [...p];
           copyPic[index] = "loading";
@@ -96,10 +102,10 @@ export default function Picture({ emitPictureFn }) {
     }
   };
 
-  const handleLongTouchStart = (index) => {
+  const handleLongTouchStart = () => {
     if (picture.length > 1) {
       longTouchTimer.current = setTimeout(() => {
-        setLongTouchPicture(index);
+        setLongTouchPicture(true);
       }, 1000);
     }
   };
@@ -127,7 +133,7 @@ export default function Picture({ emitPictureFn }) {
     }
   };
 
-  const getListStyle = (isDraggingOver) => ({
+  const getListStyle = () => ({
     display: "flex",
     padding: "16px",
     overflow: "auto",
@@ -148,6 +154,14 @@ export default function Picture({ emitPictureFn }) {
       willChange: "transform",
       opacity: 1,
     };
+  };
+
+  const sortEnter = () => {
+    const sortedFiles = picture.map((p) => {
+      return files.current.find((file) => Base64.encode(file.name) === p.id);
+    });
+    files.current = sortedFiles;
+    setLongTouchPicture(null);
   };
 
   return picture.length === 0 ? (
@@ -203,7 +217,7 @@ export default function Picture({ emitPictureFn }) {
               <SwiperSlide
                 key={index}
                 className={style.imgWrap}
-                onTouchStart={() => handleLongTouchStart(index)}
+                onTouchStart={handleLongTouchStart}
                 onTouchEnd={handleLongTouchEnd}
               >
                 {item === "loading" ? (
@@ -212,7 +226,7 @@ export default function Picture({ emitPictureFn }) {
                   </div>
                 ) : (
                   <div className={style.img}>
-                    <img src={item.src}></img>
+                    <img alt="uploadTime" src={item.src}></img>
                     <div className={style.remove}>
                       <DeleteIcon
                         sx={{ fontSize: 30 }}
@@ -265,6 +279,8 @@ export default function Picture({ emitPictureFn }) {
                       >
                         {(provided, snapshot2) => (
                           <img
+                            alt="uploadimg"
+                            data-sort={index}
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
@@ -286,11 +302,7 @@ export default function Picture({ emitPictureFn }) {
             </Droppable>
             <div className={style.warnSort}>
               拖曳圖片調整順序
-              <Button
-                variant="contained"
-                color="success"
-                onClick={() => setLongTouchPicture(null)}
-              >
+              <Button variant="contained" color="success" onClick={sortEnter}>
                 確認
               </Button>
             </div>
@@ -300,3 +312,4 @@ export default function Picture({ emitPictureFn }) {
     </>
   );
 }
+export default forwardRef(Picture);

@@ -1,9 +1,10 @@
-import { lazy, useEffect, useState } from "react";
+import { lazy, useState } from "react";
 import { AppBar, Badge, Toolbar } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import style from "./header.module.css";
 import MenuRight from "../menuRight/menuRight";
 import PeopleIcon from "@mui/icons-material/People";
+import EmailIcon from "@mui/icons-material/Email";
 
 // store
 import { observer } from "mobx-react-lite";
@@ -23,7 +24,7 @@ function Header() {
       <AppBar position="static" sx={{ flex: "0 0 0", zIndex: "9" }}>
         <Toolbar>
           <div>
-            <Link to="/">
+            <Link to="/" reloadDocument>
               <img
                 alt="logo"
                 src={logo}
@@ -45,6 +46,19 @@ function Header() {
             ) : (
               <div></div>
             )}
+            <Link to="/member/chatroom">
+              <Badge
+                badgeContent={store.user.account.unread}
+                color="error"
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                max={999}
+              >
+                <EmailIcon></EmailIcon>
+              </Badge>
+            </Link>
 
             <MenuIcon
               sx={{ fontSize: 28 }}
