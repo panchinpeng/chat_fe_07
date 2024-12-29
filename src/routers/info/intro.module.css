@@ -4,9 +4,24 @@
   border-color: #503c3c;
   outline-color: #503c3c;
 }
+
 .memo {
   font-size: 12px;
 }
 .wrap * {
   font-size: 14px;
+}
+.field {
+  * {
+    font-size: 12px;
+  }
+  .title {
+    font-size: 14px;
+    margin: 10px 0;
+  }
+}
+
+.select {
+  padding: 5px 18px 5px 5px;
+  border-radius: 5px;
 }
