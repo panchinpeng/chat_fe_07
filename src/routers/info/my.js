@@ -1,4 +1,3 @@
-import style from "./my.module.css";
 import { Box } from "@mui/material";
 import "swiper/css";
 import "swiper/css/effect-coverflow";

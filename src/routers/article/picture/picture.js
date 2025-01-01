@@ -166,20 +166,9 @@ function Picture(props, ref) {
 
   return picture.length === 0 ? (
     <>
-      <Paper
-        elevation={2}
-        sx={{
-          width: 1,
-          maxWidth: "300px",
-          mx: "auto",
-          height: "300px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+      <div className={style.pickerPicWrap}>
         <label htmlFor="postImg">
-          <AddAPhotoIcon sx={{ fontSize: 60 }} />
+          <AddAPhotoIcon sx={{ fontSize: 60, color: "#fff" }} />
         </label>
         <input
           type="file"
@@ -189,7 +178,7 @@ function Picture(props, ref) {
           multiple
           onChange={handlerImage}
         ></input>
-      </Paper>
+      </div>
 
       <div className={style.warn}>最多挑選10張照片</div>
     </>
@@ -229,7 +218,7 @@ function Picture(props, ref) {
                     <img alt="uploadTime" src={item.src}></img>
                     <div className={style.remove}>
                       <DeleteIcon
-                        sx={{ fontSize: 30 }}
+                        sx={{ fontSize: 20 }}
                         color="error"
                         className={style.removeIcon}
                         onClick={() => removePicture(index)}

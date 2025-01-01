@@ -1,3 +1,22 @@
 .tip {
   font-size: 12px;
 }
+.draft {
+  color: #007aff;
+  text-align: right;
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.line {
+  height: 1px;
+  width: 100%;
+  background-color: #fff;
+}
+.wrap {
+  background: url(./../../../public/bg.png) repeat;
+  overflow: auto;
+  height: 100%;
+}

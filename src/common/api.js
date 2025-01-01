@@ -358,5 +358,13 @@ const api = {
       throw Promise.reject(e);
     }
   },
+  async getArticleDraft() {
+    try {
+      const res = await fetch("/api/article/getDraft");
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
 };
 export default api;

@@ -41,14 +41,14 @@ export default function Place({ emitSelectPlaceFn }) {
     emitSelectPlaceFn(selectPlace);
   }, [selectPlace]);
   return (
-    <Box sx={{ mt: 1, p: 1, fontSize: 16, borderBottom: "1px solid #ccc" }}>
+    <Box sx={{ mt: 1, p: 1 }}>
       {typeof selectPlace === "string" ? (
         <TextField
+          size="small"
           multiline
           label="標記地點"
           variant="standard"
           color="primary"
-          placeholder="請輸入關鍵字"
           fullWidth
           onChange={handlePlaceChange}
           value={selectPlace.name ? selectPlace.name : selectPlace}
