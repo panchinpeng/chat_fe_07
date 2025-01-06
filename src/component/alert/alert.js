@@ -20,15 +20,17 @@ function CustomAlert(props, ref) {
   useEffect(() => {
     timerID.current = setTimeout(() => {
       setMessage("");
-      setSeverity(props.severity);
-    }, [6000]);
+      setTimeout(() => {
+        setSeverity(props.severity);
+      }, 500);
+    }, [4000]);
     return () => {
       clearTimeout(timerID.current);
     };
   }, [message]);
   return (
     <Snackbar
-      autoHideDuration={6000}
+      autoHideDuration={4000}
       open={message !== ""}
       anchorOrigin={{ vertical: "top", horizontal: "center" }}
     >

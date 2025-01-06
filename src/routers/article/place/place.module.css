@@ -1,5 +1,5 @@
 .placeDesc {
-  font-size: 14px;
+  font-size: 12px;
 }
 .showSelectPlace {
   display: flex;
@@ -11,6 +11,10 @@
   position: relative;
   overflow: hidden;
   margin-top: 5px;
+  background: #fff;
+}
+.placeTitle {
+  margin-bottom: 5px;
 }
 .placeDesc {
   margin-left: 3px;

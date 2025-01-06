@@ -14,7 +14,7 @@ import FmdGoodIcon from "@mui/icons-material/FmdGood";
 import CancelSharpIcon from "@mui/icons-material/CancelSharp";
 
 import api from "../../../common/api";
-export default function Place({ emitSelectPlaceFn }) {
+export default function Place({ emitSelectPlaceFn, draftPlace }) {
   const searchPlaceDeboundRef = useRef();
   const [places, setPlaces] = useState([]);
   const [selectPlace, setSelectPlace] = useState("");
@@ -40,6 +40,11 @@ export default function Place({ emitSelectPlaceFn }) {
   useEffect(() => {
     emitSelectPlaceFn(selectPlace);
   }, [selectPlace]);
+  useEffect(() => {
+    setSelectPlace(
+      draftPlace && draftPlace.name !== "未設定" ? draftPlace : ""
+    );
+  }, [draftPlace]);
   return (
     <Box sx={{ mt: 1, p: 1 }}>
       {typeof selectPlace === "string" ? (
@@ -59,7 +64,7 @@ export default function Place({ emitSelectPlaceFn }) {
           <div className={style.showSelectPlace}>
             <FmdGoodIcon></FmdGoodIcon>
             <div className={style.placeDesc}>
-              <div>{selectPlace.name}</div>
+              <div className={style.placeTitle}>{selectPlace.name}</div>
               <div className={style.placeDesc}>{selectPlace.display_name}</div>
             </div>
             <div className={style.close} onClick={() => setSelectPlace("")}>
@@ -88,7 +93,7 @@ export default function Place({ emitSelectPlaceFn }) {
                 }}
               >
                 <ListItemButton sx={{ borderBottom: "1px solid #dedada" }}>
-                  <ListItemIcon>
+                  <ListItemIcon sx={{ minWidth: "36px" }}>
                     <FmdGoodIcon></FmdGoodIcon>
                   </ListItemIcon>
                   <ListItemText>

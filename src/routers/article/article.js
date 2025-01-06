@@ -7,6 +7,9 @@ import Picture from "./picture/picture";
 import Place from "./place/place";
 import usePageLeaveWarn from "../../hooks/usePageLeaveWarn";
 import api from "../../common/api";
+import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
+import Draft from "../../component/draft/draft";
+import Alert from "../../component/alert/alert";
 export default function Article() {
   usePageLeaveWarn();
   const navigate = useNavigate();
@@ -18,12 +21,19 @@ export default function Article() {
   const [isReply, setIsReply] = useState(true);
   const [isThumb, setIsThumb] = useState(true);
   const [isPrivate, setIsPrivate] = useState(false);
-  const [hasDraft, setHasDraft] = useState(false);
+  const [draft, setDraft] = useState([]);
   const [error, setError] = useState({ message: false });
+  const [openDraft, setOpenDraft] = useState(false);
+  const [draftData, setDraftData] = useState(undefined);
+  const alertRef = useRef();
 
   const setPlace = (data) => (place.current = data);
 
   const submitDraft = async () => {
+    if (!message) {
+      setError({ message: true });
+      return;
+    }
     if (pictureInfo.current.longTouchPicture) {
       const userCheck = window.confirm("圖片順序尚未確定，確定要送出嗎");
       if (!userCheck) {
@@ -31,11 +41,20 @@ export default function Article() {
       }
     }
     const images = pictureInfo.current.getPictures();
+    const selectImagesLength = pictureInfo.current.getPicturesLength();
+    if (selectImagesLength === 0) {
+      alertRef.current.setMessage("請選擇一張照片");
+      alertRef.current.setSeverity("error");
+      return;
+    }
     store.loading.setLoading(true);
     // 如果區域找不到，替換成物件
     if (typeof place.current === "string") {
       place.current = { name: place.current };
     }
+
+    const sortData = pictureInfo.current.getSort();
+
     const postResult = await api.addPostArticle(
       message,
       place.current,
@@ -43,11 +62,13 @@ export default function Article() {
       isThumb,
       store.user.account.public * 1 > 0 ? isPrivate : true,
       images,
+      sortData,
       0
     );
     store.loading.setLoading(false);
     if (postResult && postResult.status) {
-      alert("已成功儲存草稿");
+      alertRef.current.setMessage("已成功儲存草稿");
+      alertRef.current.setSeverity("success");
     }
   };
 
@@ -63,8 +84,10 @@ export default function Article() {
       }
     }
     const images = pictureInfo.current.getPictures();
-    if (images.length === 0) {
-      alert("請至少選擇一張照片");
+    const selectImagesLength = pictureInfo.current.getPicturesLength();
+    if (selectImagesLength === 0) {
+      alertRef.current.setMessage("請選擇一張照片");
+      alertRef.current.setSeverity("error");
       return;
     }
     store.loading.setLoading(true);
@@ -72,7 +95,7 @@ export default function Article() {
     if (typeof place.current === "string") {
       place.current = { name: place.current };
     }
-
+    const sortData = pictureInfo.current.getSort();
     const postResult = await api.addPostArticle(
       message,
       place.current,
@@ -80,7 +103,9 @@ export default function Article() {
       isThumb,
       store.user.account.public * 1 > 0 ? isPrivate : true,
       images,
-      1
+      sortData,
+      1,
+      draftData ? draftData.id : undefined
     );
     store.loading.setLoading(false);
     if (postResult.status) {
@@ -95,16 +120,45 @@ export default function Article() {
   useEffect(() => {
     (async () => {
       const res = await api.getArticleDraft();
-      if (res.status && res.data * 1) {
-        setHasDraft(true);
+      if (res.status && res.data) {
+        setDraft(res.data);
       }
     })();
   }, []);
 
+  useEffect(() => {
+    if (draftData) {
+      setMessage(draftData.message);
+      setIsReply(draftData.is_reply * 1 === 1);
+      setIsThumb(draftData.is_thumb * 1 === 1);
+      setIsPrivate(draftData.is_private * 1 === 1);
+    }
+  }, [draftData]);
+
   return (
     <Box sx={{ p: 1, width: 1 }} className={style.wrap}>
-      {hasDraft && <div className={style.draft}>從草稿中取出</div>}
-      <Picture ref={pictureInfo}></Picture>
+      {draft.length > 0 && (
+        <div className={style.draft} onClick={() => setOpenDraft(true)}>
+          <DriveFileRenameOutlineIcon
+            fontSize="large"
+            color="primary"
+          ></DriveFileRenameOutlineIcon>
+          <div>草稿</div>
+        </div>
+      )}
+      <Draft
+        open={openDraft}
+        setOpen={setOpenDraft}
+        draft={draft}
+        setDraft={setDraft}
+        setDraftData={setDraftData}
+      ></Draft>
+      <Picture
+        ref={pictureInfo}
+        draftImages={
+          draftData && draftData.img_names ? draftData.img_names : ""
+        }
+      ></Picture>
       <div className={style.line}></div>
       <Box sx={{ mt: 3, p: 1 }}>
         <TextField
@@ -116,10 +170,14 @@ export default function Article() {
           maxRows={8}
           fullWidth
           value={message}
+          variant="standard"
           onInput={(e) => setMessage(e.target.value)}
         />
       </Box>
-      <Place emitSelectPlaceFn={setPlace}></Place>
+      <Place
+        emitSelectPlaceFn={setPlace}
+        draftPlace={draftData ? draftData.place : undefined}
+      ></Place>
       <Box sx={{ mt: 1, p: 1 }}>
         <div>
           開放回覆
@@ -159,13 +217,16 @@ export default function Article() {
       )}
 
       <Box sx={{ mt: 1, textAlign: "right", p: 1 }}>
-        <Button variant="contained" color="error" onClick={submitDraft}>
-          儲存草稿
-        </Button>
+        {!draftData && (
+          <Button variant="contained" color="error" onClick={submitDraft}>
+            儲存草稿
+          </Button>
+        )}
         <Button variant="contained" sx={{ ml: 3 }} onClick={submitArticle}>
           發佈
         </Button>
       </Box>
+      <Alert ref={alertRef} severity="success"></Alert>
     </Box>
   );
 }

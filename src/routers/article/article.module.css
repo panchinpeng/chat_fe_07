@@ -3,12 +3,11 @@
 }
 .draft {
   color: #007aff;
-  text-align: right;
-  position: absolute;
-  right: 15px;
-  top: 15px;
+
   cursor: pointer;
-  text-decoration: underline;
+  display: flex;
+  justify-content: end;
+  align-items: center;
 }
 .line {
   height: 1px;
