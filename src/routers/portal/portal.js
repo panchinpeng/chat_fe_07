@@ -7,6 +7,7 @@ import { useStore } from "../../store";
 import PostArticle from "../../component/postArticle/postArticle";
 import RecommendArticle from "../../component/recommendArticle/recommendArticle";
 import Masonry from "masonry-layout";
+import useIntersectionObserver from "./../../hooks/useIntersectionObserver.js";
 
 function Portal() {
   const store = useStore();
@@ -17,6 +18,8 @@ function Portal() {
   const totalPage = useRef(null);
   const maxArticleId = useRef(0);
   const [masonry, setMasonry] = useState(null);
+
+  const { startObserve, isIntersecting } = useIntersectionObserver();
 
   useEffect(() => {
     if (articles.length) {
@@ -42,7 +45,6 @@ function Portal() {
   }, [masonry]);
 
   useEffect(() => {
-    let observer = null;
     (async () => {
       store.trends.getAllFriendTrends();
       const articlesRes = await api.getArticle();
@@ -50,44 +52,37 @@ function Portal() {
       if (articlesRes.data.results.length) {
         totalPage.current = articlesRes.data.totalPage;
         setArticles(articlesRes.data.results);
-        observer = new IntersectionObserver(
-          async (entries) => {
-            const entry = entries[0];
-            if (entry.isIntersecting) {
-              if (totalPage.current <= nowPage.current) {
-                setIsEnd(true);
-                observer.disconnect();
-                return;
-              }
-              nowPage.current = nowPage.current + 1;
-              const articlesNextRes = await api.getArticle(
-                undefined,
-                maxArticleId.current
-              );
-              if (articlesNextRes.status) {
-                setArticles((articles) => [
-                  ...articles,
-                  ...articlesNextRes.data.results,
-                ]);
-              }
-            }
-          },
-          {
-            root: document.getElementById("interactionWrap"),
-            rootMargin: "0px 0px 100px 0px",
-          }
-        );
-        observer.observe(loadingNextPageDOM.current);
+        startObserve(loadingNextPageDOM.current);
       } else {
         setIsEnd(true);
       }
     })();
     return () => {
       masonry && masonry.destroy();
-      observer && observer.disconnect();
-      observer = null;
     };
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      if (isIntersecting) {
+        if (totalPage.current <= nowPage.current) {
+          setIsEnd(true);
+          return;
+        }
+        nowPage.current = nowPage.current + 1;
+        const articlesNextRes = await api.getArticle(
+          undefined,
+          maxArticleId.current
+        );
+        if (articlesNextRes.status) {
+          setArticles((articles) => [
+            ...articles,
+            ...articlesNextRes.data.results,
+          ]);
+        }
+      }
+    })();
+  }, [isIntersecting]);
 
   return (
     <Box

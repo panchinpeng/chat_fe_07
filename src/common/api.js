@@ -131,7 +131,9 @@ const api = {
     isThumb,
     isPrivate,
     images,
-    status
+    sort,
+    status,
+    draftData
   ) {
     if (
       !message ||
@@ -154,7 +156,10 @@ const api = {
     fd.append("isThumb", isThumb);
     fd.append("isPrivate", isPrivate);
     fd.append("status", status);
-    images.map((image) => {
+    fd.append("sort", sort);
+    fd.append("draftData", draftData);
+
+    images.forEach((image) => {
       fd.append("images", image);
     });
 
@@ -164,10 +169,6 @@ const api = {
       body: fd,
     });
     return res;
-    try {
-    } catch (e) {
-      throw Promise.reject(e);
-    }
   },
   async searchFriend(keyword) {
     keyword = keyword.trim();
@@ -353,6 +354,27 @@ const api = {
   async getRecommendFriend() {
     try {
       const res = await fetch("/api/user/recommendFriend");
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getArticleDraft() {
+    try {
+      const res = await fetch("/api/article/getDraft");
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async deleteDraft(id) {
+    try {
+      const res = await fetch("/api/article/deleteDraft", {
+        method: "POST",
+        body: {
+          id,
+        },
+      });
       return res;
     } catch (e) {
       throw Promise.reject(e);

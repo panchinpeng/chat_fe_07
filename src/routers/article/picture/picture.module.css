@@ -1,8 +1,24 @@
 .file {
   display: none;
 }
+.pickerPicWrap {
+  padding: 60px 0 40px;
+  display: flex;
+  justify-content: center;
+  label {
+    border: 6px solid #fff;
+    border-radius: 10px;
+    width: 150px;
+    box-shadow: 3px 5px 6px #ccc;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
 .mySwipper {
   width: 100% !important;
+  padding: 60px 0 40px !important;
 }
 .imgWrap {
   background-color: #e4e4e4;
@@ -10,42 +26,42 @@
   justify-content: center;
   align-items: center;
   width: auto !important;
-  height: 270px !important;
+  height: 300px !important;
   user-select: none;
 }
 
 .imgWrap img {
   display: block;
-  width: 270px;
-  height: 270px;
+  width: 300px;
+  height: 300px;
   position: relative;
   object-fit: contain;
   pointer-events: none;
   -webkit-touch-callout: none;
+  border: 1px solid #ccc;
+  padding: 6px;
+  background-color: transparent;
+  border-radius: 5px;
 }
 .removeIcon {
   position: absolute;
   top: 1px;
   right: 1px;
-  background-color: #fff;
-  border-radius: 6px;
   cursor: pointer;
 }
 .sortWrap {
-  /* background: #fff; */
-  display: flex;
-  padding: 8px;
-  overflow: auto;
+  box-sizing: border-box;
+  margin: 60px 0 40px !important;
+
   height: 300px;
   align-items: center;
-  background-color: #fff;
-  position: relative;
+
   -webkit-overflow-scrolling: touch;
 }
 .sortPicture {
   flex: 0 0 0;
-  width: 270px;
-  height: 270px;
+  width: 300px;
+  height: 300px;
   object-fit: contain;
   background-color: #e4e4e4;
   user-select: none;
@@ -55,9 +71,9 @@
   transition-duration: 0.3s;
 }
 .warn {
-  font-size: 14px;
+  font-size: 12px;
   margin: 10px;
-  float: right;
+  text-align: right;
 }
 .warnSort {
   font-size: 14px;
@@ -74,11 +90,10 @@
   overflow: hidden;
 }
 .pickInfo > .info {
-  font-size: 14px;
-  padding: 10px 10px;
+  font-size: 12px;
+  padding: 2px 10px;
   background-color: #1976d2;
   width: 250px;
   margin-right: -10px;
-  transform: skewX(-10deg);
   text-align: center;
 }

@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import api from "../../common/api";
 import man from "./../../public/man.png";
 import PostArticle from "../../component/postArticle/postArticle";
+import useIntersectionObserver from "./../../hooks/useIntersectionObserver.js";
 export default function FriendMain() {
   const navigate = useNavigate();
   const { user } = useParams();
@@ -13,6 +14,7 @@ export default function FriendMain() {
   const loadingNextPageDOM = useRef();
   const maxArticleId = useRef(0);
   const [articles, setArticles] = useState([]);
+  const { startObserve, isIntersecting } = useIntersectionObserver();
 
   useEffect(() => {
     if (articles.length) {
@@ -20,7 +22,6 @@ export default function FriendMain() {
     }
   }, [articles]);
   useEffect(() => {
-    let observer = null;
     (async () => {
       const articlesRes = await api.getArticle(user);
       if (!articlesRes.status) {
@@ -28,40 +29,35 @@ export default function FriendMain() {
         navigate("/");
         return;
       }
-      totalPage.current = articlesRes.data.totalPage;
-      setArticles(articlesRes.data.results);
-      observer = new IntersectionObserver(
-        async (entries) => {
-          const entry = entries[0];
-          if (entry.isIntersecting) {
-            if (totalPage.current <= nowPage.current) {
-              return;
-            }
-            nowPage.current = nowPage.current + 1;
-            const articlesNextRes = await api.getArticle(
-              user,
-              maxArticleId.current
-            );
-            if (articlesNextRes.status) {
-              setArticles((articles) => [
-                ...articles,
-                ...articlesNextRes.data.results,
-              ]);
-            }
-          }
-        },
-        {
-          root: document.getElementById("interactionWrap"),
-          rootMargin: "0px 0px 100px 0px",
-        }
-      );
-      observer.observe(loadingNextPageDOM.current);
+      if (articlesRes.data.results.length) {
+        totalPage.current = articlesRes.data.totalPage;
+        setArticles(articlesRes.data.results);
+        startObserve(loadingNextPageDOM.current);
+      }
     })();
-    return () => {
-      observer && observer.disconnect();
-      observer = null;
-    };
   }, [user]);
+
+  useEffect(() => {
+    (async () => {
+      if (isIntersecting) {
+        if (totalPage.current <= nowPage.current) {
+          return;
+        }
+        nowPage.current = nowPage.current + 1;
+        const articlesNextRes = await api.getArticle(
+          user,
+          maxArticleId.current
+        );
+        if (articlesNextRes.status) {
+          setArticles((articles) => [
+            ...articles,
+            ...articlesNextRes.data.results,
+          ]);
+        }
+      }
+    })();
+  }, [isIntersecting]);
+
   return (
     <Box className={style.wrap}>
       <div className={style.picWrap}>
@@ -91,22 +87,13 @@ export default function FriendMain() {
           </div>
         </div>
       </div>
-      {/* <Box sx={{ p: 1 }}>
-        {articles.length > 0 ? (
-          articles.map((article) => (
-            <PostArticle key={article.id} article={article}></PostArticle>
-          ))
-        ) : (
-          <div className={style.empty}>很懶 ... 沒有任何貼文</div>
-        )}
-        <div ref={loadingNextPageDOM}></div>
-      </Box> */}
+
       <Box sx={{ p: 1, maxWidth: "960px", margin: "auto" }}>
         <Grid container spacing={2}>
           {articles.length > 0 ? (
             articles.map((article) => (
-              <Grid item md={4} xs={12}>
-                <PostArticle key={article.id} article={article}></PostArticle>
+              <Grid item md={4} xs={12} key={article.id}>
+                <PostArticle article={article}></PostArticle>
               </Grid>
             ))
           ) : (

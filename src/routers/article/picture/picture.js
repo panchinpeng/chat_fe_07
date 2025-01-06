@@ -1,4 +1,10 @@
-import { useState, useRef, forwardRef, useImperativeHandle } from "react";
+import {
+  useState,
+  useRef,
+  forwardRef,
+  useImperativeHandle,
+  useEffect,
+} from "react";
 import { Paper, CircularProgress, Button } from "@mui/material";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 
@@ -11,20 +17,30 @@ import { EffectCoverflow } from "swiper/modules";
 
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Base64 } from "js-base64";
+import Alert from "./../../../component/alert/alert";
 
 function Picture(props, ref) {
   const [picture, setPicture] = useState([]);
   const [longTouchPicture, setLongTouchPicture] = useState(null);
   const longTouchTimer = useState();
+  const imageSort = useRef({});
   const files = useRef([]);
+  const alertRef = useRef();
 
   useImperativeHandle(
     ref,
     () => ({
       getPictures: () => files.current,
       longTouchPicture: longTouchPicture,
+      getPicturesLength: () => picture.length,
+      getSort: () =>
+        picture.map((item) =>
+          item.originSort !== undefined
+            ? `origin-${item.originSort}`
+            : `new-${item.originSortByNew}`
+        ),
     }),
-    [longTouchPicture]
+    [longTouchPicture, picture]
   );
 
   const removePicture = (index) => {
@@ -35,6 +51,20 @@ function Picture(props, ref) {
       return cpPics;
     });
   };
+  useEffect(() => {
+    if (props.draftImages && props.draftImages.length > 0) {
+      const draftImagesData = props.draftImages.map((pic, index) => ({
+        originSort: index,
+        id: pic,
+        src: `${process.env.REACT_APP_API_DOMAIN}/api/article/img?t=${pic}`,
+      }));
+      // draftImagesData.forEach(
+      //   (draft, index) => (imageSort.current[`origin${index}`] = index)
+      // );
+      // console.log("imageSort", imageSort);
+      setPicture(draftImagesData);
+    }
+  }, [props.draftImages]);
 
   const handlerImage = (e) => {
     if (e.target.files.length > 0) {
@@ -56,6 +86,7 @@ function Picture(props, ref) {
             copyPic[index] = {
               src: e.target.result,
               id: Base64.encode(item.name),
+              originSortByNew: index,
             };
             return copyPic;
           });
@@ -68,6 +99,7 @@ function Picture(props, ref) {
   const handleAppendImage = (e) => {
     if (e.target.files.length > 0) {
       const alreadyFilesLength = picture.length;
+      const alreadyNewFilesLength = files.current.length;
       let filesAry = [...e.target.files]
         .filter((item) => /^image\//.test(item.type))
         .filter(
@@ -77,22 +109,27 @@ function Picture(props, ref) {
       const totalSize = alreadyFilesLength + filesAry.length;
 
       if (totalSize > 10) {
-        filesAry = filesAry.slice(0, 10 - alreadyFilesLength);
+        alertRef.current.setMessage("已選擇超過10張照片，請重新選擇");
+        alertRef.current.setSeverity("error");
+        return;
       }
+      console.log(picture, files.current, e.target.files);
       files.current = [...files.current, ...filesAry];
-      files.current.forEach((item, index) => {
+      filesAry.forEach((item, index) => {
+        const newIndex = alreadyFilesLength + index;
         setPicture((p) => {
           const copyPic = [...p];
-          copyPic[index] = "loading";
+          copyPic[newIndex] = "loading";
           return copyPic;
         });
         const fileReader = new FileReader();
         fileReader.onload = (e) => {
           setPicture((p) => {
             const copyPic = [...p];
-            copyPic[index] = {
+            copyPic[newIndex] = {
               src: e.target.result,
               id: Base64.encode(item.name),
+              originSortByNew: alreadyNewFilesLength + index,
             };
             return copyPic;
           });
@@ -124,10 +161,6 @@ function Picture(props, ref) {
         cpPics[result.destination.index] = pics[result.source.index];
         return cpPics;
       });
-
-      const cpFiles = [...files.current];
-      files.current[result.source.index] = cpFiles[result.destination.index];
-      files.current[result.destination.index] = cpFiles[result.source.index];
     } catch (e) {
       alert("err");
     }
@@ -157,29 +190,14 @@ function Picture(props, ref) {
   };
 
   const sortEnter = () => {
-    const sortedFiles = picture.map((p) => {
-      return files.current.find((file) => Base64.encode(file.name) === p.id);
-    });
-    files.current = sortedFiles;
     setLongTouchPicture(null);
   };
 
   return picture.length === 0 ? (
     <>
-      <Paper
-        elevation={2}
-        sx={{
-          width: 1,
-          maxWidth: "300px",
-          mx: "auto",
-          height: "300px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+      <div className={style.pickerPicWrap}>
         <label htmlFor="postImg">
-          <AddAPhotoIcon sx={{ fontSize: 60 }} />
+          <AddAPhotoIcon sx={{ fontSize: 60, color: "#fff" }} />
         </label>
         <input
           type="file"
@@ -189,7 +207,7 @@ function Picture(props, ref) {
           multiple
           onChange={handlerImage}
         ></input>
-      </Paper>
+      </div>
 
       <div className={style.warn}>最多挑選10張照片</div>
     </>
@@ -229,7 +247,7 @@ function Picture(props, ref) {
                     <img alt="uploadTime" src={item.src}></img>
                     <div className={style.remove}>
                       <DeleteIcon
-                        sx={{ fontSize: 30 }}
+                        sx={{ fontSize: 20 }}
                         color="error"
                         className={style.removeIcon}
                         onClick={() => removePicture(index)}
@@ -309,6 +327,7 @@ function Picture(props, ref) {
           </DragDropContext>
         </>
       )}
+      <Alert ref={alertRef} severity="success"></Alert>
     </>
   );
 }

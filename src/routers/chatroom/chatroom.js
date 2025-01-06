@@ -7,6 +7,7 @@ import {
   Typography,
   Divider,
 } from "@mui/material";
+import React from "react";
 import Avatar from "../../component/avatar/avatar";
 import style from "./chatroom.module.css";
 import { useNavigate } from "react-router-dom";
@@ -40,7 +41,7 @@ function Chatroom() {
                   : item.username;
 
               return (
-                <>
+                <React.Fragment key={index}>
                   <ListItem
                     alignItems="flex-start"
                     onClick={() =>
@@ -74,7 +75,7 @@ function Chatroom() {
                     )}
                   </ListItem>
                   {index !== friend.length - 1 && <Divider />}
-                </>
+                </React.Fragment>
               );
             })}
           </List>
