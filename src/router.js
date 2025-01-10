@@ -1,5 +1,5 @@
 import React from "react";
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, redirect } from "react-router-dom";
 import PrivateRoutes from "./routers/privateRoute";
 import Logout from "./routers/logout/logout";
 import Error from "./routers/error/error";
@@ -48,6 +48,10 @@ const router = createBrowserRouter([
         path: "friendMain/:user",
         element: <FriendMain></FriendMain>,
       },
+      {
+        path: "",
+        loader: () => redirect("/"),
+      },
     ],
   },
   {
@@ -79,6 +83,10 @@ const router = createBrowserRouter([
         element: <Portal></Portal>,
       },
     ],
+  },
+  {
+    path: "*",
+    loader: () => redirect("/"),
   },
 ]);
 
