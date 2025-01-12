@@ -23,7 +23,6 @@ function Picture(props, ref) {
   const [picture, setPicture] = useState([]);
   const [longTouchPicture, setLongTouchPicture] = useState(null);
   const longTouchTimer = useState();
-  const imageSort = useRef({});
   const files = useRef([]);
   const alertRef = useRef();
 
@@ -45,8 +44,19 @@ function Picture(props, ref) {
 
   const removePicture = (index) => {
     setPicture((pics) => {
-      const cpPics = [...pics];
-      cpPics.splice(index, 1);
+      let cpPics = [...pics];
+      const removePic = cpPics.splice(index, 1);
+      const findAttr =
+        removePic[0].originSortByNew !== undefined
+          ? "originSortByNew"
+          : "originSort";
+
+      cpPics = cpPics.map((cpPic) => {
+        if (cpPic[findAttr] && cpPic[findAttr] > removePic[0][findAttr]) {
+          cpPic[findAttr] = cpPic[findAttr] - 1;
+        }
+        return cpPic;
+      });
       files.current.splice(index, 1);
       return cpPics;
     });
@@ -58,10 +68,6 @@ function Picture(props, ref) {
         id: pic,
         src: `${process.env.REACT_APP_API_DOMAIN}/api/article/img?t=${pic}`,
       }));
-      // draftImagesData.forEach(
-      //   (draft, index) => (imageSort.current[`origin${index}`] = index)
-      // );
-      // console.log("imageSort", imageSort);
       setPicture(draftImagesData);
     }
   }, [props.draftImages]);
