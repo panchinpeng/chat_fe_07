@@ -380,5 +380,13 @@ const api = {
       throw Promise.reject(e);
     }
   },
+  async getUserRankInfo() {
+    try {
+      const res = await fetch("/api/user/getRankInfo");
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
 };
 export default api;

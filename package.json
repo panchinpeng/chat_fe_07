@@ -22,6 +22,7 @@
     "masonry-layout": "^4.2.2",
     "mobx": "^6.13.0",
     "mobx-react-lite": "^4.0.7",
+    "pinch-zoom-js": "^2.3.5",
     "prettier": "^3.3.3",
     "react": "^18.3.1",
     "react-beautiful-dnd": "^13.1.1",

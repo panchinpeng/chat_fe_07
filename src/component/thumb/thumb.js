@@ -1,5 +1,5 @@
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import api from "../../common/api";
 import style from "./thumb.module.css";
 

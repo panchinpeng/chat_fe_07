@@ -18,6 +18,7 @@ import Thumb from "../thumb/thumb";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../store";
 import Commits from "../commits/commits";
+import ZoomImg from "../zoomImg/zoomImg";
 
 function PostArticle({ article, renderFn }) {
   const store = useStore();
@@ -25,6 +26,7 @@ function PostArticle({ article, renderFn }) {
     article ? new Array(article.img_names.length).fill(0) : []
   );
   const [showCommits, setShowCommits] = useState(false);
+  const [activeImg, setActiveImg] = useState("");
 
   const renderTime = (time) => {
     const d = new Date(Date.parse(time));
@@ -74,7 +76,7 @@ function PostArticle({ article, renderFn }) {
         return undefined;
       });
     }
-  }, []);
+  }, [article]);
   useEffect(() => {
     if (showCommits) {
       setTimeout(() => {
@@ -83,106 +85,109 @@ function PostArticle({ article, renderFn }) {
     } else {
       renderFn && renderFn();
     }
-  }, [showCommits]);
+  }, [showCommits, renderFn]);
 
   return (
-    <Card>
-      <CardHeader
-        avatar={<Avatar from="Index" friendName={article.username}></Avatar>}
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
-        title={article.username}
-        subheader={
-          <div className={style.subheader}>
-            <div>{renderTime(article.time)}</div>
-          </div>
-        }
-      />
-
-      <CardMedia
-        children={
-          <div
-            id="adsawsd"
-            className={style.imageGallery}
-            onScroll={(e) => loadingRestImage(e)}
-          >
-            {images &&
-              images.map((img, index) =>
-                img === 0 ? (
-                  <Skeleton
-                    key={index}
-                    animation="wave"
-                    sx={{
-                      width: "300px",
-                      transform: "none",
-                      flex: "0 0 300px",
-                      height: "309px",
-                    }}
-                    className={style.articleImg}
-                  />
-                ) : (
-                  <img
-                    className={style.articleImg}
-                    key={img}
-                    src={img}
-                    alt="article picture"
-                  ></img>
-                )
-              )}
-          </div>
-        }
-      />
-      <CardContent sx={{ padding: "0px" }}>
-        <div variant="body2" color="text.secondary">
-          {(article.is_thumb * 1 === 1 ||
-            article.is_reply * 1 === 1 ||
-            article.place.name !== "未設定") && (
-            <div className={style.interactive}>
-              <Thumb
-                articleID={article.id}
-                show={article.is_thumb * 1 === 1}
-                selfArticle={store.user.account.username === article.username}
-                thumbNum={article.thumbTotal}
-                hasBeenThumb={article.thumbSelf}
-              ></Thumb>
-
-              {article.is_reply * 1 === 1 && (
-                <>
-                  <CommentIcon
-                    sx={{ mr: 1 }}
-                    onClick={() =>
-                      setShowCommits((showCommits) => !showCommits)
-                    }
-                  ></CommentIcon>
-                  <span>{article.replyTotal}</span>
-                </>
-              )}
-              {article.place.name !== "未設定" && (
-                <a
-                  target="_BLANK"
-                  rel="noreferrer"
-                  className={style.address}
-                  href={`https://www.google.com/maps/dir//google+map+${article.place.name}`}
-                >
-                  <FmdGoodIcon sx={{ fontSize: "13px" }}></FmdGoodIcon>
-                  <div className={style.addressDetail}>
-                    <div className={style.nowrap}>{article.place.name}</div>
-                  </div>
-                </a>
-              )}
+    <>
+      <Card>
+        <CardHeader
+          avatar={<Avatar from="Index" friendName={article.username}></Avatar>}
+          action={
+            <IconButton aria-label="settings">
+              <MoreVertIcon />
+            </IconButton>
+          }
+          title={article.username}
+          subheader={
+            <div className={style.subheader}>
+              <div>{renderTime(article.time)}</div>
             </div>
-          )}
+          }
+        />
 
-          <div className={style.message}>{article.message}</div>
-          {showCommits && (
-            <Commits id={article.id} renderFn={renderFn}></Commits>
-          )}
-        </div>
-      </CardContent>
-    </Card>
+        <CardMedia
+          children={
+            <div
+              className={`${style.imageGallery} imgsWall`}
+              onScroll={(e) => loadingRestImage(e)}
+            >
+              {images &&
+                images.map((img, index) =>
+                  img === 0 ? (
+                    <Skeleton
+                      key={index}
+                      animation="wave"
+                      sx={{
+                        width: "300px",
+                        transform: "none",
+                        flex: "0 0 300px",
+                        height: "309px",
+                      }}
+                      className={style.articleImg}
+                    />
+                  ) : (
+                    <img
+                      className={style.articleImg}
+                      key={img}
+                      src={img}
+                      alt="article"
+                      onClick={() => setActiveImg(img)}
+                    ></img>
+                  )
+                )}
+            </div>
+          }
+        />
+        <CardContent sx={{ padding: "0px" }}>
+          <div variant="body2" color="text.secondary">
+            {(article.is_thumb * 1 === 1 ||
+              article.is_reply * 1 === 1 ||
+              article.place.name !== "未設定") && (
+              <div className={style.interactive}>
+                <Thumb
+                  articleID={article.id}
+                  show={article.is_thumb * 1 === 1}
+                  selfArticle={store.user.account.username === article.username}
+                  thumbNum={article.thumbTotal}
+                  hasBeenThumb={article.thumbSelf}
+                ></Thumb>
+
+                {article.is_reply * 1 === 1 && (
+                  <>
+                    <CommentIcon
+                      sx={{ mr: 1 }}
+                      onClick={() =>
+                        setShowCommits((showCommits) => !showCommits)
+                      }
+                    ></CommentIcon>
+                    <span>{article.replyTotal}</span>
+                  </>
+                )}
+                {article.place.name !== "未設定" && (
+                  <a
+                    target="_BLANK"
+                    rel="noreferrer"
+                    className={style.address}
+                    href={`https://www.google.com/maps/dir//google+map+${article.place.name}`}
+                  >
+                    <FmdGoodIcon sx={{ fontSize: "13px" }}></FmdGoodIcon>
+                    <div className={style.addressDetail}>
+                      <div className={style.nowrap}>{article.place.name}</div>
+                    </div>
+                  </a>
+                )}
+              </div>
+            )}
+
+            <div className={style.message}>{article.message}</div>
+            {showCommits && (
+              <Commits id={article.id} renderFn={renderFn}></Commits>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+      <ZoomImg url={activeImg} closeZoom={() => setActiveImg("")}></ZoomImg>
+    </>
   );
 }
 export default observer(PostArticle);

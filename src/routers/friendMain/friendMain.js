@@ -14,6 +14,11 @@ export default function FriendMain() {
   const loadingNextPageDOM = useRef();
   const maxArticleId = useRef(0);
   const [articles, setArticles] = useState([]);
+  const [rankInfo, setRankInfo] = useState({
+    activityScore: "-",
+    totalArticles: "-",
+    totalTrends: "-",
+  });
   const { startObserve, isIntersecting } = useIntersectionObserver();
 
   useEffect(() => {
@@ -23,6 +28,10 @@ export default function FriendMain() {
   }, [articles]);
   useEffect(() => {
     (async () => {
+      const rankInfo = await api.getUserRankInfo();
+      if (rankInfo.status) {
+        setRankInfo(rankInfo.data);
+      }
       const articlesRes = await api.getArticle(user);
       if (!articlesRes.status) {
         alert("發生錯誤");
@@ -71,19 +80,19 @@ export default function FriendMain() {
         <div className={style.statistics}>
           <div>
             <div>貼文數</div>
-            <div>36</div>
+            <div>{rankInfo.totalArticles}</div>
           </div>
           <div>
             <div>動態數</div>
-            <div>258</div>
+            <div>{rankInfo.totalTrends}</div>
           </div>
           <div>
             <div>金幣</div>
-            <div>3655</div>
+            <div>-</div>
           </div>
           <div>
             <div>活耀度</div>
-            <div>100</div>
+            <div>{rankInfo.activityScore}</div>
           </div>
         </div>
       </div>
@@ -97,7 +106,7 @@ export default function FriendMain() {
               </Grid>
             ))
           ) : (
-            <div className={style.empty}>很懶 ... 沒有任何貼文</div>
+            <div className={style.empty}></div>
           )}
         </Grid>
         <div ref={loadingNextPageDOM}></div>

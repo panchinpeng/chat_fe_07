@@ -23,66 +23,65 @@ function Chatroom() {
     (async () => {
       const res = await api.getFriend();
       if (res && res.status) {
-        setFriend(res.data);
+        setFriend(res.data.length ? res.data : null);
+      } else {
+        setFriend(null);
       }
     })();
   }, []);
   const navigator = useNavigate();
+
   return (
     <Box className={style.content}>
-      {friend.length > 0 ? (
-        <>
-          <TrendOverride></TrendOverride>
-          <List sx={{ width: "100vw", bgcolor: "#ffffff82", padding: "0" }}>
-            {friend.map((item, index) => {
-              const friendUsername =
-                item.username === store.user.account.username
-                  ? item.friend_username
-                  : item.username;
+      <TrendOverride></TrendOverride>
+      <List sx={{ width: "100vw", bgcolor: "#ffffff82", padding: "0" }}>
+        {friend === null ? (
+          <div className={style.noFriend}></div>
+        ) : (
+          friend.map((item, index) => {
+            const friendUsername =
+              item.username === store.user.account.username
+                ? item.friend_username
+                : item.username;
 
-              return (
-                <React.Fragment key={index}>
-                  <ListItem
-                    alignItems="flex-start"
-                    onClick={() =>
-                      navigator(`/member/online/${friendUsername}`)
+            return (
+              <React.Fragment key={index}>
+                <ListItem
+                  alignItems="flex-start"
+                  onClick={() => navigator(`/member/online/${friendUsername}`)}
+                  sx={{ padding: "0px 8px 0 8px" }}
+                >
+                  <ListItemAvatar sx={{ minWidth: 0 }}>
+                    <Avatar from="Index" friendName={friendUsername} />
+                  </ListItemAvatar>
+                  <ListItemText
+                    sx={{ ml: 1 }}
+                    primary={friendUsername}
+                    className={style.lastMessage}
+                    secondary={
+                      <>
+                        <Typography
+                          sx={{ display: "inline", fontSize: "13px" }}
+                          component="span"
+                          variant="body2"
+                          color="text.primary"
+                        >
+                          {item.last_message || ""}
+                        </Typography>
+                      </>
                     }
-                    sx={{ padding: "0px 8px 0 8px" }}
-                  >
-                    <ListItemAvatar sx={{ minWidth: 0 }}>
-                      <Avatar from="Index" friendName={friendUsername} />
-                    </ListItemAvatar>
-                    <ListItemText
-                      sx={{ ml: 1 }}
-                      primary={friendUsername}
-                      className={style.lastMessage}
-                      secondary={
-                        <>
-                          <Typography
-                            sx={{ display: "inline", fontSize: "13px" }}
-                            component="span"
-                            variant="body2"
-                            color="text.primary"
-                          >
-                            {item.last_message || ""}
-                          </Typography>
-                        </>
-                      }
-                    ></ListItemText>
+                  ></ListItemText>
 
-                    {item.unread > 0 && (
-                      <div className={style.unread}>{item.unread}</div>
-                    )}
-                  </ListItem>
-                  {index !== friend.length - 1 && <Divider />}
-                </React.Fragment>
-              );
-            })}
-          </List>
-        </>
-      ) : (
-        <div className={style.noFriend}>哭哭，沒有好朋友</div>
-      )}
+                  {item.unread > 0 && (
+                    <div className={style.unread}>{item.unread}</div>
+                  )}
+                </ListItem>
+                {index !== friend.length - 1 && <Divider />}
+              </React.Fragment>
+            );
+          })
+        )}
+      </List>
     </Box>
   );
 }

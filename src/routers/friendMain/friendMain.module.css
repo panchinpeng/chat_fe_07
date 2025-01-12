@@ -50,8 +50,10 @@
   font-size: 28px;
 }
 .empty {
-  margin: 40px auto;
+  width: 100%;
+  height: 300px;
   font-size: 28px;
   text-align: center;
   color: #757575;
+  background: url("./../../public/emptyData.png") center / 150px auto no-repeat;
 }
