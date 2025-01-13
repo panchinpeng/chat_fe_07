@@ -380,9 +380,9 @@ const api = {
       throw Promise.reject(e);
     }
   },
-  async getUserRankInfo() {
+  async getUserRankInfo(username) {
     try {
-      const res = await fetch("/api/user/getRankInfo");
+      const res = await fetch(`/api/user/getRankInfo?username=${username}`);
       return res;
     } catch (e) {
       throw Promise.reject(e);

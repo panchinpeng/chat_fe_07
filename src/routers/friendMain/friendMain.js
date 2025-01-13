@@ -28,7 +28,7 @@ export default function FriendMain() {
   }, [articles]);
   useEffect(() => {
     (async () => {
-      const rankInfo = await api.getUserRankInfo();
+      const rankInfo = await api.getUserRankInfo(user);
       if (rankInfo.status) {
         setRankInfo(rankInfo.data);
       }
@@ -72,6 +72,7 @@ export default function FriendMain() {
       <div className={style.picWrap}>
         <img
           width="100%"
+          alt="avatar"
           src={`${process.env.REACT_APP_API_DOMAIN}/api/user/avatar?username=${user}`}
           onError={(e) => (e.target.src = man)}
           className={style.pic}

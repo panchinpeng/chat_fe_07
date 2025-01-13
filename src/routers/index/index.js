@@ -1,4 +1,5 @@
-import { Outlet } from "react-router-dom";
+import { useEffect } from "react";
+import { Outlet, useLocation } from "react-router-dom";
 import { Box } from "@mui/material";
 
 import style from "./index.module.css";
@@ -11,6 +12,11 @@ import Loading from "../../component/loading/loading";
 
 function Index() {
   const store = useStore();
+  const location = useLocation();
+  useEffect(() => {
+    document.getElementById("interactionWrap").scrollTop = 0;
+  }, [location.pathname]);
+
   return (
     <>
       <Box component="section" className={style.content} id="interactionWrap">

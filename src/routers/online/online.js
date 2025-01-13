@@ -35,7 +35,7 @@ function Online() {
   }, [friend]);
   useEffect(() => {
     if (!socket.current) {
-      socket.current = io(process.env.REACT_APP_API_DOMAIN, {
+      socket.current = io(process.env.REACT_APP_SOCKET_DOMAIN, {
         withCredentials: true,
       });
       socket.current.on("connect", () => {
@@ -105,8 +105,13 @@ function Online() {
         });
       });
       socket.current.on("disconnect", (reason) => {
+        console.log("disconnect");
         if (reason.indexOf("client disconnect") === -1) {
-          setNetworkError(true);
+          if (socket.current.active) {
+            setNetworkError(1);
+          } else {
+            setNetworkError(2);
+          }
         }
       });
 
@@ -115,6 +120,10 @@ function Online() {
           navigate("/logout");
         }
         console.log("connect_error", error, error.message);
+      });
+
+      socket.current.on("reconnect_failed", () => {
+        console.log("reconnect_failed");
       });
     }
 
@@ -197,7 +206,11 @@ function Online() {
     <Box className={style.box}>
       <div className={style.history}>
         {networkError && (
-          <div className={style.disconnectNetwork}>網路好像不太給力...</div>
+          <div className={style.disconnectNetwork}>
+            {networkError === 1
+              ? "網路不穩，請稍後..."
+              : "網路錯誤，請重新整理再試..."}
+          </div>
         )}
         {history.map((message) => (
           <Message

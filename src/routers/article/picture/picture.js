@@ -5,7 +5,7 @@ import {
   useImperativeHandle,
   useEffect,
 } from "react";
-import { Paper, CircularProgress, Button } from "@mui/material";
+import { CircularProgress, Button } from "@mui/material";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 
 import DeleteIcon from "@mui/icons-material/Delete";

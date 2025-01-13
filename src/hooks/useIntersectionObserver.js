@@ -10,7 +10,8 @@ export default function useIntersectionObserver() {
   return {
     startObserve: (currentDOM) => {
       if (observer.current) {
-        throw new Error("IntersectionObserver multiple");
+        observer.current.disconnect();
+        // throw new Error("IntersectionObserver multiple");
       }
       observer.current = new IntersectionObserver(
         (entries) => {
