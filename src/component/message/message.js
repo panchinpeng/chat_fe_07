@@ -27,7 +27,6 @@ function Message({ message, setReply, sendReaction }) {
   };
 
   const renderReaction = (reaction) => {
-    console.log("aaa", Object.values(reaction));
     return Object.values(reaction).map((item) => (
       <EmojiSingle unified={item} size="18"></EmojiSingle>
     ));

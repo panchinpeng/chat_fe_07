@@ -12,13 +12,17 @@ import { useStore } from "../../store";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
 import Emoji from "../../component/emoji/emoji";
+import useIntersectionObserver from "./../../hooks/useIntersectionObserver";
 
 function Online() {
   const store = useStore();
   const navigate = useNavigate();
   const { friend } = useParams();
+  const { startObserve, isIntersecting } = useIntersectionObserver();
+
   const socket = useRef(null);
   const messageIds = useRef([]);
+  const loadMoreDom = useRef();
   const [history, setHistory] = useState([]);
   const [networkError, setNetworkError] = useState(false);
   const [message, setMessage] = useState("");
@@ -140,6 +144,9 @@ function Online() {
             updateUnreadData();
           }, 2000);
           setHistory(res.data);
+          setTimeout(() => {
+            startObserve(loadMoreDom.current);
+          }, 300);
         }
       }
     })();
@@ -148,6 +155,19 @@ function Online() {
     };
   }, []);
 
+  useEffect(() => {
+    (async () => {
+      if (isIntersecting) {
+        const res = await api.getMessageHistory(
+          friend,
+          messageIds.current[messageIds.current.length - 1]
+        );
+        if (res && res.data.length) {
+          setHistory((h) => [...h, ...res.data]);
+        }
+      }
+    })();
+  }, [isIntersecting]);
   useEffect(() => {
     messageIds.current = history.map((item) => item.id);
   }, [history]);
@@ -216,6 +236,7 @@ function Online() {
               : "網路錯誤，請重新整理再試..."}
           </div>
         )}
+
         {history.map((message) => (
           <Message
             message={message}
@@ -224,6 +245,7 @@ function Online() {
             sendReaction={sendReaction}
           ></Message>
         ))}
+        <div ref={loadMoreDom} id="loadMoreDom"></div>
       </div>
       <div className={style.inputMessage}>
         {reply && (

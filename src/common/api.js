@@ -220,11 +220,11 @@ const api = {
       throw Promise.reject(e);
     }
   },
-  async getMessageHistory(friend) {
+  async getMessageHistory(friend, lastID) {
     try {
       const res = await fetch("/api/message/history", {
         method: "POST",
-        body: { friend },
+        body: { friend, lastID },
       });
       return res;
     } catch (e) {
