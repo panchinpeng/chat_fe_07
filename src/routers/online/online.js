@@ -104,6 +104,10 @@ function Online() {
           return cpHistory;
         });
       });
+      socket.current.on("logout", () => {
+        navigate("/logout");
+      });
+
       socket.current.on("disconnect", (reason) => {
         console.log("disconnect");
         if (reason.indexOf("client disconnect") === -1) {
