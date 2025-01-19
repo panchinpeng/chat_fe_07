@@ -6,6 +6,7 @@ import api from "../../common/api";
 import man from "./../../public/man.png";
 import PostArticle from "../../component/postArticle/postArticle";
 import useIntersectionObserver from "./../../hooks/useIntersectionObserver.js";
+import { UserInterests } from "../../component/userInterests/userInterests";
 export default function FriendMain() {
   const navigate = useNavigate();
   const { user } = useParams();
@@ -19,6 +20,7 @@ export default function FriendMain() {
     totalArticles: "-",
     totalTrends: "-",
   });
+  const [userInfo, setUserInfo] = useState();
   const { startObserve, isIntersecting } = useIntersectionObserver();
 
   useEffect(() => {
@@ -42,6 +44,11 @@ export default function FriendMain() {
         totalPage.current = articlesRes.data.totalPage;
         setArticles(articlesRes.data.results);
         startObserve(loadingNextPageDOM.current);
+      }
+
+      const res = await api.getUserInfo(user);
+      if (res.status && res.data) {
+        setUserInfo(res.data);
       }
     })();
   }, [user]);
@@ -77,7 +84,11 @@ export default function FriendMain() {
           onError={(e) => (e.target.src = man)}
           className={style.pic}
         ></img>
+
         <div className={style.name}>{user}</div>
+        <UserInterests
+          interests={userInfo && userInfo.interests}
+        ></UserInterests>
         <div className={style.statistics}>
           <div>
             <div>貼文數</div>

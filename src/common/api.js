@@ -73,9 +73,11 @@ const api = {
       throw Promise.reject(e);
     }
   },
-  async getUserInfo() {
+  async getUserInfo(username) {
     try {
-      const res = await fetch("/api/user/info");
+      const res = await fetch(
+        `/api/user/info${username ? "?username=" + username : ""}`
+      );
       return res;
     } catch (e) {
       throw Promise.reject(e);

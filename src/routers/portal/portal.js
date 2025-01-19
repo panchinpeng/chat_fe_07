@@ -94,7 +94,7 @@ function Portal() {
         },
       }}
     >
-      <div className="waterFall">
+      <div className={`waterFall ${style.waterFall}`}>
         {articles.map((article) => (
           <div
             key={article.id}

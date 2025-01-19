@@ -68,7 +68,7 @@ export default function RecommendArticle() {
   return (
     <>
       <div className={style.title}>熱門動態</div>
-      <div className="waterFall" ref={waterFallDOM}>
+      <div className={`waterFall ${style.waterFall}`} ref={waterFallDOM}>
         {articles.map((article) => (
           <div
             key={article.id}

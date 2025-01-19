@@ -121,7 +121,7 @@ function PostArticle({ article, renderFn }) {
                         width: "300px",
                         transform: "none",
                         flex: "0 0 300px",
-                        height: "309px",
+                        height: "700px",
                       }}
                       className={style.articleImg}
                     />
