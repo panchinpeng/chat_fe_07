@@ -6,7 +6,7 @@ import Error from "./routers/error/error";
 import History from "./routers/history/history";
 
 const AddFriend = React.lazy(() => import("./routers/addFriend/addFriend"));
-const Portal = React.lazy(() => import("./routers/portal/portal"));
+// const Portal = React.lazy(() => import("./routers/portal/portal"));
 const Signup = React.lazy(() => import("./routers/signup/signup"));
 const Login = React.lazy(() => import("./routers/login/login"));
 const Post = React.lazy(() => import("./routers/post/post"));
@@ -80,7 +80,7 @@ const router = createBrowserRouter([
       },
       {
         path: "",
-        element: <Portal></Portal>,
+        element: null,
       },
     ],
   },

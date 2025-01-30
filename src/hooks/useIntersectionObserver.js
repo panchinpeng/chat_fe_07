@@ -23,7 +23,9 @@ export default function useIntersectionObserver() {
           rootMargin: "0px 0px 100px 0px",
         }
       );
-      observer.current.observe(currentDOM);
+      if (currentDOM) {
+        observer.current.observe(currentDOM);
+      }
     },
     isIntersecting,
   };

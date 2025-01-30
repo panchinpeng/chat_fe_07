@@ -1,13 +1,14 @@
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Button } from "@mui/material";
 import style from "./friendMain.module.css";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
+import { observer } from "mobx-react-lite";
 import api from "../../common/api";
-import man from "./../../public/man.png";
+import man from "./../../public/emptyAvatar.png";
 import PostArticle from "../../component/postArticle/postArticle";
 import useIntersectionObserver from "./../../hooks/useIntersectionObserver.js";
 import { UserInterests } from "../../component/userInterests/userInterests";
-export default function FriendMain() {
+function FriendMain() {
   const navigate = useNavigate();
   const { user } = useParams();
   const nowPage = useRef(1);
@@ -19,9 +20,17 @@ export default function FriendMain() {
     activityScore: "-",
     totalArticles: "-",
     totalTrends: "-",
+    friendStatus: false,
   });
   const [userInfo, setUserInfo] = useState();
   const { startObserve, isIntersecting } = useIntersectionObserver();
+
+  const addFriend = async () => {
+    const res = await api.addFriend(user);
+    if (res.status) {
+      setRankInfo({ ...rankInfo, friendStatus: "pending" });
+    }
+  };
 
   useEffect(() => {
     if (articles.length) {
@@ -84,11 +93,32 @@ export default function FriendMain() {
           onError={(e) => (e.target.src = man)}
           className={style.pic}
         ></img>
-
+        {rankInfo.friendStatus && (
+          <>
+            <Button
+              fullWidth
+              variant="contained"
+              sx={{
+                marginTop: "6px",
+                fontWeight: 700,
+              }}
+              color="info"
+              onClick={addFriend}
+              disabled={rankInfo.friendStatus === "pending"}
+            >
+              {rankInfo.friendStatus === "apply" ? "加為好友" : "等待回覆"}
+            </Button>
+          </>
+        )}
         <div className={style.name}>{user}</div>
-        <UserInterests
-          interests={userInfo && userInfo.interests}
-        ></UserInterests>
+        {userInfo && userInfo.self_introd && (
+          <div className={style.intro}>{userInfo.self_introd}</div>
+        )}
+
+        {userInfo && userInfo.interests && (
+          <UserInterests interests={userInfo.interests}></UserInterests>
+        )}
+
         <div className={style.statistics}>
           <div>
             <div>貼文數</div>
@@ -126,3 +156,4 @@ export default function FriendMain() {
     </Box>
   );
 }
+export default FriendMain;
