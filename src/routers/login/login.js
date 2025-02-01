@@ -24,6 +24,7 @@ function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [betaCheck, setBetaCheck] = useState(false);
+  const [captcha, setCaptcha] = useState("");
   const navigate = useNavigate();
   const store = useStore();
 
@@ -53,6 +54,10 @@ function Login() {
       alertRef.current.setMessage("請輸入密碼");
       return;
     }
+    if (!captcha) {
+      alertRef.current.setMessage("請輸入驗證碼");
+      return;
+    }
     if (!betaCheck) {
       alertRef.current.setMessage("請確認注意事項");
       return;
@@ -68,7 +73,7 @@ function Login() {
       alertRef.current.setMessage("密碼限定在50字以下");
       return;
     }
-    const data = await api.login(username, password);
+    const data = await api.login(username, password, captcha);
     if (data.status) {
       store.user.setLogin(true);
 
@@ -107,6 +112,19 @@ function Login() {
           type="password"
           required={true}
           inputProps={{ maxLength: 50 }}
+        />
+        <img
+          src={`${process.env.REACT_APP_API_DOMAIN}/captcha`}
+          className={style.captcha}
+        ></img>
+        <TextField
+          label="驗證碼"
+          variant="outlined"
+          fullWidth
+          value={captcha}
+          required={true}
+          onChange={(event) => setCaptcha(event.target.value)}
+          inputProps={{ maxLength: 4 }}
         />
         <FormControlLabel
           required

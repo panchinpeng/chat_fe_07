@@ -25,6 +25,7 @@ export default function Signup() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [birthday, setBirthday] = useState("");
+  const [captcha, setCaptcha] = useState("");
   const [betaCheck, setBetaCheck] = useState(false);
 
   useEffect(() => {
@@ -57,6 +58,10 @@ export default function Signup() {
       alertRef.current.setMessage("請輸入生日");
       return;
     }
+    if (!captcha) {
+      alertRef.current.setMessage("請輸入驗證碼");
+      return;
+    }
     if (!betaCheck) {
       alertRef.current.setMessage("請確認注意事項");
       return;
@@ -72,7 +77,7 @@ export default function Signup() {
       return;
     }
 
-    const res = await api.regester(username, password, birthday);
+    const res = await api.regester(username, password, birthday, captcha);
     if (res.status) {
       alertRef.current.setMessage("恭喜你註冊成功，將為你導向登入頁");
       alertRef.current.setSeverity("success");
@@ -115,10 +120,23 @@ export default function Signup() {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
             label="生日"
-            sx={{ mt: 2, width: 1 }}
+            sx={{ mt: 1, width: 1 }}
             onChange={(event) => setBirthday(event.format("YYYY-MM-DD"))}
           />
         </LocalizationProvider>
+        <img
+          src={`${process.env.REACT_APP_API_DOMAIN}/captcha`}
+          className={style.captcha}
+        ></img>
+        <TextField
+          label="驗證碼"
+          variant="outlined"
+          fullWidth
+          value={captcha}
+          required={true}
+          onChange={(event) => setCaptcha(event.target.value)}
+          inputProps={{ maxLength: 4 }}
+        />
         <FormControlLabel
           required
           control={

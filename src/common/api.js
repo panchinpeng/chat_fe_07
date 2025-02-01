@@ -18,10 +18,10 @@ const api = {
       throw Promise.reject(e);
     }
   },
-  async login(username, password) {
+  async login(username, password, captcha) {
     try {
       const res = await fetch("/api/user/login", {
-        body: { username, password },
+        body: { username, password, captcha },
         method: "POST",
       });
       return res;
@@ -29,10 +29,10 @@ const api = {
       throw Promise.reject(e);
     }
   },
-  async regester(username, password, birthday) {
+  async regester(username, password, birthday, captcha) {
     try {
       const res = await fetch("/api/user/register", {
-        body: { username, password, birthday },
+        body: { username, password, birthday, captcha },
         method: "POST",
       });
       return res;

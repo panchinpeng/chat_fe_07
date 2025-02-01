@@ -76,3 +76,6 @@
   color: #1976d2;
   text-decoration: underline;
 }
+.captcha {
+  margin: 10px 0;
+}
