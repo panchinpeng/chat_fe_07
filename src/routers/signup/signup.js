@@ -27,6 +27,7 @@ export default function Signup() {
   const [birthday, setBirthday] = useState("");
   const [captcha, setCaptcha] = useState("");
   const [betaCheck, setBetaCheck] = useState(false);
+  const [clearCacheCode, setClearCacheCode] = useState("");
 
   useEffect(() => {
     const vantaEffect = WAVES({
@@ -39,6 +40,8 @@ export default function Signup() {
       scaleMobile: 1.0,
       color: "#1685c8",
     });
+    console.log("aaa");
+    setClearCacheCode(Date.now());
 
     return () => {
       if (vantaEffect) vantaEffect.destroy();
@@ -125,7 +128,7 @@ export default function Signup() {
           />
         </LocalizationProvider>
         <img
-          src={`${process.env.REACT_APP_API_DOMAIN}/captcha`}
+          src={`${process.env.REACT_APP_API_DOMAIN}/captcha?cache=${clearCacheCode}`}
           className={style.captcha}
         ></img>
         <TextField

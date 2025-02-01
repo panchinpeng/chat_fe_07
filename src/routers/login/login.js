@@ -25,6 +25,8 @@ function Login() {
   const [password, setPassword] = useState("");
   const [betaCheck, setBetaCheck] = useState(false);
   const [captcha, setCaptcha] = useState("");
+  const [clearCacheCode, setClearCacheCode] = useState("");
+
   const navigate = useNavigate();
   const store = useStore();
 
@@ -39,6 +41,7 @@ function Login() {
       scaleMobile: 1.0,
       color: "#1685c8",
     });
+    setClearCacheCode(Date.now());
 
     return () => {
       if (vantaEffect) vantaEffect.destroy();
@@ -114,7 +117,7 @@ function Login() {
           inputProps={{ maxLength: 50 }}
         />
         <img
-          src={`${process.env.REACT_APP_API_DOMAIN}/captcha`}
+          src={`${process.env.REACT_APP_API_DOMAIN}/captcha?cache=${clearCacheCode}`}
           className={style.captcha}
         ></img>
         <TextField

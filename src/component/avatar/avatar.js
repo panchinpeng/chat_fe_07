@@ -13,8 +13,10 @@ function CuAvatar({ from, friendName }) {
   const navigate = useNavigate();
   const store = useStore();
   const warnRef = useRef();
+  const [cache, setCache] = useState(Math.floor(Date.now() / 1000 / 30));
+
   const [avatar, setAvatar] = useState(
-    `${process.env.REACT_APP_API_DOMAIN}/api/user/avatar${friendName ? "?username=" + friendName : ""}`
+    `${process.env.REACT_APP_API_DOMAIN}/api/user/avatar${friendName ? "?username=" + friendName + `&cache=${cache}` : `?cache=${cache}`}`
   );
   const handleAvatar = async (e) => {
     const file = e.target.files[0];
@@ -89,6 +91,7 @@ function CuAvatar({ from, friendName }) {
         }
       >
         <Avatar
+          key={cache}
           sx={computedAvatarClassName()}
           onClick={async () => {
             const getTrendRes = await store.trends.getTrend(
@@ -110,7 +113,7 @@ function CuAvatar({ from, friendName }) {
           ) : (
             <img
               alt="avatar"
-              key={avatar}
+              key={cache}
               src={avatar}
               onError={() => setAvatar("")}
               width="100%"

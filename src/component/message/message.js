@@ -19,7 +19,7 @@ function Message({ message, setReply, sendReaction }) {
 
   const handleTouchStart = () => {
     touchRef.current = setTimeout(() => {
-      setShowMore(true);
+      setShowMore((showMore) => !showMore);
     }, 500);
   };
   const handleTouchEnd = () => {
@@ -30,6 +30,18 @@ function Message({ message, setReply, sendReaction }) {
     return Object.values(reaction).map((item) => (
       <EmojiSingle unified={item} size="18"></EmojiSingle>
     ));
+  };
+  const renderMessage = (message) => {
+    try {
+      new URL(message);
+      return (
+        <a target="_blank" href={message} className={style.link}>
+          {message}
+        </a>
+      );
+    } catch (e) {
+      return message;
+    }
   };
 
   return (
@@ -52,7 +64,7 @@ function Message({ message, setReply, sendReaction }) {
               {message.reply_message}
             </a>
           )}
-          {message.message}
+          {renderMessage(message.message)}
           {message.reaction && (
             <>
               <div className={style.fake}></div>

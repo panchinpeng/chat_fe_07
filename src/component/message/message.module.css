@@ -14,7 +14,7 @@
   background-color: #f8f6f6;
   user-select: none;
   position: relative;
-  white-space: pre;
+  white-space: pre-wrap;
 }
 .messageWrap {
   margin: 5px;
@@ -68,4 +68,8 @@
 }
 .fake {
   height: 20px;
+}
+.link {
+  color: #4343c1;
+  text-decoration: underline;
 }
