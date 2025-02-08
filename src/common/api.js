@@ -295,6 +295,17 @@ const api = {
       throw Promise.reject(e);
     }
   },
+  async removeThumb(id) {
+    try {
+      const res = await fetch("/api/article/removeThumb", {
+        method: "POST",
+        body: { id },
+      });
+      return res.status;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
   async getThumb(id) {
     try {
       const res = await fetch("/api/article/getThumb", {

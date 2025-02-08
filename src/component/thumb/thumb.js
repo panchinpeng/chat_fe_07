@@ -14,18 +14,22 @@ export default function Thumb({
   const [thumbSum, setThumbSum] = useState(thumbNum);
 
   const doThumb = async () => {
-    if (isActive) {
-      return;
-    }
     if (selfArticle) {
       alert("不可以按讚自己的貼文唷");
       return;
     }
-
-    const res = await api.setThumb(articleID);
-    if (res) {
-      setThumbSum((thumbSum) => thumbSum + 1);
-      setIsActive(res);
+    if (isActive) {
+      const res = await api.removeThumb(articleID);
+      if (res) {
+        setThumbSum((thumbSum) => thumbSum - 1);
+        setIsActive(false);
+      }
+    } else {
+      const res = await api.setThumb(articleID);
+      if (res) {
+        setThumbSum((thumbSum) => thumbSum + 1);
+        setIsActive(res);
+      }
     }
   };
   return (

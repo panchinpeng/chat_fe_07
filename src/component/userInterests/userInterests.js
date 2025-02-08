@@ -13,6 +13,7 @@ export function UserInterests({ interests }) {
               size="small"
               color="warning"
               label={interest}
+              key={interest}
               sx={{ mb: 0.5, mr: 0.5 }}
             />
           ))}
