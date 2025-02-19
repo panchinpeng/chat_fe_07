@@ -21,7 +21,7 @@ function Chatroom() {
   const [friend, setFriend] = useState([]);
   useEffect(() => {
     (async () => {
-      const res = await api.getFriend();
+      const res = await api.getFriendChat();
       if (res && res.status) {
         setFriend(res.data.length ? res.data : null);
       } else {
@@ -49,14 +49,16 @@ function Chatroom() {
                 <ListItem
                   alignItems="flex-start"
                   onClick={() => navigator(`/member/online/${friendUsername}`)}
-                  sx={{ padding: "0px 8px 0 8px" }}
+                  sx={{ padding: "5px 8px 5px 8px" }}
                 >
                   <ListItemAvatar sx={{ minWidth: 0 }}>
                     <Avatar from="Index" friendName={friendUsername} />
                   </ListItemAvatar>
                   <ListItemText
                     sx={{ ml: 1 }}
-                    primary={friendUsername}
+                    primary={
+                      <span className={style.chatName}>{friendUsername}</span>
+                    }
                     className={style.lastMessage}
                     secondary={
                       <>

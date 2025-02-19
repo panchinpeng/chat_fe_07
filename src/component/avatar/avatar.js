@@ -9,7 +9,7 @@ import Alert from "../alert/alert";
 import { useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
 
-function CuAvatar({ from, friendName }) {
+function CuAvatar({ from, friendName, disabledClick }) {
   const navigate = useNavigate();
   const store = useStore();
   const warnRef = useRef();
@@ -94,6 +94,9 @@ function CuAvatar({ from, friendName }) {
           key={cache}
           sx={computedAvatarClassName()}
           onClick={async () => {
+            if (disabledClick) {
+              return false;
+            }
             const getTrendRes = await store.trends.getTrend(
               friendName ? friendName : store.user.account.username
             );

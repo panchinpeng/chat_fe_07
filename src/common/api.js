@@ -214,6 +214,14 @@ const api = {
       throw Promise.reject(e);
     }
   },
+  async getFriendChat() {
+    try {
+      const res = await fetch("/api/user/friendChat");
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
   async getFriend() {
     try {
       const res = await fetch("/api/user/friend");
@@ -397,6 +405,20 @@ const api = {
     try {
       const res = await fetch(`/api/user/getRankInfo?username=${username}`);
       return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async addShareArticle(articleId, toUsers) {
+    try {
+      const res = await fetch("/api/article/share", {
+        method: "POST",
+        body: {
+          articleId,
+          toUsers,
+        },
+      });
+      return res.status;
     } catch (e) {
       throw Promise.reject(e);
     }

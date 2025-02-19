@@ -30,6 +30,7 @@ function CustomAlert(props, ref) {
   }, [message]);
   return (
     <Snackbar
+      sx={{ zIndex: 1000 }}
       autoHideDuration={4000}
       open={message !== ""}
       anchorOrigin={{ vertical: "top", horizontal: "center" }}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardHeader,
@@ -13,15 +13,16 @@ import CommentIcon from "@mui/icons-material/Comment";
 import FmdGoodIcon from "@mui/icons-material/FmdGood";
 
 import style from "./postArticle.module.css";
-import { useEffect, useState } from "react";
 import Thumb from "../thumb/thumb";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../store";
 import Commits from "../commits/commits";
 import ZoomImg from "../zoomImg/zoomImg";
+import PostArticleMore from "../postArticleMore/postArticleMore";
 
-function PostArticle({ article, renderFn }) {
+function PostArticle({ article, renderFn, from }) {
   const store = useStore();
+  const [showMore, setShowMore] = useState(false);
   const [images, setImages] = useState(() =>
     article ? new Array(article.img_names.length).fill(0) : []
   );
@@ -93,9 +94,11 @@ function PostArticle({ article, renderFn }) {
         <CardHeader
           avatar={<Avatar from="Index" friendName={article.username}></Avatar>}
           action={
-            <IconButton aria-label="settings">
-              <MoreVertIcon />
-            </IconButton>
+            from === "chatroom" ? null : (
+              <IconButton aria-label="more" onClick={() => setShowMore(true)}>
+                <MoreVertIcon />
+              </IconButton>
+            )
           }
           title={article.username}
           subheader={
@@ -187,6 +190,11 @@ function PostArticle({ article, renderFn }) {
         </CardContent>
       </Card>
       <ZoomImg url={activeImg} closeZoom={() => setActiveImg("")}></ZoomImg>
+      <PostArticleMore
+        articleId={article.id}
+        showMore={showMore}
+        setShowMore={setShowMore}
+      ></PostArticleMore>
     </>
   );
 }

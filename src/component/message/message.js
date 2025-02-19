@@ -7,7 +7,9 @@ import ReplyIcon from "@mui/icons-material/Reply";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import Emoji from "../emoji/emoji";
 import { Emoji as EmojiSingle } from "emoji-picker-react";
-import { useRef, useState } from "react";
+import { useRef, useState, lazy } from "react";
+const PostArticle = lazy(() => import("./../postArticle/postArticle"));
+
 function Message({ message, setReply, sendReaction }) {
   const touchRef = useRef(false);
   const [showMore, setShowMore] = useState(false);
@@ -32,6 +34,10 @@ function Message({ message, setReply, sendReaction }) {
     ));
   };
   const renderMessage = (message) => {
+    if (typeof message === "object" && message.id) {
+      return <PostArticle article={message} from="chatroom"></PostArticle>;
+    }
+
     try {
       new URL(message);
       return (
@@ -89,13 +95,16 @@ function Message({ message, setReply, sendReaction }) {
         <div className={style.time}>
           {showMore ? (
             <div className={style.more}>
-              <IconButton
-                aria-label="fingerprint"
-                color="primary"
-                onClick={() => setReply(message.id)}
-              >
-                <ReplyIcon />
-              </IconButton>
+              {typeof message.message === "string" && (
+                <IconButton
+                  aria-label="fingerprint"
+                  color="primary"
+                  onClick={() => setReply(message.id)}
+                >
+                  <ReplyIcon />
+                </IconButton>
+              )}
+
               <IconButton
                 aria-label="fingerprint"
                 color="primary"
