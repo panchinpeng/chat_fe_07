@@ -5,13 +5,14 @@ import style from "./message.module.css";
 import Avatar from "./../avatar/avatar";
 import ReplyIcon from "@mui/icons-material/Reply";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import CancelIcon from "@mui/icons-material/Cancel";
 import Emoji from "../emoji/emoji";
-import { Emoji as EmojiSingle } from "emoji-picker-react";
-import { useRef, useState, lazy } from "react";
+import { FacebookCounter } from "@charkour/react-reactions";
+import { useState, lazy } from "react";
 const PostArticle = lazy(() => import("./../postArticle/postArticle"));
 
 function Message({ message, setReply, sendReaction }) {
-  const touchRef = useRef(false);
   const [showMore, setShowMore] = useState(false);
   const [showEmoji, setShowEmoji] = useState(false);
   const store = useStore();
@@ -19,18 +20,14 @@ function Message({ message, setReply, sendReaction }) {
   const time = new Date(Date.parse(message.send_time));
   const timeString = `${(time.getMonth() + 1).toString().padStart(2, "0")}-${time.getDate().toString().padStart(2, "0")} ${time.getHours().toString().padStart(2, "0")}:${time.getMinutes().toString().padStart(2, "0")}`;
 
-  const handleTouchStart = () => {
-    touchRef.current = setTimeout(() => {
-      setShowMore((showMore) => !showMore);
-    }, 500);
-  };
-  const handleTouchEnd = () => {
-    clearTimeout(touchRef.current);
-  };
-
   const renderReaction = (reaction) => {
-    return Object.values(reaction).map((item) => (
-      <EmojiSingle unified={item} size="18"></EmojiSingle>
+    console.log("aaa", reaction);
+    return Object.entries(reaction).map(([by, emoji]) => (
+      <FacebookCounter
+        alwaysShowOthers={false}
+        counters={[{ emoji, by }]}
+        important={[by]}
+      ></FacebookCounter>
     ));
   };
   const renderMessage = (message) => {
@@ -41,7 +38,12 @@ function Message({ message, setReply, sendReaction }) {
     try {
       new URL(message);
       return (
-        <a target="_blank" href={message} className={style.link}>
+        <a
+          target="_blank"
+          rel="noreferrer"
+          href={message}
+          className={style.link}
+        >
           {message}
         </a>
       );
@@ -56,11 +58,7 @@ function Message({ message, setReply, sendReaction }) {
         from="Message"
         friendName={my ? undefined : message.from_username}
       ></Avatar>
-      <div
-        className={style.messageWrap}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-      >
+      <div className={style.messageWrap}>
         <div className={style.messageContent} id={`message${message.id}`}>
           {message.reply_id && (
             <a
@@ -81,7 +79,7 @@ function Message({ message, setReply, sendReaction }) {
           )}
 
           <Emoji
-            open={showEmoji}
+            open={showEmoji && showMore}
             sendReaction={(unified) => {
               sendReaction(
                 unified,
@@ -112,9 +110,17 @@ function Message({ message, setReply, sendReaction }) {
               >
                 <EmojiEmotionsIcon />
               </IconButton>
+
+              <IconButton
+                aria-label="fingerprint"
+                color="primary"
+                onClick={() => setShowMore(false)}
+              >
+                <CancelIcon />
+              </IconButton>
             </div>
           ) : (
-            <div />
+            <MoreHorizIcon onClick={() => setShowMore(true)}></MoreHorizIcon>
           )}
 
           <div className={style.timeData}>{timeString}</div>

@@ -11,7 +11,6 @@ import Message from "../../component/message/message";
 import { useStore } from "../../store";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
-import Emoji from "../../component/emoji/emoji";
 import useIntersectionObserver from "./../../hooks/useIntersectionObserver";
 
 function Online() {
@@ -280,9 +279,6 @@ function Online() {
             ),
           }}
         />
-      </div>
-      <div className={style.preloadEmoji}>
-        <Emoji open={true}></Emoji>
       </div>
     </Box>
   );

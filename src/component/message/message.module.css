@@ -58,6 +58,9 @@
   position: absolute;
   right: 0;
   bottom: 0;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
 }
 .reactionWrap img {
   margin-right: 5px;
@@ -65,9 +68,10 @@
 
 .right .reactionWrap {
   left: 0;
+  right: auto;
 }
 .fake {
-  height: 20px;
+  height: 32px;
 }
 .link {
   color: #4343c1;
