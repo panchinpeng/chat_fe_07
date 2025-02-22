@@ -1,4 +1,4 @@
-import { Box, TextField } from "@mui/material";
+import { Box, TextField, TextareaAutosize } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import style from "./online.module.css";
@@ -8,6 +8,7 @@ import HighlightOffSharpIcon from "@mui/icons-material/HighlightOffSharp";
 import { useParams } from "react-router-dom";
 import api from "../../common/api";
 import Message from "../../component/message/message";
+import RecycleMessage from "../../component/recycleMessage/recycleMessage";
 import { useStore } from "../../store";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
@@ -107,6 +108,18 @@ function Online() {
           return cpHistory;
         });
       });
+      socket.current.on("delMessage", (delRes) => {
+        setHistory((history) => {
+          const cpHistory = [...history];
+          const targetMessageIndex = cpHistory.findIndex(
+            (item) => item.id === delRes.id
+          );
+          if (targetMessageIndex > -1) {
+            cpHistory[targetMessageIndex].is_del = 1;
+          }
+          return cpHistory;
+        });
+      });
       socket.current.on("logout", () => {
         navigate("/logout");
       });
@@ -201,6 +214,25 @@ function Online() {
       });
     }
   };
+  const deleteMessage = (id, room) => {
+    if (id && room) {
+      socket.current.emit("delMessage", room, id, (res) => {
+        console.log("rrr", res);
+        if (res.status) {
+          setHistory((history) => {
+            const cpHistory = [...history];
+            const targetMessageIndex = history.findIndex(
+              (item) => item.id === id
+            );
+            if (targetMessageIndex > -1) {
+              cpHistory[targetMessageIndex].is_del = 1;
+            }
+            return cpHistory;
+          });
+        }
+      });
+    }
+  };
   const sendMessage = () => {
     if (message) {
       socket.current.emit("message", message, friend, reply, (res) => {
@@ -236,14 +268,21 @@ function Online() {
           </div>
         )}
 
-        {history.map((message) => (
-          <Message
-            message={message}
-            key={message.id}
-            setReply={setReply}
-            sendReaction={sendReaction}
-          ></Message>
-        ))}
+        {history.map((message) => {
+          if (message.is_del === 1) {
+            return <RecycleMessage />;
+          } else {
+            return (
+              <Message
+                message={message}
+                key={message.id}
+                setReply={setReply}
+                sendReaction={sendReaction}
+                deleteMessage={deleteMessage}
+              ></Message>
+            );
+          }
+        })}
         <div ref={loadMoreDom} id="loadMoreDom"></div>
       </div>
       <div className={style.inputMessage}>
@@ -260,25 +299,25 @@ function Online() {
             </div>
           </div>
         )}
-        <TextField
-          fullWidth
-          id="filled-multiline-static"
-          label="想說甚麼"
-          multiline
-          maxRows={8}
-          variant="standard"
-          onChange={handleInput}
-          value={message}
-          sx={{ mt: 1 }}
-          InputProps={{
-            endAdornment: (
-              <SendIcon
-                sx={{ fontSize: "30px", cursor: "pointer" }}
-                onClick={sendMessage}
-              ></SendIcon>
-            ),
-          }}
-        />
+        <div className={style.userInputWrap}>
+          <TextareaAutosize
+            className={style.input}
+            minRows={1}
+            maxRows={10}
+            onChange={handleInput}
+            value={message}
+            placeholder="輸入訊息"
+          ></TextareaAutosize>
+          <SendIcon
+            sx={{
+              fontSize: "30px",
+              cursor: "pointer",
+              mr: 0.5,
+              color: "#575757",
+            }}
+            onClick={sendMessage}
+          ></SendIcon>
+        </div>
       </div>
     </Box>
   );

@@ -6,13 +6,14 @@ import Avatar from "./../avatar/avatar";
 import ReplyIcon from "@mui/icons-material/Reply";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import DeleteIcon from "@mui/icons-material/Delete";
 import CancelIcon from "@mui/icons-material/Cancel";
 import Emoji from "../emoji/emoji";
 import { FacebookCounter } from "@charkour/react-reactions";
 import { useState, lazy } from "react";
 const PostArticle = lazy(() => import("./../postArticle/postArticle"));
 
-function Message({ message, setReply, sendReaction }) {
+function Message({ message, setReply, sendReaction, deleteMessage }) {
   const [showMore, setShowMore] = useState(false);
   const [showEmoji, setShowEmoji] = useState(false);
   const store = useStore();
@@ -21,7 +22,6 @@ function Message({ message, setReply, sendReaction }) {
   const timeString = `${(time.getMonth() + 1).toString().padStart(2, "0")}-${time.getDate().toString().padStart(2, "0")} ${time.getHours().toString().padStart(2, "0")}:${time.getMinutes().toString().padStart(2, "0")}`;
 
   const renderReaction = (reaction) => {
-    console.log("aaa", reaction);
     return Object.entries(reaction).map(([by, emoji]) => (
       <FacebookCounter
         alwaysShowOthers={false}
@@ -52,6 +52,24 @@ function Message({ message, setReply, sendReaction }) {
     }
   };
 
+  const renderReply = (message) => {
+    if (message.reply_id) {
+      if (message.reply_message === "is_del=1") {
+        return <div className={style.replyMessageDelete}>訊息已回收</div>;
+      } else {
+        return (
+          <a
+            className={style.replyMessage}
+            href={`#message${message.reply_id}`}
+          >
+            {message.reply_message}
+          </a>
+        );
+      }
+    }
+    return "";
+  };
+
   return (
     <div className={`${style.message} ${my ? style.right : style.left}`}>
       <Avatar
@@ -60,14 +78,8 @@ function Message({ message, setReply, sendReaction }) {
       ></Avatar>
       <div className={style.messageWrap}>
         <div className={style.messageContent} id={`message${message.id}`}>
-          {message.reply_id && (
-            <a
-              className={style.replyMessage}
-              href={`#message${message.reply_id}`}
-            >
-              {message.reply_message}
-            </a>
-          )}
+          {renderReply(message)}
+
           {renderMessage(message.message)}
           {message.reaction && (
             <>
@@ -93,6 +105,19 @@ function Message({ message, setReply, sendReaction }) {
         <div className={style.time}>
           {showMore ? (
             <div className={style.more}>
+              {my && (
+                <IconButton color="primary">
+                  <DeleteIcon
+                    onClick={() =>
+                      deleteMessage(
+                        message.id,
+                        my ? message.to_username : message.from_username
+                      )
+                    }
+                  ></DeleteIcon>
+                </IconButton>
+              )}
+
               {typeof message.message === "string" && (
                 <IconButton
                   aria-label="fingerprint"
