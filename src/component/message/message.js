@@ -27,12 +27,22 @@ function Message({ message, setReply, sendReaction, deleteMessage }) {
         alwaysShowOthers={false}
         counters={[{ emoji, by }]}
         important={[by]}
+        key={by}
       ></FacebookCounter>
     ));
   };
   const renderMessage = (message) => {
-    if (typeof message === "object" && message.id) {
+    if (typeof message === "object" && message.type === "article") {
       return <PostArticle article={message} from="chatroom"></PostArticle>;
+    } else if (typeof message === "object" && message.type === "image") {
+      return (
+        <div>
+          <img
+            width="100%"
+            src={`${process.env.REACT_APP_API_DOMAIN}/api/message/getImage?path=${message.path}`}
+          ></img>
+        </div>
+      );
     }
 
     try {

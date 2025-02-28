@@ -1,10 +1,11 @@
-import { Box, TextField, TextareaAutosize } from "@mui/material";
+import { Box, TextareaAutosize } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import style from "./online.module.css";
 import SendIcon from "@mui/icons-material/Send";
 import ReplyAllSharpIcon from "@mui/icons-material/ReplyAllSharp";
 import HighlightOffSharpIcon from "@mui/icons-material/HighlightOffSharp";
+import ImageIcon from "@mui/icons-material/Image";
 import { useParams } from "react-router-dom";
 import api from "../../common/api";
 import Message from "../../component/message/message";
@@ -13,6 +14,8 @@ import { useStore } from "../../store";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
 import useIntersectionObserver from "./../../hooks/useIntersectionObserver";
+import MessageUploadFile from "../../component/messageUploadFile/messageUploadFile";
+import Alert from "./../../component/alert/alert";
 
 function Online() {
   const store = useStore();
@@ -23,10 +26,14 @@ function Online() {
   const socket = useRef(null);
   const messageIds = useRef([]);
   const loadMoreDom = useRef();
+  const uploadImageDom = useRef();
+  const warnRef = useRef();
   const [history, setHistory] = useState([]);
   const [networkError, setNetworkError] = useState(false);
   const [message, setMessage] = useState("");
   const [reply, setReply] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
+  const [fileKey, setFileKey] = useState(1);
   const renderReplyMessage = () => {
     const msgObj = history.find((msg) => msg.id === reply);
     return msgObj.message;
@@ -41,6 +48,7 @@ function Online() {
     if (!socket.current) {
       socket.current = io(process.env.REACT_APP_SOCKET_DOMAIN, {
         withCredentials: true,
+        transports: ["websocket"],
       });
       socket.current.on("connect", () => {
         console.log("connect ....");
@@ -76,6 +84,9 @@ function Online() {
               historyMsgObj = replyMessage.data.message;
             }
           }
+        }
+        if (message.message.path2) {
+          message.message.path = message.message.path2;
         }
         setHistory((history) => [
           {
@@ -217,7 +228,6 @@ function Online() {
   const deleteMessage = (id, room) => {
     if (id && room) {
       socket.current.emit("delMessage", room, id, (res) => {
-        console.log("rrr", res);
         if (res.status) {
           setHistory((history) => {
             const cpHistory = [...history];
@@ -256,6 +266,49 @@ function Online() {
       });
     }
   };
+  const handleImage = (e) => {
+    if (e.target.files.length === 1) {
+      const file = e.target.files[0];
+      if (file.size > 9.5 * 1024 * 1024) {
+        setFileKey((k) => k + 1);
+        warnRef.current.setMessage("file to large limit 9MB");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        setPreviewImage(event.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  const submitPicMessage = () => {
+    if (uploadImageDom.current.files.length === 1) {
+      const file = uploadImageDom.current.files[0];
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        const arrayBuffer = event.target.result;
+        socket.current.emit(
+          "sendImage",
+          {
+            image: new Uint8Array(arrayBuffer),
+            type: file.type,
+          },
+          friend,
+          (res) => {
+            setFileKey((k) => k + 1);
+            if (res.status) {
+              setHistory((history) => [res.data, ...history]);
+              setPreviewImage(null);
+            } else {
+              alert("訊息檔案失敗");
+              console.log(res);
+            }
+          }
+        );
+      };
+      reader.readAsArrayBuffer(file);
+    }
+  };
 
   return (
     <Box className={style.box}>
@@ -270,7 +323,7 @@ function Online() {
 
         {history.map((message) => {
           if (message.is_del === 1) {
-            return <RecycleMessage />;
+            return <RecycleMessage key={message.id} />;
           } else {
             return (
               <Message
@@ -300,6 +353,24 @@ function Online() {
           </div>
         )}
         <div className={style.userInputWrap}>
+          <label htmlFor="addImage" className={style.selectPic}>
+            <ImageIcon
+              sx={{
+                fontSize: "30px",
+                cursor: "pointer",
+                mr: 0.5,
+                color: "#575757",
+              }}
+            ></ImageIcon>
+          </label>
+          <input
+            type="file"
+            id="addImage"
+            accept="image/*"
+            onChange={handleImage}
+            ref={uploadImageDom}
+            key={fileKey}
+          />
           <TextareaAutosize
             className={style.input}
             minRows={1}
@@ -319,6 +390,17 @@ function Online() {
           ></SendIcon>
         </div>
       </div>
+      {previewImage && (
+        <MessageUploadFile
+          image={previewImage}
+          handleClose={() => {
+            setPreviewImage(null);
+            setFileKey((k) => k + 1);
+          }}
+          submitFile={submitPicMessage}
+        ></MessageUploadFile>
+      )}
+      <Alert ref={warnRef} severity="error"></Alert>
     </Box>
   );
 }
