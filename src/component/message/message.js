@@ -28,6 +28,7 @@ function Message({ message, setReply, sendReaction, deleteMessage }) {
         counters={[{ emoji, by }]}
         important={[by]}
         key={by}
+        className={style.reactionText}
       ></FacebookCounter>
     ));
   };
@@ -161,6 +162,7 @@ function Message({ message, setReply, sendReaction, deleteMessage }) {
           <div className={style.timeData}>{timeString}</div>
         </div>
       </div>
+      <div className={style.fakeDiv}></div>
     </div>
   );
 }
