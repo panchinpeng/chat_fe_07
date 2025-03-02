@@ -204,6 +204,7 @@ function Picture(props, ref) {
       <div className={style.pickerPicWrap}>
         <label htmlFor="postImg">
           <AddAPhotoIcon sx={{ fontSize: 60, color: "#fff" }} />
+          添加相片
         </label>
         <input
           type="file"

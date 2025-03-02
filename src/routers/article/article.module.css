@@ -10,7 +10,7 @@
   align-items: center;
 }
 .line {
-  height: 1px;
+  height: 4px;
   width: 100%;
   background-color: #fff;
 }
@@ -18,4 +18,37 @@
   background: url(./../../../public/bg.png) repeat;
   overflow: auto;
   height: 100%;
+}
+.icon {
+  min-width: 40px;
+  padding-left: 10px;
+}
+.inputTitle {
+  flex: 0 0 110px;
+}
+.fillContent {
+  flex: 1 1 100px;
+  white-space: pre-wrap;
+  background: #414040;
+  padding: 5px 10px;
+  border-radius: 5px;
+  max-height: 111px;
+  overflow: auto;
+  margin-left: 36px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  color: #fff;
+}
+.switch {
+  flex: 1 1 0;
+  text-align: right;
+}
+.fieldTip {
+  color: #727272;
+  font-size: 11px;
+  margin-top: -10px;
+  margin-left: 10px;
+}
+.disabled * {
+  color: #ccc;
 }

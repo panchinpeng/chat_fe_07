@@ -129,6 +129,7 @@ const api = {
   async addPostArticle(
     message,
     place,
+    tagFriends,
     isReply,
     isThumb,
     isPrivate,
@@ -143,7 +144,8 @@ const api = {
       typeof isReply !== "boolean" ||
       typeof isThumb !== "boolean" ||
       typeof isPrivate !== "boolean" ||
-      !Array.isArray(images)
+      !Array.isArray(images) ||
+      !Array.isArray(tagFriends)
     ) {
       return;
     }
@@ -154,6 +156,7 @@ const api = {
     const fd = new FormData();
     fd.append("message", message);
     fd.append("place", JSON.stringify(place));
+    fd.append("tagFriends", tagFriends);
     fd.append("isReply", isReply);
     fd.append("isThumb", isThumb);
     fd.append("isPrivate", isPrivate);

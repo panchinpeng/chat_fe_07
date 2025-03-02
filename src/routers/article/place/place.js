@@ -46,21 +46,23 @@ export default function Place({ emitSelectPlaceFn, draftPlace }) {
     );
   }, [draftPlace]);
   return (
-    <Box sx={{ mt: 1, p: 1 }}>
+    <Box>
       {typeof selectPlace === "string" ? (
         <TextField
           size="small"
-          multiline
-          label="標記地點"
           variant="standard"
           color="primary"
           fullWidth
           onChange={handlePlaceChange}
           value={selectPlace.name ? selectPlace.name : selectPlace}
+          InputProps={{
+            disableUnderline: true,
+          }}
+          autoFocus
+          placeholder="地點關鍵字，選擇清單中推薦項目..."
         />
       ) : (
         <>
-          <div>標記地點</div>
           <div className={style.showSelectPlace}>
             <FmdGoodIcon></FmdGoodIcon>
             <div className={style.placeDesc}>
