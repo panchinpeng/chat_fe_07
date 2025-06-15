@@ -6,44 +6,41 @@ import {
   ListItemText,
   Divider,
 } from "@mui/material";
-import { Fragment, useRef } from "react";
+import { Fragment } from "react";
 import style from "./friendApply.module.css";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import { useEffect, useState } from "react";
 import api from "../../common/api";
 import CuAvatar from "../avatar/avatar";
-import Alert from "../alert/alert";
 import { useStore } from "../../store";
 import { observer } from "mobx-react-lite";
 function FriendApply({ open, setOpen }) {
   const store = useStore();
   const [apply, setApply] = useState([]);
-  const alertRef = useRef();
   const handleReject = async (item, index) => {
     const res = await api.setFriendApply("reject", item.username);
     if (res.status) {
-      alertRef.current.setMessage("成功拒絕好友邀請");
+      store.tip.show("成功拒絕好友邀請", "success");
       const cApply = [...apply];
       cApply.splice(index, 1);
       setApply(cApply);
       store.user.verify();
     } else {
-      alertRef.current.setMessage("發生錯誤，請重試");
-      alertRef.current.setSeverity("error");
+      store.tip.show("發生錯誤，請重試", "error");
     }
   };
   const handleAccpet = async (item, index) => {
     const res = await api.setFriendApply("allow", item.username);
     if (res.status) {
-      alertRef.current.setMessage("已成為好友，趕快敲他聊天吧");
+      store.tip.show("已成為好友，趕快敲他聊天吧", "success");
+
       const cApply = [...apply];
       cApply.splice(index, 1);
       setApply(cApply);
       store.user.verify();
     } else {
-      alertRef.current.setMessage("發生錯誤，請重試");
-      alertRef.current.setSeverity("error");
+      store.tip.show("發生錯誤，請重試", "error");
     }
   };
   useEffect(() => {
@@ -118,7 +115,6 @@ function FriendApply({ open, setOpen }) {
           ))}
         </List>
       </SwipeableDrawer>
-      <Alert severity="success" ref={alertRef}></Alert>
     </>
   );
 }

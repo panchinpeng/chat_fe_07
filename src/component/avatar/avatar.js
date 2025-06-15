@@ -5,25 +5,25 @@ import { useStore } from "../../store";
 import { observer } from "mobx-react-lite";
 import style from "./avatar.module.css";
 import api from "../../common/api";
-import Alert from "../alert/alert";
 import { useNavigate } from "react-router-dom";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
-function CuAvatar({ from, friendName }) {
+function CuAvatar({ from, friendName, disabledClick }) {
   const navigate = useNavigate();
   const store = useStore();
-  const warnRef = useRef();
+  const [cache] = useState(Math.floor(Date.now() / 1000 / 30));
+
   const [avatar, setAvatar] = useState(
-    `${process.env.REACT_APP_API_DOMAIN}/api/user/avatar${friendName ? "?username=" + friendName : ""}`
+    `${process.env.REACT_APP_API_DOMAIN}/api/user/avatar${friendName ? "?username=" + friendName + `&cache=${cache}` : `?cache=${cache}`}`
   );
   const handleAvatar = async (e) => {
     const file = e.target.files[0];
     if (file.size > 10024000) {
-      warnRef.current.setMessage("file to large");
+      store.tip.show("file to large", "error");
       return;
     }
     if (!/image\/*/.test(file.type)) {
-      warnRef.current.setMessage("file type must images");
+      store.tip.show("file type must images", "error");
       return;
     }
 
@@ -71,7 +71,6 @@ function CuAvatar({ from, friendName }) {
   };
   return (
     <>
-      <Alert ref={warnRef} severity="error"></Alert>
       <Badge
         overlap="circular"
         sx={computedAvatarClassName("treads")}
@@ -89,8 +88,12 @@ function CuAvatar({ from, friendName }) {
         }
       >
         <Avatar
+          key={cache}
           sx={computedAvatarClassName()}
           onClick={async () => {
+            if (disabledClick) {
+              return false;
+            }
             const getTrendRes = await store.trends.getTrend(
               friendName ? friendName : store.user.account.username
             );
@@ -110,7 +113,7 @@ function CuAvatar({ from, friendName }) {
           ) : (
             <img
               alt="avatar"
-              key={avatar}
+              key={cache}
               src={avatar}
               onError={() => setAvatar("")}
               width="100%"

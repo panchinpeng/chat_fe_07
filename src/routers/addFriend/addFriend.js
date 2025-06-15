@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useRef } from "react";
+import React, { useState, Fragment } from "react";
 import style from "./addFriend.module.css";
 import {
   Box,
@@ -18,7 +18,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import api from "../../common/api";
 import Avatar from "../../component/avatar/avatar";
 import FriendInvite from "../../component/dialog/friendInvite/friendInvite";
-import Alert from "./../../component/alert/alert";
+
 import { useStore } from "../../store";
 import { observer } from "mobx-react-lite";
 import RecommendedFriend from "../../component/recommendFriend/recommendFriend";
@@ -28,7 +28,6 @@ function AddFriend() {
   const [friend, setFriend] = useState([]);
   const [seleceUser, setSelectUser] = useState("");
   const [inviteUser, setInviteUser] = useState([]);
-  const alertRef = useRef();
   const store = useStore();
   const searchHandler = async () => {
     setFriend(false);
@@ -39,8 +38,7 @@ function AddFriend() {
     const res = await api.searchFriend(keyword);
     if (res.status) {
       if (res.data.length === 0) {
-        alertRef.current.setMessage("找不到用戶");
-        alertRef.current.setSeverity("error");
+        store.tip.show("找不到用戶", "error");
       }
       setFriend(res.data);
     }
@@ -51,37 +49,33 @@ function AddFriend() {
       setSelectUser("");
     }
     if (status) {
-      alertRef.current.setMessage("已送出邀請");
-      alertRef.current.setSeverity("success");
+      store.tip.show("已送出邀請", "success");
     } else {
-      alertRef.current.setMessage("出現錯誤，請重新在試");
-      alertRef.current.setSeverity("error");
+      store.tip.show("出現錯誤，請重新再試", "error");
     }
   };
   const handleAccept = async (username, index) => {
     const res = await api.setFriendApply("allow", username);
     if (res.status) {
-      alertRef.current.setMessage("已成為好友，趕快敲他聊天吧");
+      store.tip.show("已成為好友，趕快敲他聊天吧", "success");
       const cfriend = [...friend];
       cfriend.splice(index, 1);
       setFriend(cfriend);
       store.user.verify();
     } else {
-      alertRef.current.setMessage("發生錯誤，請重試");
-      alertRef.current.setSeverity("error");
+      store.tip.show("發生錯誤，請重試", "error");
     }
   };
   const handleReject = async (username, index) => {
     const res = await api.setFriendApply("reject", username);
     if (res.status) {
-      alertRef.current.setMessage("成功拒絕好友邀請");
+      store.tip.show("成功拒絕好友邀請", "success");
       const cfriend = [...friend];
       cfriend.splice(index, 1);
       setFriend(cfriend);
       store.user.verify();
     } else {
-      alertRef.current.setMessage("發生錯誤，請重試");
-      alertRef.current.setSeverity("error");
+      store.tip.show("發生錯誤，請重試", "error");
     }
   };
   const sendAddFriend = (friendItem) => {
@@ -179,8 +173,7 @@ function AddFriend() {
                       <div className={style.AddFriendWait}>等待回復</div>
                     )}
 
-                    {(inviteUser.includes(friendItem.username) ||
-                      friendItem.applying * 1 === 2) && (
+                    {friendItem.applying * 1 === 2 && (
                       <div className={style.AddFriendWait}>已成為好友</div>
                     )}
                     {friendItem.receiveApplying && (
@@ -205,7 +198,6 @@ function AddFriend() {
         closeFn={() => setSelectUser("")}
         AddFriendFn={AddFriendResFn}
       ></FriendInvite>
-      <Alert severity="success" ref={alertRef}></Alert>
     </>
   );
 }

@@ -18,10 +18,10 @@ const api = {
       throw Promise.reject(e);
     }
   },
-  async login(username, password) {
+  async login(username, password, captcha) {
     try {
       const res = await fetch("/api/user/login", {
-        body: { username, password },
+        body: { username, password, captcha },
         method: "POST",
       });
       return res;
@@ -29,10 +29,10 @@ const api = {
       throw Promise.reject(e);
     }
   },
-  async regester(username, password, birthday) {
+  async regester(username, password, birthday, captcha) {
     try {
       const res = await fetch("/api/user/register", {
-        body: { username, password, birthday },
+        body: { username, password, birthday, captcha },
         method: "POST",
       });
       return res;
@@ -73,9 +73,11 @@ const api = {
       throw Promise.reject(e);
     }
   },
-  async getUserInfo() {
+  async getUserInfo(username) {
     try {
-      const res = await fetch("/api/user/info");
+      const res = await fetch(
+        `/api/user/info${username ? "?username=" + username : ""}`
+      );
       return res;
     } catch (e) {
       throw Promise.reject(e);
@@ -127,6 +129,7 @@ const api = {
   async addPostArticle(
     message,
     place,
+    tagFriends,
     isReply,
     isThumb,
     isPrivate,
@@ -141,7 +144,8 @@ const api = {
       typeof isReply !== "boolean" ||
       typeof isThumb !== "boolean" ||
       typeof isPrivate !== "boolean" ||
-      !Array.isArray(images)
+      !Array.isArray(images) ||
+      !Array.isArray(tagFriends)
     ) {
       return;
     }
@@ -152,6 +156,7 @@ const api = {
     const fd = new FormData();
     fd.append("message", message);
     fd.append("place", JSON.stringify(place));
+    fd.append("tagFriends", tagFriends);
     fd.append("isReply", isReply);
     fd.append("isThumb", isThumb);
     fd.append("isPrivate", isPrivate);
@@ -212,6 +217,14 @@ const api = {
       throw Promise.reject(e);
     }
   },
+  async getFriendChat() {
+    try {
+      const res = await fetch("/api/user/friendChat");
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
   async getFriend() {
     try {
       const res = await fetch("/api/user/friend");
@@ -220,11 +233,11 @@ const api = {
       throw Promise.reject(e);
     }
   },
-  async getMessageHistory(friend) {
+  async getMessageHistory(friend, lastID) {
     try {
       const res = await fetch("/api/message/history", {
         method: "POST",
-        body: { friend },
+        body: { friend, lastID },
       });
       return res;
     } catch (e) {
@@ -289,6 +302,17 @@ const api = {
         `/api/article?pre=${fid ? "&fid=" + fid : ""}${last ? "&last=" + last : ""}`
       );
       return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async removeThumb(id) {
+    try {
+      const res = await fetch("/api/article/removeThumb", {
+        method: "POST",
+        body: { id },
+      });
+      return res.status;
     } catch (e) {
       throw Promise.reject(e);
     }
@@ -375,6 +399,36 @@ const api = {
           id,
         },
       });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getUserRankInfo(username) {
+    try {
+      const res = await fetch(`/api/user/getRankInfo?username=${username}`);
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async addShareArticle(articleId, toUsers) {
+    try {
+      const res = await fetch("/api/article/share", {
+        method: "POST",
+        body: {
+          articleId,
+          toUsers,
+        },
+      });
+      return res.status;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getPaymentInfos() {
+    try {
+      const res = await fetch("/api/payment");
       return res;
     } catch (e) {
       throw Promise.reject(e);

@@ -1,12 +1,12 @@
 import React from "react";
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, redirect } from "react-router-dom";
 import PrivateRoutes from "./routers/privateRoute";
 import Logout from "./routers/logout/logout";
 import Error from "./routers/error/error";
 import History from "./routers/history/history";
 
 const AddFriend = React.lazy(() => import("./routers/addFriend/addFriend"));
-const Portal = React.lazy(() => import("./routers/portal/portal"));
+// const Portal = React.lazy(() => import("./routers/portal/portal"));
 const Signup = React.lazy(() => import("./routers/signup/signup"));
 const Login = React.lazy(() => import("./routers/login/login"));
 const Post = React.lazy(() => import("./routers/post/post"));
@@ -15,6 +15,7 @@ const Online = React.lazy(() => import("./routers/online/online"));
 const Chatroom = React.lazy(() => import("./routers/chatroom/chatroom"));
 const Article = React.lazy(() => import("./routers/article/article"));
 const FriendMain = React.lazy(() => import("./routers/friendMain/friendMain"));
+const Pay = React.lazy(() => import("./routers/pay/pay"));
 const router = createBrowserRouter([
   {
     path: "/member",
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
         path: "friendMain/:user",
         element: <FriendMain></FriendMain>,
       },
+      {
+        path: "",
+        loader: () => redirect("/"),
+      },
     ],
   },
   {
@@ -75,10 +80,18 @@ const router = createBrowserRouter([
         element: <History></History>,
       },
       {
+        path: "/pay",
+        element: <Pay></Pay>,
+      },
+      {
         path: "",
-        element: <Portal></Portal>,
+        element: null,
       },
     ],
+  },
+  {
+    path: "*",
+    loader: () => redirect("/"),
   },
 ]);
 

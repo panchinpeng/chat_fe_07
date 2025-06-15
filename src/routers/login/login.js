@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import api from "../../common/api";
 import { NavLink, useNavigate } from "react-router-dom";
-import Alert from "./../../component/alert/alert";
 import * as THREE from "three";
 
 // store
@@ -20,10 +19,12 @@ import WAVES from "vanta/dist/vanta.waves.min";
 
 function Login() {
   const myRef = useRef(null);
-  const alertRef = useRef();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [betaCheck, setBetaCheck] = useState(false);
+  const [captcha, setCaptcha] = useState("");
+  const [clearCacheCode, setClearCacheCode] = useState("");
+
   const navigate = useNavigate();
   const store = useStore();
 
@@ -38,6 +39,7 @@ function Login() {
       scaleMobile: 1.0,
       color: "#1685c8",
     });
+    setClearCacheCode(Date.now());
 
     return () => {
       if (vantaEffect) vantaEffect.destroy();
@@ -46,35 +48,37 @@ function Login() {
 
   const submit = async () => {
     if (!username) {
-      alertRef.current.setMessage("請輸入帳號");
+      store.tip.show("請輸入帳號", "error");
       return;
     }
     if (!password) {
-      alertRef.current.setMessage("請輸入密碼");
+      store.tip.show("請輸入密碼", "error");
+      return;
+    }
+    if (!captcha) {
+      store.tip.show("請輸入驗證碼", "error");
       return;
     }
     if (!betaCheck) {
-      alertRef.current.setMessage("請確認注意事項");
+      store.tip.show("請確認注意事項", "error");
       return;
     }
 
     if (!/^\w+$/.test(username) || username.length >= 50) {
-      alertRef.current.setMessage(
-        "帳號僅允許英文字母、數字底線，並限定在50字以下"
-      );
+      store.tip.show("帳號僅允許英文字母、數字底線，並限定在50字以下", "error");
       return;
     }
     if (password.length >= 50) {
-      alertRef.current.setMessage("密碼限定在50字以下");
+      store.tip.show("密碼限定在50字以下", "error");
       return;
     }
-    const data = await api.login(username, password);
+    const data = await api.login(username, password, captcha);
     if (data.status) {
       store.user.setLogin(true);
 
       navigate("/");
     } else {
-      alertRef.current.setMessage("登入失敗，請確認帳密是否輸入正確");
+      store.tip.show("登入失敗，請確認帳密是否輸入正確", "error");
     }
   };
 
@@ -108,6 +112,20 @@ function Login() {
           required={true}
           inputProps={{ maxLength: 50 }}
         />
+        <img
+          src={`${process.env.REACT_APP_API_DOMAIN}/captcha?cache=${clearCacheCode}`}
+          className={style.captcha}
+          alt="captcha"
+        ></img>
+        <TextField
+          label="驗證碼"
+          variant="outlined"
+          fullWidth
+          value={captcha}
+          required={true}
+          onChange={(event) => setCaptcha(event.target.value)}
+          inputProps={{ maxLength: 4 }}
+        />
         <FormControlLabel
           required
           control={
@@ -125,7 +143,6 @@ function Login() {
           登入
         </Button>
       </Box>
-      <Alert severity="error" ref={alertRef}></Alert>
     </>
   );
 }

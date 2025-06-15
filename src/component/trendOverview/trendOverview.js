@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import api from "../../common/api";
+import { useEffect } from "react";
 import Avatar from "../avatar/avatar";
 import style from "./trendOverview.module.css";
 import { useStore } from "../../store";

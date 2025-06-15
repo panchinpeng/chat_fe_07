@@ -10,7 +10,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import style from "./signup.module.css";
-import Alert from "./../../component/alert/alert";
 import * as THREE from "three";
 
 import { NavLink, useNavigate } from "react-router-dom";
@@ -18,14 +17,18 @@ import api from "../../common/api";
 
 import WAVES from "vanta/dist/vanta.waves.min";
 
-export default function Signup() {
+import { observer } from "mobx-react-lite";
+import { useStore } from "./../../store";
+function Signup() {
+  const store = useStore();
   const myRef = useRef(null);
-  const alertRef = useRef();
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [birthday, setBirthday] = useState("");
+  const [captcha, setCaptcha] = useState("");
   const [betaCheck, setBetaCheck] = useState(false);
+  const [clearCacheCode, setClearCacheCode] = useState("");
 
   useEffect(() => {
     const vantaEffect = WAVES({
@@ -38,6 +41,8 @@ export default function Signup() {
       scaleMobile: 1.0,
       color: "#1685c8",
     });
+    console.log("aaa");
+    setClearCacheCode(Date.now());
 
     return () => {
       if (vantaEffect) vantaEffect.destroy();
@@ -46,41 +51,42 @@ export default function Signup() {
 
   const submit = async () => {
     if (!username) {
-      alertRef.current.setMessage("請輸入帳號");
+      store.tip.show("請輸入帳號", "error");
       return;
     }
     if (!password) {
-      alertRef.current.setMessage("請輸入密碼");
+      store.tip.show("請輸入密碼", "error");
       return;
     }
     if (!birthday) {
-      alertRef.current.setMessage("請輸入生日");
+      store.tip.show("請輸入生日", "error");
+      return;
+    }
+    if (!captcha) {
+      store.tip.show("請輸入驗證碼", "error");
       return;
     }
     if (!betaCheck) {
-      alertRef.current.setMessage("請確認注意事項");
+      store.tip.show("請確認注意事項", "error");
       return;
     }
     if (!/^\w+$/.test(username) || username.length >= 50) {
-      alertRef.current.setMessage(
-        "帳號僅允許英文字母、數字底線，並限定在50字以下"
-      );
+      store.tip.show("帳號僅允許英文字母、數字底線，並限定在50字以下", "error");
       return;
     }
     if (password.length >= 50) {
-      alertRef.current.setMessage("密碼限定在50字以下");
+      store.tip.show("密碼限定在50字以下", "error");
       return;
     }
 
-    const res = await api.regester(username, password, birthday);
+    const res = await api.regester(username, password, birthday, captcha);
     if (res.status) {
-      alertRef.current.setMessage("恭喜你註冊成功，將為你導向登入頁");
-      alertRef.current.setSeverity("success");
+      store.tip.show("恭喜你註冊成功，將為你導向登入頁", "success");
       setTimeout(() => {
         navigate("/login", { replace: true });
       }, 3000);
     } else {
-      alertRef.current.setMessage("註冊失敗，請確認資料是否正確輸入");
+      store.tip.show("註冊失敗，請確認資料是否正確輸入", "error");
     }
   };
   return (
@@ -115,10 +121,24 @@ export default function Signup() {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
             label="生日"
-            sx={{ mt: 2, width: 1 }}
+            sx={{ mt: 1, width: 1 }}
             onChange={(event) => setBirthday(event.format("YYYY-MM-DD"))}
           />
         </LocalizationProvider>
+        <img
+          src={`${process.env.REACT_APP_API_DOMAIN}/captcha?cache=${clearCacheCode}`}
+          className={style.captcha}
+          alt="captcha"
+        ></img>
+        <TextField
+          label="驗證碼"
+          variant="outlined"
+          fullWidth
+          value={captcha}
+          required={true}
+          onChange={(event) => setCaptcha(event.target.value)}
+          inputProps={{ maxLength: 4 }}
+        />
         <FormControlLabel
           required
           control={
@@ -136,7 +156,7 @@ export default function Signup() {
           註冊
         </Button>
       </Box>
-      <Alert severity="error" ref={alertRef}></Alert>
     </>
   );
 }
+export default observer(Signup);

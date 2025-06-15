@@ -14,14 +14,14 @@
   color: #fff;
 }
 .commit {
-  background-color: #000;
-  border-radius: 10px;
+  background-color: #0000001c;
+  border-radius: 19px;
   padding: 6px;
   margin-top: 2px;
   opacity: 1;
 }
 .commit * {
-  color: #fff;
+  color: #000;
 }
 .title {
   margin-top: 5px;

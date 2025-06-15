@@ -18,8 +18,15 @@
   max-height: 120px;
 }
 .noFriend {
+  height: 200px;
+  width: 100vw;
   margin: 40px auto;
   font-size: 28px;
   text-align: center;
   color: #757575;
+  background: url("./../../public/emptyFriend.png") center / contain no-repeat;
+}
+.chatName {
+  font-weight: 700;
+  font-size: 15px;
 }

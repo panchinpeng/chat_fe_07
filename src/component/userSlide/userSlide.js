@@ -12,13 +12,17 @@ const titles = {
   popular: "熱門用戶",
   online: "活耀度排行",
   article: "貼文數排行",
+  friend: "好友",
 };
-export default function UserSlide({ type, data }) {
+export default function UserSlide({ type, data, onClick, disableHeader }) {
   return (
     <>
-      <Typography variant="h7" gutterBottom sx={{ mt: 0 }}>
-        {titles[type]}
-      </Typography>
+      {!disableHeader && (
+        <Typography variant="h7" gutterBottom sx={{ mt: 0 }}>
+          {titles[type]}
+        </Typography>
+      )}
+
       <Swiper
         slidesPerView={4}
         spaceBetween={0}
@@ -37,9 +41,18 @@ export default function UserSlide({ type, data }) {
       >
         {data && data.length > 0 ? (
           data.map((username) => (
-            <SwiperSlide>
-              <div className={style.member}>
-                <Avatar from="Index" friendName={username}></Avatar>
+            <SwiperSlide key={username}>
+              <div
+                className={style.member}
+                onClick={() => {
+                  onClick && onClick(username);
+                }}
+              >
+                <Avatar
+                  from="Index"
+                  friendName={username}
+                  disabledClick={onClick ? true : false}
+                ></Avatar>
                 <div>{username}</div>
               </div>
             </SwiperSlide>

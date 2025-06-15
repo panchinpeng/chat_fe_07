@@ -10,7 +10,8 @@ export default function useIntersectionObserver() {
   return {
     startObserve: (currentDOM) => {
       if (observer.current) {
-        throw new Error("IntersectionObserver multiple");
+        observer.current.disconnect();
+        // throw new Error("IntersectionObserver multiple");
       }
       observer.current = new IntersectionObserver(
         (entries) => {
@@ -22,7 +23,9 @@ export default function useIntersectionObserver() {
           rootMargin: "0px 0px 100px 0px",
         }
       );
-      observer.current.observe(currentDOM);
+      if (currentDOM) {
+        observer.current.observe(currentDOM);
+      }
     },
     isIntersecting,
   };

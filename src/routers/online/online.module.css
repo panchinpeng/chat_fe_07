@@ -27,8 +27,24 @@
 .inputMessage {
   width: 100%;
   flex: 0 0;
-  padding: 10px;
-  background-color: #fff;
+  /* padding: 10px; */
+  background-color: #e4e4e4;
+}
+.userInputWrap {
+  display: flex;
+  align-items: center;
+}
+.input {
+  border-radius: 20px;
+  padding: 5px 12px;
+  resize: none;
+  outline: 0;
+  border: 0;
+  margin: 10px 10px 10px 0;
+  flex: 1 0 0;
+}
+input[type="file"] {
+  display: none;
 }
 .replyWrap {
   display: flex;
@@ -61,4 +77,7 @@
   position: absolute;
   z-index: -66;
   visibility: hidden;
+}
+.selectPic {
+  display: flex;
 }

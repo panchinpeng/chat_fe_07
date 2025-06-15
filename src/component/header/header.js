@@ -21,7 +21,10 @@ function Header() {
 
   return (
     <>
-      <AppBar position="static" sx={{ flex: "0 0 0", zIndex: "9" }}>
+      <AppBar
+        position="static"
+        sx={{ flex: "0 0 0", zIndex: "9", boxShadow: "none" }}
+      >
         <Toolbar>
           <div>
             <Link to="/" reloadDocument>

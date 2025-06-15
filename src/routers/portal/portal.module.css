@@ -3,6 +3,9 @@
     width: 960px;
   }
 }
+.waterFall {
+  margin: 0 10px;
+}
 .waterFallItem {
   width: 300px;
   margin-bottom: 10px;

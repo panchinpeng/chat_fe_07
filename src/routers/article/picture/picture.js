@@ -5,7 +5,7 @@ import {
   useImperativeHandle,
   useEffect,
 } from "react";
-import { Paper, CircularProgress, Button } from "@mui/material";
+import { CircularProgress, Button } from "@mui/material";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -17,15 +17,16 @@ import { EffectCoverflow } from "swiper/modules";
 
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Base64 } from "js-base64";
-import Alert from "./../../../component/alert/alert";
+import { observer } from "mobx-react-lite";
+import { useStore } from "./../../../store";
 
 function Picture(props, ref) {
+  const store = useStore();
+
   const [picture, setPicture] = useState([]);
   const [longTouchPicture, setLongTouchPicture] = useState(null);
   const longTouchTimer = useState();
-  const imageSort = useRef({});
   const files = useRef([]);
-  const alertRef = useRef();
 
   useImperativeHandle(
     ref,
@@ -45,8 +46,19 @@ function Picture(props, ref) {
 
   const removePicture = (index) => {
     setPicture((pics) => {
-      const cpPics = [...pics];
-      cpPics.splice(index, 1);
+      let cpPics = [...pics];
+      const removePic = cpPics.splice(index, 1);
+      const findAttr =
+        removePic[0].originSortByNew !== undefined
+          ? "originSortByNew"
+          : "originSort";
+
+      cpPics = cpPics.map((cpPic) => {
+        if (cpPic[findAttr] && cpPic[findAttr] > removePic[0][findAttr]) {
+          cpPic[findAttr] = cpPic[findAttr] - 1;
+        }
+        return cpPic;
+      });
       files.current.splice(index, 1);
       return cpPics;
     });
@@ -58,10 +70,6 @@ function Picture(props, ref) {
         id: pic,
         src: `${process.env.REACT_APP_API_DOMAIN}/api/article/img?t=${pic}`,
       }));
-      // draftImagesData.forEach(
-      //   (draft, index) => (imageSort.current[`origin${index}`] = index)
-      // );
-      // console.log("imageSort", imageSort);
       setPicture(draftImagesData);
     }
   }, [props.draftImages]);
@@ -109,11 +117,9 @@ function Picture(props, ref) {
       const totalSize = alreadyFilesLength + filesAry.length;
 
       if (totalSize > 10) {
-        alertRef.current.setMessage("已選擇超過10張照片，請重新選擇");
-        alertRef.current.setSeverity("error");
+        store.tip.show("已選擇超過10張照片，請重新選擇", "error");
         return;
       }
-      console.log(picture, files.current, e.target.files);
       files.current = [...files.current, ...filesAry];
       filesAry.forEach((item, index) => {
         const newIndex = alreadyFilesLength + index;
@@ -198,6 +204,7 @@ function Picture(props, ref) {
       <div className={style.pickerPicWrap}>
         <label htmlFor="postImg">
           <AddAPhotoIcon sx={{ fontSize: 60, color: "#fff" }} />
+          添加相片
         </label>
         <input
           type="file"
@@ -327,8 +334,7 @@ function Picture(props, ref) {
           </DragDropContext>
         </>
       )}
-      <Alert ref={alertRef} severity="success"></Alert>
     </>
   );
 }
-export default forwardRef(Picture);
+export default observer(forwardRef(Picture));
