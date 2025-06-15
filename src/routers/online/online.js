@@ -15,7 +15,6 @@ import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
 import useIntersectionObserver from "./../../hooks/useIntersectionObserver";
 import MessageUploadFile from "../../component/messageUploadFile/messageUploadFile";
-import Alert from "./../../component/alert/alert";
 
 function Online() {
   const store = useStore();
@@ -27,7 +26,6 @@ function Online() {
   const messageIds = useRef([]);
   const loadMoreDom = useRef();
   const uploadImageDom = useRef();
-  const warnRef = useRef();
   const [history, setHistory] = useState([]);
   const [networkError, setNetworkError] = useState(false);
   const [message, setMessage] = useState("");
@@ -271,7 +269,7 @@ function Online() {
       const file = e.target.files[0];
       if (file.size > 9.5 * 1024 * 1024) {
         setFileKey((k) => k + 1);
-        warnRef.current.setMessage("file to large limit 9MB");
+        store.tip.show("file to large limit 9MB", "error");
         return;
       }
       const reader = new FileReader();
@@ -400,7 +398,6 @@ function Online() {
           submitFile={submitPicMessage}
         ></MessageUploadFile>
       )}
-      <Alert ref={warnRef} severity="error"></Alert>
     </Box>
   );
 }

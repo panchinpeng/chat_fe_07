@@ -4,6 +4,7 @@ import "./index.css";
 import router from "./router";
 import { RouterProvider } from "react-router-dom";
 import Loading from "./component/loading/loading";
+import Alert from "./component/alert/alert";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 // 解決當觀看commits時，點選頭貼僅入其他頁，按上一頁後，會出現錯誤Uncaught ResizeObserver loop completed with undelivered notifications.
 const ro = window.ResizeObserver;
@@ -19,6 +20,7 @@ root.render(
   // <React.StrictMode>
   <Suspense fallback={<Loading from="Suspense"></Loading>}>
     <RouterProvider router={router}></RouterProvider>
+    <Alert />
   </Suspense>
   // </React.StrictMode>
 );

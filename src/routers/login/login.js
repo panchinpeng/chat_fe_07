@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import api from "../../common/api";
 import { NavLink, useNavigate } from "react-router-dom";
-import Alert from "./../../component/alert/alert";
 import * as THREE from "three";
 
 // store
@@ -20,7 +19,6 @@ import WAVES from "vanta/dist/vanta.waves.min";
 
 function Login() {
   const myRef = useRef(null);
-  const alertRef = useRef();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [betaCheck, setBetaCheck] = useState(false);
@@ -50,30 +48,28 @@ function Login() {
 
   const submit = async () => {
     if (!username) {
-      alertRef.current.setMessage("請輸入帳號");
+      store.tip.show("請輸入帳號", "error");
       return;
     }
     if (!password) {
-      alertRef.current.setMessage("請輸入密碼");
+      store.tip.show("請輸入密碼", "error");
       return;
     }
     if (!captcha) {
-      alertRef.current.setMessage("請輸入驗證碼");
+      store.tip.show("請輸入驗證碼", "error");
       return;
     }
     if (!betaCheck) {
-      alertRef.current.setMessage("請確認注意事項");
+      store.tip.show("請確認注意事項", "error");
       return;
     }
 
     if (!/^\w+$/.test(username) || username.length >= 50) {
-      alertRef.current.setMessage(
-        "帳號僅允許英文字母、數字底線，並限定在50字以下"
-      );
+      store.tip.show("帳號僅允許英文字母、數字底線，並限定在50字以下", "error");
       return;
     }
     if (password.length >= 50) {
-      alertRef.current.setMessage("密碼限定在50字以下");
+      store.tip.show("密碼限定在50字以下", "error");
       return;
     }
     const data = await api.login(username, password, captcha);
@@ -82,7 +78,7 @@ function Login() {
 
       navigate("/");
     } else {
-      alertRef.current.setMessage("登入失敗，請確認帳密是否輸入正確");
+      store.tip.show("登入失敗，請確認帳密是否輸入正確", "error");
     }
   };
 
@@ -147,7 +143,6 @@ function Login() {
           登入
         </Button>
       </Box>
-      <Alert severity="error" ref={alertRef}></Alert>
     </>
   );
 }

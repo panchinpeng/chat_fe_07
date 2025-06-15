@@ -17,14 +17,16 @@ import { EffectCoverflow } from "swiper/modules";
 
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Base64 } from "js-base64";
-import Alert from "./../../../component/alert/alert";
+import { observer } from "mobx-react-lite";
+import { useStore } from "./../../../store";
 
 function Picture(props, ref) {
+  const store = useStore();
+
   const [picture, setPicture] = useState([]);
   const [longTouchPicture, setLongTouchPicture] = useState(null);
   const longTouchTimer = useState();
   const files = useRef([]);
-  const alertRef = useRef();
 
   useImperativeHandle(
     ref,
@@ -115,11 +117,9 @@ function Picture(props, ref) {
       const totalSize = alreadyFilesLength + filesAry.length;
 
       if (totalSize > 10) {
-        alertRef.current.setMessage("已選擇超過10張照片，請重新選擇");
-        alertRef.current.setSeverity("error");
+        store.tip.show("已選擇超過10張照片，請重新選擇", "error");
         return;
       }
-      console.log(picture, files.current, e.target.files);
       files.current = [...files.current, ...filesAry];
       filesAry.forEach((item, index) => {
         const newIndex = alreadyFilesLength + index;
@@ -334,8 +334,7 @@ function Picture(props, ref) {
           </DragDropContext>
         </>
       )}
-      <Alert ref={alertRef} severity="success"></Alert>
     </>
   );
 }
-export default forwardRef(Picture);
+export default observer(forwardRef(Picture));

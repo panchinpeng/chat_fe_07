@@ -8,10 +8,12 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import CuAvatar from "./../../component/avatar/avatar";
-import Alert from "../../component/alert/alert";
 import style from "./intro.module.css";
 import InfoContext from "./infoContext";
-import { useContext, useRef } from "react";
+import { useContext } from "react";
+
+import { observer } from "mobx-react-lite";
+import { useStore } from "./../../store";
 const jobMap = [
   "醫生",
   "律師",
@@ -166,9 +168,9 @@ const interests = [
   "寵物訓練",
   "釣魚",
 ];
-export default function Intro() {
+function Intro() {
+  const store = useStore();
   const { person, setPerson } = useContext(InfoContext);
-  const warnRef = useRef();
   return (
     <Box>
       <h3>個人介紹</h3>
@@ -185,7 +187,7 @@ export default function Intro() {
               value={person.intro}
               onChange={(e) => {
                 if (e.target.value.length > 100) {
-                  warnRef.current.setMessage("最多100個字");
+                  store.tip.show("最多100個字", "error");
                   return;
                 }
                 setPerson((person) => ({ ...person, intro: e.target.value }));
@@ -297,7 +299,7 @@ export default function Intro() {
                   label={item}
                   onClick={() => {
                     if (person.interests.length >= 10) {
-                      warnRef.current.setMessage("Select up to 10");
+                      store.tip.show("最多選10個", "error");
                       return;
                     }
                     setPerson((person) => ({
@@ -333,10 +335,8 @@ export default function Intro() {
             />
           ))}
         </div>
-        <Alert severity="error" ref={warnRef}></Alert>
       </Box>
-
-      <Alert ref={warnRef} severity="error"></Alert>
     </Box>
   );
 }
+export default observer(Intro);

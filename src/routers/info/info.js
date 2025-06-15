@@ -1,13 +1,15 @@
 import { Box, Button } from "@mui/material";
 import style from "./info.module.css";
-import Alert from "../../component/alert/alert.js";
 import My from "./my";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import InfoContext from "./infoContext.js";
 import api from "../../common/api.js";
 
-export default function Info() {
-  const alertRef = useRef();
+import { observer } from "mobx-react-lite";
+import { useStore } from "./../../store";
+
+function Info() {
+  const store = useStore();
   const [person, setPerson] = useState({
     interests: [],
     job: "",
@@ -40,8 +42,7 @@ export default function Info() {
       person.intro === "" ||
       typeof person.public !== "boolean"
     ) {
-      alertRef.current.setMessage("請正確填寫資料");
-      alertRef.current.setSeverity("error");
+      store.tip.show("請正確填寫資料", "error");
     } else {
       const res = await api.setUserInfo(
         person.job,
@@ -52,11 +53,9 @@ export default function Info() {
         person.public
       );
       if (res.status) {
-        alertRef.current.setMessage("Saved");
-        alertRef.current.setSeverity("success");
+        store.tip.show("Saved", "success");
       } else {
-        alertRef.current.setMessage("Save Failed");
-        alertRef.current.setSeverity("error");
+        store.tip.show("Save Failed", "error");
       }
     }
   };
@@ -69,9 +68,8 @@ export default function Info() {
             save
           </Button>
         </div>
-
-        <Alert ref={alertRef} severity="success"></Alert>
       </Box>
     </InfoContext.Provider>
   );
 }
+export default observer(Info);

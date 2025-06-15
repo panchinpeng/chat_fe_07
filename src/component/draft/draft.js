@@ -12,19 +12,14 @@ import ListItemText from "@mui/material/ListItemText";
 import Divider from "@mui/material/Divider";
 import DeleteIcon from "@mui/icons-material/Delete";
 import api from "../../common/api";
-import Alert from "../alert/alert";
+import { observer } from "mobx-react-lite";
+import { useStore } from "./../../store";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function Draft({
-  open,
-  setOpen,
-  draft,
-  setDraft,
-  setDraftData,
-}) {
-  const warnRef = React.useRef();
+function Draft({ open, setOpen, draft, setDraft, setDraftData }) {
+  const store = useStore();
   if (draft.length === 0) {
     return null;
   }
@@ -44,13 +39,11 @@ export default function Draft({
       const res = await api.deleteDraft(draftItem.id);
       console.log("res", res);
       if (res.data) {
-        warnRef.current.setMessage("已刪除");
-        warnRef.current.setSeverity("success");
+        store.tip.show("已刪除", "success");
         const resetDraft = draft.filter((d) => d.id !== draftItem.id);
         setDraft(resetDraft);
       } else {
-        warnRef.current.setMessage("刪除失敗");
-        warnRef.current.setSeverity("error");
+        store.tip.show("刪除失敗", "error");
       }
     }
   };
@@ -97,7 +90,8 @@ export default function Draft({
           </React.Fragment>
         ))}
       </List>
-      <Alert ref={warnRef} severity="success"></Alert>
     </Dialog>
   );
 }
+
+export default observer(Draft);

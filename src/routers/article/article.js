@@ -16,7 +16,6 @@ import {
 } from "@mui/material";
 import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useStore } from "../../store";
 import style from "./article.module.css";
 import Picture from "./picture/picture";
 import Place from "./place/place";
@@ -25,7 +24,6 @@ import api from "../../common/api";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import ReplyIcon from "@mui/icons-material/Reply";
 import Draft from "../../component/draft/draft";
-import Alert from "../../component/alert/alert";
 import CreateIcon from "@mui/icons-material/Create";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import PeopleIcon from "@mui/icons-material/People";
@@ -33,6 +31,9 @@ import PlaceIcon from "@mui/icons-material/Place";
 import EnhancedEncryptionIcon from "@mui/icons-material/EnhancedEncryption";
 import TagFriend from "./tagFriend/tagFriend";
 import UserSlide from "./../../component/userSlide/userSlide";
+
+import { observer } from "mobx-react-lite";
+import { useStore } from "./../../store";
 const edits = [
   { name: "分享些甚麼", icon: <CreateIcon></CreateIcon> },
   { name: "標記地點", icon: <PlaceIcon></PlaceIcon> },
@@ -51,7 +52,7 @@ const Transition = React.forwardRef((props, ref) => (
   <Slide direction="up" ref={ref} {...props} />
 ));
 
-export default function Article() {
+function Article() {
   usePageLeaveWarn();
   const navigate = useNavigate();
   const store = useStore();
@@ -69,14 +70,12 @@ export default function Article() {
   const [draftData, setDraftData] = useState(undefined);
   const [editStatus, setEditStatus] = useState(null);
   const [tagFriends, setTagFriends] = useState([]);
-  const alertRef = useRef();
 
   const setPlace = (data) => (place.current = data);
 
   const submitDraft = async () => {
     if (!message) {
-      alertRef.current.setMessage("分享內容不能空白");
-      alertRef.current.setSeverity("error");
+      store.tip.show("分享內容不能空白", "error");
       return;
     }
     if (pictureInfo.current.longTouchPicture) {
@@ -88,8 +87,7 @@ export default function Article() {
     const images = pictureInfo.current.getPictures();
     const selectImagesLength = pictureInfo.current.getPicturesLength();
     if (selectImagesLength === 0) {
-      alertRef.current.setMessage("請選擇一張照片");
-      alertRef.current.setSeverity("error");
+      store.tip.show("請選擇一張照片", "error");
       return;
     }
     store.loading.setLoading(true);
@@ -113,15 +111,13 @@ export default function Article() {
     );
     store.loading.setLoading(false);
     if (postResult && postResult.status) {
-      alertRef.current.setMessage("已成功儲存草稿");
-      alertRef.current.setSeverity("success");
+      store.tip.show("已成功儲存草稿", "success");
     }
   };
 
   const submitArticle = async () => {
     if (!message) {
-      alertRef.current.setMessage("分享內容不能空白");
-      alertRef.current.setSeverity("error");
+      store.tip.show("分享內容不能空白", "error");
       return;
     }
     if (pictureInfo.current.longTouchPicture) {
@@ -133,8 +129,7 @@ export default function Article() {
     const images = pictureInfo.current.getPictures();
     const selectImagesLength = pictureInfo.current.getPicturesLength();
     if (selectImagesLength === 0) {
-      alertRef.current.setMessage("請選擇一張照片");
-      alertRef.current.setSeverity("error");
+      store.tip.show("請選擇一張照片", "error");
       return;
     }
     store.loading.setLoading(true);
@@ -376,7 +371,7 @@ export default function Article() {
           發佈
         </Button>
       </Box>
-      <Alert ref={alertRef} severity="success"></Alert>
     </Box>
   );
 }
+export default observer(Article);

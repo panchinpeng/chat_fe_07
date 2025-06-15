@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -19,14 +19,16 @@ import usdtIcon from "./../../public/usdt.png";
 import api from "../../common/api";
 import { QRCodeSVG } from "qrcode.react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import Alert from "./../../component/alert/alert";
+
+import { observer } from "mobx-react-lite";
+import { useStore } from "./../../store";
 
 import style from "./pay.module.css";
 
 function Pay() {
+  const store = useStore();
   const [openDesc, setOpenDesc] = useState(false);
   const [payinfo, setPayinfo] = useState(undefined);
-  const alertRef = useRef();
   useEffect(() => {
     let intervalID = "";
     (async () => {
@@ -71,7 +73,7 @@ function Pay() {
               <CopyToClipboard
                 text={payinfo.pay_address}
                 onCopy={() => {
-                  alertRef.current.setSeverity("success");
+                  store.tip.show("已複製", "success");
                 }}
               >
                 <ContentCopyIcon></ContentCopyIcon>
@@ -97,7 +99,6 @@ function Pay() {
         )}
       </Card>
       <USDTDesc open={openDesc} onClose={() => setOpenDesc(false)} />
-      <Alert ref={alertRef} serverity="success"></Alert>
     </Box>
   );
 }
@@ -122,4 +123,4 @@ function USDTDesc({ open, onClose }) {
     </Dialog>
   );
 }
-export default Pay;
+export default observer(Pay);

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   List,
@@ -10,14 +10,15 @@ import {
   Avatar,
 } from "@mui/material";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
-import Alert from "../alert/alert";
+import { observer } from "mobx-react-lite";
+import { useStore } from "./../../store";
 const PostArticleShare = React.lazy(
   () => import("../postArticleShare/postArticleShare")
 );
 
-export default function PostArticleMore({ showMore, setShowMore, articleId }) {
+function PostArticleMore({ showMore, setShowMore, articleId }) {
+  const store = useStore();
   const [action, setAction] = useState();
-  const warnRef = React.useRef();
 
   return (
     <Box>
@@ -46,8 +47,7 @@ export default function PostArticleMore({ showMore, setShowMore, articleId }) {
           articleId={articleId}
           showWarn={(data) => {
             if (data) {
-              warnRef.current.setMessage(data.message);
-              warnRef.current.setSeverity(data.type);
+              store.tip.show(data.message, data.type);
             }
           }}
           closeParentDialog={() => {
@@ -56,7 +56,7 @@ export default function PostArticleMore({ showMore, setShowMore, articleId }) {
           }}
         ></PostArticleShare>
       )}
-      <Alert ref={warnRef} severity="success"></Alert>
     </Box>
   );
 }
+export default observer(PostArticleMore);
