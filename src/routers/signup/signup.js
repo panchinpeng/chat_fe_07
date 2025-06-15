@@ -130,6 +130,7 @@ export default function Signup() {
         <img
           src={`${process.env.REACT_APP_API_DOMAIN}/captcha?cache=${clearCacheCode}`}
           className={style.captcha}
+          alt="captcha"
         ></img>
         <TextField
           label="驗證碼"

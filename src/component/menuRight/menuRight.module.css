@@ -1,3 +1,4 @@
-.right {
-  border-top-left-radius: 50%;
+.rotate {
+  transition: all 1s !important;
+  transform: rotate(360deg);
 }

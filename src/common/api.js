@@ -426,5 +426,13 @@ const api = {
       throw Promise.reject(e);
     }
   },
+  async getPaymentInfos() {
+    try {
+      const res = await fetch("/api/payment");
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
 };
 export default api;

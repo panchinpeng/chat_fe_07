@@ -15,6 +15,7 @@ const Online = React.lazy(() => import("./routers/online/online"));
 const Chatroom = React.lazy(() => import("./routers/chatroom/chatroom"));
 const Article = React.lazy(() => import("./routers/article/article"));
 const FriendMain = React.lazy(() => import("./routers/friendMain/friendMain"));
+const Pay = React.lazy(() => import("./routers/pay/pay"));
 const router = createBrowserRouter([
   {
     path: "/member",
@@ -77,6 +78,10 @@ const router = createBrowserRouter([
       {
         path: "/history",
         element: <History></History>,
+      },
+      {
+        path: "/pay",
+        element: <Pay></Pay>,
       },
       {
         path: "",

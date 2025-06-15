@@ -1,0 +1,59 @@
+.postHistoryWrap {
+  position: relative;
+  margin: 0 -24px;
+}
+.postHistoryWrap::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  background-color: #1976d2;
+  transform: translateX(20px);
+}
+.eventTime {
+  color: #fff;
+  background-color: #1976d2;
+  border-radius: 10px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  font-size: 11px;
+  margin-right: 10px;
+  flex: 0 0 50px;
+}
+.record {
+  padding: 30px 0;
+  display: flex;
+  align-items: start;
+  position: relative;
+}
+.record.year {
+  padding: 0;
+  margin: 0 10px;
+}
+.record .content {
+  flex: 1 1 0;
+  overflow: auto;
+  white-space: nowrap;
+  margin-left: -26px;
+}
+.record .content .item {
+  margin-right: 5px;
+}
+.record .postType {
+  position: absolute;
+  top: 25px;
+  right: 0;
+  background-color: #1976d2;
+  padding: 2px 5px;
+  font-size: 11px;
+  color: #fff;
+  border-radius: 5px;
+}
+.year .eventTime {
+  flex: 1 0 0;
+  font-size: 14px;
+}

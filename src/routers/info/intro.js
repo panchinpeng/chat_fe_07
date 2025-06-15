@@ -2,7 +2,6 @@ import {
   Box,
   FormControl,
   FormLabel,
-  Paper,
   RadioGroup,
   Radio,
   Chip,

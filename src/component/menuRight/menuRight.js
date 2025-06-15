@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Drawer,
   List,
@@ -8,15 +8,19 @@ import {
   ListItemText,
   Box,
   Divider,
+  Typography,
+  Button,
 } from "@mui/material";
+import style from "./menuRight.module.css";
 import PersonIcon from "@mui/icons-material/Person";
 import HistoryIcon from "@mui/icons-material/History";
 import LogoutIcon from "@mui/icons-material/Logout";
-import PaymentIcon from "@mui/icons-material/Payment";
 import LoginIcon from "@mui/icons-material/Login";
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { grey } from "@mui/material/colors";
@@ -29,54 +33,32 @@ const menu = [
   {
     title: "新增限動",
     page: "/member/post",
-    loginRequire: true,
     icon: <AddCircleOutlineIcon></AddCircleOutlineIcon>,
   },
   {
     title: "新增貼文",
     page: "/member/article",
-    loginRequire: true,
     icon: <PostAddIcon></PostAddIcon>,
   },
   {
     title: "資訊",
     page: "/member/info",
-    loginRequire: true,
     icon: <PersonIcon></PersonIcon>,
   },
   {
     title: "歷史",
     page: "/history",
-    loginRequire: true,
     icon: <HistoryIcon></HistoryIcon>,
-  },
-  {
-    title: "支付",
-    page: "",
-    loginRequire: true,
-    icon: <PaymentIcon></PaymentIcon>,
   },
   {
     title: "好友",
     page: "/member/addFriend",
-    loginRequire: true,
     icon: <PersonAddIcon></PersonAddIcon>,
   },
   {
     title: "登出",
     page: "/logout",
-    loginRequire: true,
     icon: <LogoutIcon></LogoutIcon>,
-  },
-  {
-    title: "登入",
-    page: "/login",
-    icon: <LoginIcon></LoginIcon>,
-  },
-  {
-    title: "註冊",
-    page: "/signup",
-    icon: <AppRegistrationIcon></AppRegistrationIcon>,
   },
 ];
 
@@ -84,6 +66,17 @@ function MenuRight({ open, setOpen }) {
   const store = useStore();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [refreshBalance, setRefreshBalance] = useState(false);
+
+  const refreshFn = async () => {
+    setRefreshBalance(true);
+    await store.user.verify();
+    setTimeout(() => {
+      setRefreshBalance(false);
+    }, 1000);
+  };
+
   return (
     <Drawer
       anchor="right"
@@ -111,6 +104,43 @@ function MenuRight({ open, setOpen }) {
           </Box>
           <Box
             sx={{
+              background: "linear-gradient(135deg, #3f51b5, #5c6bc0);",
+              borderRadius: "12px",
+              padding: 1,
+              color: "#fff",
+              mx: 2,
+              boxShadow: "0 4px 8px rgba(0,0,0,0.15)",
+              textAlign: "left",
+              position: "relative",
+            }}
+          >
+            <Typography sx={{ display: "flex", mb: 1 }}>
+              <AccountBalanceWalletIcon></AccountBalanceWalletIcon>
+              &nbsp;餘額
+            </Typography>
+            <Typography
+              sx={{ fontWeight: "bold", fontSize: 18, display: "flex" }}
+            >
+              {store.user.account.balance}
+              <RefreshIcon
+                className={refreshBalance ? style.rotate : ""}
+                sx={{ mt: "2px", ml: "6px" }}
+                onClick={refreshFn}
+              ></RefreshIcon>
+            </Typography>
+            <Button
+              variant="contained"
+              sx={{ position: "absolute", top: 10, right: 10 }}
+              onClick={() => {
+                setOpen(false);
+                navigate("/pay");
+              }}
+            >
+              充值
+            </Button>
+          </Box>
+          <Box
+            sx={{
               maxWidth: 500,
               color: grey[900],
               height: 1,
@@ -118,29 +148,27 @@ function MenuRight({ open, setOpen }) {
             key="login_menu"
           >
             <List>
-              {menu
-                .filter((item) => item.loginRequire)
-                .map((item) => (
-                  <React.Fragment key={item.title}>
-                    <ListItem disablePadding key={item.title}>
-                      <ListItemButton
-                        onClick={() => {
-                          setOpen(false);
-                          navigate(item.page);
+              {menu.map((item) => (
+                <React.Fragment key={item.title}>
+                  <ListItem disablePadding key={item.title}>
+                    <ListItemButton
+                      onClick={() => {
+                        setOpen(false);
+                        navigate(item.page);
+                      }}
+                    >
+                      <ListItemIcon>{item.icon}</ListItemIcon>
+                      <ListItemText
+                        primary={item.title}
+                        sx={{
+                          width: 200,
                         }}
-                      >
-                        <ListItemIcon>{item.icon}</ListItemIcon>
-                        <ListItemText
-                          primary={item.title}
-                          sx={{
-                            width: 200,
-                          }}
-                        />
-                      </ListItemButton>
-                    </ListItem>
-                    <Divider />
-                  </React.Fragment>
-                ))}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                  <Divider />
+                </React.Fragment>
+              ))}
             </List>
           </Box>
         </>
