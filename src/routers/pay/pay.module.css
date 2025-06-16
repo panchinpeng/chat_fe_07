@@ -24,3 +24,22 @@
   color: #fff;
   border-radius: 5px;
 }
+.header {
+  display: flex;
+  margin: 20px 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  align-items: center;
+}
+.header .title {
+  font-size: 18px;
+  font-weight: 700;
+}
+.body {
+  padding: 0 20px;
+}
+.protocolError {
+  display: flex;
+  justify-content: center;
+}

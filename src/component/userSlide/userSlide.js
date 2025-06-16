@@ -53,7 +53,7 @@ export default function UserSlide({ type, data, onClick, disableHeader }) {
                   friendName={username}
                   disabledClick={onClick ? true : false}
                 ></Avatar>
-                <div>{username}</div>
+                <div className={style.text}>{username}</div>
               </div>
             </SwiperSlide>
           ))

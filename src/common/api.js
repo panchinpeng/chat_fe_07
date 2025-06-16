@@ -426,9 +426,22 @@ const api = {
       throw Promise.reject(e);
     }
   },
-  async getPaymentInfos() {
+  async getUSDTProtocol() {
     try {
       const res = await fetch("/api/payment");
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getPaymentInfo(protocol) {
+    try {
+      const res = await fetch("/api/payment/getPaymentInfo", {
+        method: "POST",
+        body: {
+          protocol,
+        },
+      });
       return res;
     } catch (e) {
       throw Promise.reject(e);
