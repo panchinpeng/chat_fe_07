@@ -13,6 +13,8 @@ import {
   InputLabel,
   MenuItem,
   FormControl,
+  OutlinedInput,
+  InputAdornment,
 } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import HelpIcon from "@mui/icons-material/Help";
@@ -31,20 +33,22 @@ function Pay() {
   const [openDesc, setOpenDesc] = useState(false);
   const [payinfo, setPayinfo] = useState(undefined);
   const [USDTProtocols, setUSDTProtocols] = useState([]);
-  const [selectProtocol, setSelectProtocol] = useState("");
+  const [selectProtocol, setSelectProtocol] = useState(undefined);
+
+  const [amount, setAmount] = useState();
 
   useEffect(() => {
     (async () => {
       if (selectProtocol) {
-        store.loading.setLoading(true);
-        setPayinfo(undefined);
-        let paymentInfoRes = await api.getPaymentInfo(selectProtocol);
-        if (paymentInfoRes.status && paymentInfoRes.data) {
-          setPayinfo(paymentInfoRes.data);
-        } else {
-          setPayinfo("error");
-        }
-        store.loading.setLoading(false);
+        // store.loading.setLoading(true);
+        // setPayinfo(undefined);
+        // let paymentInfoRes = await api.getPaymentInfo(selectProtocol);
+        // if (paymentInfoRes.status && paymentInfoRes.data) {
+        //   setPayinfo(paymentInfoRes.data);
+        // } else {
+        //   setPayinfo("error");
+        // }
+        // store.loading.setLoading(false);
       }
     })();
   }, [selectProtocol]);
@@ -69,26 +73,58 @@ function Pay() {
             </IconButton>
           </div>
           <div className={style.body}>
-            <FormControl fullWidth sx={{ mb: 4 }}>
+            <FormControl fullWidth sx={{ mb: 3 }}>
               <InputLabel id="selectProtocol">選擇網路</InputLabel>
               <Select
                 labelId="selectProtocol"
                 label="選擇網路"
-                value={selectProtocol}
+                value={selectProtocol?.currency || ""}
                 onChange={(e) => {
-                  setSelectProtocol(e.target.value);
+                  const selectProtocol = USDTProtocols.find(
+                    (protocol) => protocol.currency === e.target.value
+                  );
+                  setSelectProtocol(selectProtocol);
                 }}
               >
                 <MenuItem disabled value="">
                   <em>請選擇網路</em>
                 </MenuItem>
                 {USDTProtocols.map((p) => (
-                  <MenuItem key={p} value={p}>
-                    {p.toUpperCase()}
+                  <MenuItem key={p.currency} value={p.currency}>
+                    {p.currency.toUpperCase()}
                   </MenuItem>
                 ))}
               </Select>
             </FormControl>
+            {selectProtocol && (
+              <>
+                <div>輸入充值金額</div>
+                <FormControl fullWidth sx={{ mb: 1 }}>
+                  <OutlinedInput
+                    id="outlined-adornment-amount"
+                    placeholder="輸入充值金額"
+                    value={amount}
+                    onChange={(e) =>
+                      setAmount(e.target.value.replace(/\D/g, ""))
+                    }
+                    endAdornment={
+                      <InputAdornment position="end">USDT</InputAdornment>
+                    }
+                  />
+                </FormControl>
+                <div>
+                  最低付款金額:{" "}
+                  <span className={style.minmaxAmount}>
+                    {Math.round(selectProtocol.min_amount)} USDT
+                  </span>{" "}
+                  最高付款金額:{" "}
+                  <span className={style.minmaxAmount}>
+                    {Math.round(selectProtocol.max_amount)} USDT
+                  </span>
+                </div>
+              </>
+            )}
+
             {payinfo && (
               <>
                 {payinfo === "error" ? (
