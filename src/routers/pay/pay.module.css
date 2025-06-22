@@ -38,11 +38,49 @@
 }
 .body {
   padding: 0 20px;
+  margin-bottom: 20px;
 }
 .protocolError {
   display: flex;
   justify-content: center;
+  margin: 32px;
+  color: #dc4040;
 }
 .minmaxAmount {
   color: #dc4040;
+}
+.paymentDetail {
+  margin-top: 32px;
+  margin: 32px 5px 0 5px;
+  border: 1px solid #cccccc;
+  padding: 16px;
+  border-radius: 5px;
+}
+.payInfo.mark {
+  position: relative;
+  overflow: hidden;
+  filter: blur(2px);
+}
+.payInfo.mark::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  background-color: #424242ed;
+}
+.cancelWrap {
+  position: absolute;
+  z-index: 22;
+  top: 137px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.cancelWrap.noSelectProtocols {
+  position: relative;
+  top: 20px;
+  text-align: center;
+  width: 100;
 }

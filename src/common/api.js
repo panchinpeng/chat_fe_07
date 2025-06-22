@@ -434,9 +434,23 @@ const api = {
       throw Promise.reject(e);
     }
   },
-  async getPaymentInfo(protocol) {
+  async getPaymentInfo(protocol, amount) {
     try {
       const res = await fetch("/api/payment/getPaymentInfo", {
+        method: "POST",
+        body: {
+          protocol,
+          amount,
+        },
+      });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async cancelDeposit(protocol) {
+    try {
+      const res = await fetch("/api/payment/cancel", {
         method: "POST",
         body: {
           protocol,
