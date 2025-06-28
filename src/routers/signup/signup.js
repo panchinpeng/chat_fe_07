@@ -41,7 +41,6 @@ function Signup() {
       scaleMobile: 1.0,
       color: "#1685c8",
     });
-    console.log("aaa");
     setClearCacheCode(Date.now());
 
     return () => {

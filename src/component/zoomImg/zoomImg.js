@@ -1,28 +1,33 @@
 import React, { useEffect } from "react";
 import PinchZoom from "pinch-zoom-js";
 import style from "./zoomImg.module.css";
-export default function ZoomImg({ url, closeZoom }) {
+import { observer } from "mobx-react-lite";
+import { useStore } from "./../../store/index";
+const ZoomImg = () => {
+  const store = useStore();
   useEffect(() => {
     let pz;
-    if (url) {
-      pz = new PinchZoom(document.getElementById(url));
+    if (store.zoomImg.url) {
+      pz = new PinchZoom(document.getElementById("zoomImg"));
     }
     return () => {
       pz && pz.destroy();
       pz = null;
     };
-  }, [url]);
-  if (!url) {
+  }, [store.zoomImg.url]);
+  if (!store.zoomImg.url) {
     return null;
   }
   return (
-    <div className={style.zoomWrap} onClick={closeZoom}>
+    <div className={style.zoomWrap} onClick={() => store.zoomImg.close()}>
       <img
-        src={url}
-        id={url}
+        src={store.zoomImg?.url}
+        id="zoomImg"
         onClick={(e) => e.stopPropagation()}
         alt="zoom"
       ></img>
     </div>
   );
-}
+};
+
+export default observer(ZoomImg);

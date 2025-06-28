@@ -5,11 +5,8 @@ import style from "./index.module.css";
 
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../store";
-
 import Trends from "../../component/trends/trends";
-import Loading from "../../component/loading/loading";
 import Portal from "./../portal/portal";
-
 function Index() {
   const store = useStore();
   const location = useLocation();
@@ -28,7 +25,6 @@ function Index() {
         )}
       </Box>
       <Trends></Trends>
-      <Loading></Loading>
     </>
   );
 }

@@ -1,3 +1,4 @@
+// Online.jsx
 import { Box, TextareaAutosize } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
@@ -15,6 +16,7 @@ import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
 import useIntersectionObserver from "./../../hooks/useIntersectionObserver";
 import MessageUploadFile from "../../component/messageUploadFile/messageUploadFile";
+import VisibilityCheck from "./visibilityCheck"; // 加入可視區塊判斷元件
 
 function Online() {
   const store = useStore();
@@ -42,6 +44,7 @@ function Online() {
       store.user.changeUnread(totalUnreadCount.unread);
     });
   }, [friend]);
+
   useEffect(() => {
     if (!socket.current) {
       socket.current = io(process.env.REACT_APP_SOCKET_DOMAIN, {
@@ -49,20 +52,16 @@ function Online() {
         transports: ["websocket"],
       });
       socket.current.on("connect", () => {
-        console.log("connect ....");
         setNetworkError((networkError) => {
           (async () => {
             if (networkError) {
               const res = await api.getMessageHistory(friend);
               if (res && res.status) {
-                setTimeout(() => {
-                  updateUnreadData();
-                }, 2000);
+                setTimeout(() => updateUnreadData(), 2000);
                 setHistory(res.data);
               }
             }
           })();
-
           return false;
         });
       });
@@ -73,7 +72,6 @@ function Online() {
             (item) => item === message.reply_id
           );
           if (historyMsgObj <= -1) {
-            // 對方已經滾到上方，本地尚未有資料
             const replyMessage = await api.getSingleHistory(
               friend,
               message.reply_id
@@ -129,41 +127,25 @@ function Online() {
           return cpHistory;
         });
       });
-      socket.current.on("logout", () => {
-        navigate("/logout");
-      });
-
+      socket.current.on("logout", () => navigate("/logout"));
       socket.current.on("disconnect", (reason) => {
-        console.log("disconnect");
-        if (reason.indexOf("client disconnect") === -1) {
-          if (socket.current.active) {
-            setNetworkError(1);
-          } else {
-            setNetworkError(2);
-          }
+        if (!reason.includes("client disconnect")) {
+          setNetworkError(socket.current.active ? 1 : 2);
         }
       });
-
       socket.current.on("connect_error", (error) => {
-        if (error.message === "login fail") {
-          navigate("/logout");
-        }
-        console.log("connect_error", error, error.message);
+        if (error.message === "login fail") navigate("/logout");
+        console.log("connect_error", error.message);
       });
-
       socket.current.on("reconnect_failed", () => {
         console.log("reconnect_failed");
       });
     }
-
     (async () => {
-      // 取得歷史訊息
       if (friend) {
         const res = await api.getMessageHistory(friend);
         if (res && res.status) {
-          setTimeout(() => {
-            updateUnreadData();
-          }, 2000);
+          setTimeout(() => updateUnreadData(), 2000);
           setHistory(res.data);
           setTimeout(() => {
             startObserve(loadMoreDom.current);
@@ -171,38 +153,43 @@ function Online() {
         }
       }
     })();
-    return () => {
-      socket.current.disconnect();
-    };
+    return () => socket.current.disconnect();
   }, []);
 
   useEffect(() => {
     (async () => {
       if (isIntersecting) {
+        store.loading.setLoading(true);
         const res = await api.getMessageHistory(
           friend,
           messageIds.current[messageIds.current.length - 1]
         );
         if (res && res.data.length) {
           setHistory((h) => [...h, ...res.data]);
+          setTimeout(() => {
+            // 等待訊息loading完成，避免載入出現空白
+            store.loading.setLoading(false);
+          }, 1000);
+        } else {
+          store.loading.setLoading(false);
         }
       }
     })();
   }, [isIntersecting]);
+
   useEffect(() => {
     messageIds.current = history.map((item) => item.id);
   }, [history]);
 
-  const handleInput = (e) => {
-    setMessage(e.target.value);
-  };
+  const handleInput = (e) => setMessage(e.target.value);
+
   const sendReaction = (unified, id, room) => {
     if (unified) {
       socket.current.emit("reaction", unified, room, id, (res) => {
         if (res.status) {
           setHistory((history) => {
             const cpHistory = [...history];
-            const targetMessageIndex = history.findIndex(
+            const targetMessageIndex = cpHistory.findIndex(
               (item) => item.id === id
             );
             if (targetMessageIndex > -1) {
@@ -216,31 +203,31 @@ function Online() {
                 };
               }
             }
-
             return cpHistory;
           });
         }
       });
     }
   };
+
   const deleteMessage = (id, room) => {
     if (id && room) {
       socket.current.emit("delMessage", room, id, (res) => {
         if (res.status) {
           setHistory((history) => {
             const cpHistory = [...history];
-            const targetMessageIndex = history.findIndex(
+            const targetMessageIndex = cpHistory.findIndex(
               (item) => item.id === id
             );
-            if (targetMessageIndex > -1) {
+            if (targetMessageIndex > -1)
               cpHistory[targetMessageIndex].is_del = 1;
-            }
             return cpHistory;
           });
         }
       });
     }
   };
+
   const sendMessage = () => {
     if (message) {
       socket.current.emit("message", message, friend, reply, (res) => {
@@ -248,7 +235,7 @@ function Online() {
           setHistory((history) => [
             {
               ...res.data,
-              reply_id: reply ? reply : null,
+              reply_id: reply || null,
               reply_message: reply
                 ? history.find((item) => item.id === reply).message
                 : "",
@@ -264,6 +251,7 @@ function Online() {
       });
     }
   };
+
   const handleImage = (e) => {
     if (e.target.files.length === 1) {
       const file = e.target.files[0];
@@ -273,24 +261,20 @@ function Online() {
         return;
       }
       const reader = new FileReader();
-      reader.onload = function (event) {
-        setPreviewImage(event.target.result);
-      };
+      reader.onload = (event) => setPreviewImage(event.target.result);
       reader.readAsDataURL(file);
     }
   };
+
   const submitPicMessage = () => {
     if (uploadImageDom.current.files.length === 1) {
       const file = uploadImageDom.current.files[0];
       const reader = new FileReader();
-      reader.onload = function (event) {
+      reader.onload = (event) => {
         const arrayBuffer = event.target.result;
         socket.current.emit(
           "sendImage",
-          {
-            image: new Uint8Array(arrayBuffer),
-            type: file.type,
-          },
+          { image: new Uint8Array(arrayBuffer), type: file.type },
           friend,
           (res) => {
             setFileKey((k) => k + 1);
@@ -319,37 +303,39 @@ function Online() {
           </div>
         )}
 
-        {history.map((message) => {
-          if (message.is_del === 1) {
-            return <RecycleMessage key={message.id} />;
-          } else {
-            return (
+        {history.map((message) => (
+          <VisibilityCheck key={message.id}>
+            {message.is_del === 1 ? (
+              <RecycleMessage />
+            ) : (
               <Message
                 message={message}
-                key={message.id}
                 setReply={setReply}
                 sendReaction={sendReaction}
                 deleteMessage={deleteMessage}
-              ></Message>
-            );
-          }
-        })}
+              />
+            )}
+          </VisibilityCheck>
+        ))}
+
         <div ref={loadMoreDom} id="loadMoreDom"></div>
       </div>
+
       <div className={style.inputMessage}>
         {reply && (
           <div className={style.replyWrap}>
-            <ReplyAllSharpIcon className={style.replyMark}></ReplyAllSharpIcon>
+            <ReplyAllSharpIcon className={style.replyMark} />
             <div className={style.replyContent}>
               {renderReplyMessage()}
               <HighlightOffSharpIcon
                 color="primary"
                 className={style.close}
                 onClick={() => setReply(null)}
-              ></HighlightOffSharpIcon>
+              />
             </div>
           </div>
         )}
+
         <div className={style.userInputWrap}>
           <label htmlFor="addImage" className={style.selectPic}>
             <ImageIcon
@@ -359,7 +345,7 @@ function Online() {
                 mr: 0.5,
                 color: "#575757",
               }}
-            ></ImageIcon>
+            />
           </label>
           <input
             type="file"
@@ -376,7 +362,7 @@ function Online() {
             onChange={handleInput}
             value={message}
             placeholder="輸入訊息"
-          ></TextareaAutosize>
+          />
           <SendIcon
             sx={{
               fontSize: "30px",
@@ -385,9 +371,10 @@ function Online() {
               color: "#575757",
             }}
             onClick={sendMessage}
-          ></SendIcon>
+          />
         </div>
       </div>
+
       {previewImage && (
         <MessageUploadFile
           image={previewImage}
@@ -396,9 +383,10 @@ function Online() {
             setFileKey((k) => k + 1);
           }}
           submitFile={submitPicMessage}
-        ></MessageUploadFile>
+        />
       )}
     </Box>
   );
 }
+
 export default observer(Online);

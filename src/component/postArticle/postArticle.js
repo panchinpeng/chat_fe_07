@@ -17,7 +17,6 @@ import Thumb from "../thumb/thumb";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../store";
 import Commits from "../commits/commits";
-import ZoomImg from "../zoomImg/zoomImg";
 import PostArticleMore from "../postArticleMore/postArticleMore";
 
 function PostArticle({ article, renderFn, from }) {
@@ -27,7 +26,6 @@ function PostArticle({ article, renderFn, from }) {
     article ? new Array(article.img_names.length).fill(0) : []
   );
   const [showCommits, setShowCommits] = useState(false);
-  const [activeImg, setActiveImg] = useState("");
 
   const renderTime = (time) => {
     const d = new Date(Date.parse(time));
@@ -134,7 +132,7 @@ function PostArticle({ article, renderFn, from }) {
                       key={img}
                       src={img}
                       alt="article"
-                      onClick={() => setActiveImg(img)}
+                      onClick={() => store.zoomImg.watch(img)}
                     ></img>
                   )
                 )}
@@ -189,7 +187,6 @@ function PostArticle({ article, renderFn, from }) {
           </div>
         </CardContent>
       </Card>
-      <ZoomImg url={activeImg} closeZoom={() => setActiveImg("")}></ZoomImg>
       <PostArticleMore
         articleId={article.id}
         showMore={showMore}

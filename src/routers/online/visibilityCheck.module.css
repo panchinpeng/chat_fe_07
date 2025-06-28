@@ -1,0 +1,21 @@
+.hideLauout {
+  background: "rgba(230,230,230,0.3)";
+  border-radius: "8px";
+  margin: "4px 0";
+  animation: "pulse 1.5s infinite";
+}
+.messageWrapper > div {
+  will-change: opacity;
+}
+
+@keyframes pulse {
+  0% {
+    background-color: rgba(230, 230, 230, 0.3);
+  }
+  50% {
+    background-color: rgba(200, 200, 200, 0.4);
+  }
+  100% {
+    background-color: rgba(230, 230, 230, 0.3);
+  }
+}

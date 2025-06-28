@@ -13,11 +13,9 @@ import { FacebookCounter } from "@charkour/react-reactions";
 import { useState, lazy } from "react";
 
 const PostArticle = lazy(() => import("./../postArticle/postArticle"));
-const ZoomImg = lazy(() => import("./../zoomImg/zoomImg"));
 function Message({ message, setReply, sendReaction, deleteMessage }) {
   const [showMore, setShowMore] = useState(false);
   const [showEmoji, setShowEmoji] = useState(false);
-  const [zoomImgUrl, setZoomImgUrl] = useState("");
   const store = useStore();
   const my = store.user.account.username === message.from_username;
   const time = new Date(Date.parse(message.send_time));
@@ -42,9 +40,10 @@ function Message({ message, setReply, sendReaction, deleteMessage }) {
         <div>
           <img
             width="100%"
+            alt="message"
             src={`${process.env.REACT_APP_API_DOMAIN}/api/message/getImage?path=${message.path}`}
             onClick={() =>
-              setZoomImgUrl(
+              store.zoomImg.watch(
                 `${process.env.REACT_APP_API_DOMAIN}/api/message/getImage?path=${message.path}`
               )
             }
@@ -170,7 +169,6 @@ function Message({ message, setReply, sendReaction, deleteMessage }) {
         </div>
       </div>
       <div className={style.fakeDiv}></div>
-      <ZoomImg url={zoomImgUrl} closeZoom={() => setZoomImgUrl("")}></ZoomImg>
     </div>
   );
 }
