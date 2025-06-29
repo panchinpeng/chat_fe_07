@@ -17,33 +17,24 @@ function Portal() {
   const nowPage = useRef(1);
   const totalPage = useRef(null);
   const maxArticleId = useRef(0);
-  const [masonry, setMasonry] = useState(null);
+  const masonry = useRef();
 
   const { startObserve, isIntersecting } = useIntersectionObserver();
 
   useEffect(() => {
     if (articles.length) {
       maxArticleId.current = articles[articles.length - 1].id;
-      setMasonry(
-        new Masonry(
-          document.querySelector(".waterFall", {
-            columnWidth: 300,
-            itemSelector: ".waterFallItem",
-            gutter: 10,
-          })
-        )
+      masonry.current = new Masonry(
+        document.querySelector(".waterFall", {
+          columnWidth: 300,
+          itemSelector: ".waterFallItem",
+          gutter: 10,
+        })
       );
     }
   }, [articles]);
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (masonry) {
-        masonry.layout();
-      }
-    }, 200);
-  }, [masonry]);
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     (async () => {
       store.trends.getAllFriendTrends();
@@ -58,7 +49,7 @@ function Portal() {
       }
     })();
     return () => {
-      masonry && masonry.destroy();
+      masonry.current && masonry.current.destroy();
     };
   }, []);
 
@@ -102,7 +93,7 @@ function Portal() {
           >
             <PostArticle
               article={article}
-              renderFn={() => masonry && masonry.layout()}
+              renderFn={() => masonry.current && masonry.current.layout()}
             ></PostArticle>
           </div>
         ))}

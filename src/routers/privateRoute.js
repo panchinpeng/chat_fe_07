@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../store";
 import Index from "./index";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import Header from "./../component/header/header";
 
 function PrivateRoutes({ forceToLogin }) {
@@ -11,15 +11,19 @@ function PrivateRoutes({ forceToLogin }) {
   const intervalID = useRef();
   const store = useStore();
 
-  useEffect(() => {
-    const checkLogin = async (callback) => {
+  const checkLogin = useCallback(
+    async (callback) => {
       const res = await store.user.verify();
       if (res.status) {
         callback instanceof Function && callback();
       } else {
         forceToLogin && navigate("/logout");
       }
-    };
+    },
+    [store.user, forceToLogin, navigate]
+  );
+
+  useEffect(() => {
     if (location.pathname === "/logout") {
       return;
     }
@@ -33,7 +37,7 @@ function PrivateRoutes({ forceToLogin }) {
     return () => {
       clearInterval(intervalID.current);
     };
-  }, [location]);
+  }, [location, checkLogin, store.trends]);
   if (forceToLogin) {
     return store.user.login ? (
       <>

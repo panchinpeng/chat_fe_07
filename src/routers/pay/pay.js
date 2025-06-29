@@ -86,7 +86,7 @@ function Pay() {
       }
       store.loading.setLoading(false);
     })();
-  }, []);
+  }, [store.loading]);
   return (
     <Box sx={{ width: 1 }}>
       {payinfo === "error" && (
