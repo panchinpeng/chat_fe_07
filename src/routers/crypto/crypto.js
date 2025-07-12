@@ -25,13 +25,13 @@ import { QRCodeSVG } from "qrcode.react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
 import { observer } from "mobx-react-lite";
-import { useStore } from "./../../store";
+import { useStore } from "../../store";
 
 import { useNavigate } from "react-router-dom";
 
-import style from "./pay.module.css";
+import style from "./crypto.module.css";
 
-function Pay() {
+function Crypto() {
   const store = useStore();
   const navigate = useNavigate();
   const [openDesc, setOpenDesc] = useState(false);
@@ -110,7 +110,7 @@ function Pay() {
         <>
           <div className={`${style.payInfo} ${payinfo ? style.mark : ""}`}>
             <div className={style.header}>
-              <div className={style.title}>加密支付</div>
+              <div className={style.title}>加密貨幣支付</div>
               <IconButton onClick={() => setOpenDesc(true)}>
                 <HelpIcon></HelpIcon>
               </IconButton>
@@ -317,4 +317,4 @@ function USDTDesc({ open, onClose }) {
     </Dialog>
   );
 }
-export default observer(Pay);
+export default observer(Crypto);

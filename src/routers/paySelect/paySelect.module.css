@@ -1,0 +1,33 @@
+.paySelect {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.payType {
+  border: 1px solid #e8e4e4;
+  border-radius: 10px;
+  width: 300px;
+  padding: 5px;
+  margin: 20px 0;
+}
+.horizon {
+  display: flex;
+  justify-content: center;
+  font-size: 17px;
+}
+.payTypeDesc {
+  color: #615d5d;
+  text-align: center;
+}
+.icon {
+  width: 20px;
+  margin-right: 16px;
+}
+.title {
+  font-size: 20px;
+}

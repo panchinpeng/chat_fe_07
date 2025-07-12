@@ -461,5 +461,17 @@ const api = {
       throw Promise.reject(e);
     }
   },
+  async verifyPayPay(orderID) {
+    try {
+      const res = await fetch("/api/payment/verifyCode", {
+        method: "POST",
+        body: {
+          orderID,
+        },
+      });
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
 };
 export default api;
