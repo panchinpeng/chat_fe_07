@@ -428,7 +428,7 @@ const api = {
   },
   async getUSDTProtocol() {
     try {
-      const res = await fetch("/api/payment");
+      const res = await fetch("/api/payment/crypto");
       return res;
     } catch (e) {
       throw Promise.reject(e);
@@ -436,7 +436,7 @@ const api = {
   },
   async getPaymentInfo(protocol, amount) {
     try {
-      const res = await fetch("/api/payment/getPaymentInfo", {
+      const res = await fetch("/api/payment/crypto/getPaymentInfo", {
         method: "POST",
         body: {
           protocol,
@@ -450,7 +450,7 @@ const api = {
   },
   async cancelDeposit(protocol) {
     try {
-      const res = await fetch("/api/payment/cancel", {
+      const res = await fetch("/api/payment/crypto/cancel", {
         method: "POST",
         body: {
           protocol,
@@ -461,14 +461,10 @@ const api = {
       throw Promise.reject(e);
     }
   },
-  async verifyPayPay(orderID) {
+  async getCreditOrderID() {
     try {
-      const res = await fetch("/api/payment/verifyCode", {
-        method: "POST",
-        body: {
-          orderID,
-        },
-      });
+      const res = await fetch("/api/payment/createCredit");
+      return res;
     } catch (e) {
       throw Promise.reject(e);
     }
