@@ -1,6 +1,6 @@
 .box {
   flex: 1;
-  background: url(./../../../public/bg.png);
+  background-color: #eff0ef;
 }
 .sendWrap {
   text-align: center;

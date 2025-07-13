@@ -1,8 +1,8 @@
 .textarea {
   padding: 10px;
   border-radius: 10px;
-  border-color: #503c3c;
-  outline-color: #503c3c;
+  border-color: #d1d1d1;
+  outline-color: #d1d1d1;
 }
 
 .memo {
@@ -24,4 +24,6 @@
 .select {
   padding: 5px 18px 5px 5px;
   border-radius: 5px;
+  border-color: #d1d1d1;
+  outline-color: #d1d1d1;
 }
