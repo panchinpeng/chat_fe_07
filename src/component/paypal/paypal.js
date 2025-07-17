@@ -31,6 +31,7 @@ function PayPal() {
               {
                 amount: {
                   value: "10.00", // 金額
+                  currency_code: "USD",
                 },
                 custom_id: orderID,
               },
