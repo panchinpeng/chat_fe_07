@@ -18,6 +18,7 @@ const FriendMain = React.lazy(() => import("./routers/friendMain/friendMain"));
 const Crypto = React.lazy(() => import("./routers/crypto/crypto"));
 const Credit = React.lazy(() => import("./routers/credit/credit"));
 const PaySelect = React.lazy(() => import("./routers/paySelect/paySelect"));
+const ForgetPassword = React.lazy(() => import("./routers/forgetPassword/forgetPassword"))
 const router = createBrowserRouter([
   {
     path: "/member",
@@ -72,6 +73,10 @@ const router = createBrowserRouter([
   {
     path: "/error",
     element: <Error></Error>,
+  },
+  {
+    path: "/forgetPassword",
+    element: <ForgetPassword></ForgetPassword>
   },
   {
     path: "/",
