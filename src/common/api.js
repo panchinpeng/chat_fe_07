@@ -469,5 +469,21 @@ const api = {
       throw Promise.reject(e);
     }
   },
+  async resetPassowrd(username, newpassword, birthday, captcha) {
+    try {
+      const res = await fetch("/api/user/forgetPasswod", {
+        method: "POST",
+        body: {
+          username,
+          newpassword,
+          birthday,
+          captcha,
+        },
+      });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
 };
 export default api;
