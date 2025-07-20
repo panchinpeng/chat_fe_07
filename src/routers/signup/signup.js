@@ -108,6 +108,7 @@ function Signup() {
               onChange={(event) => setBirthday(event.format("YYYY-MM-DD"))}
             />
           </LocalizationProvider>
+          <div className={style.right}>未來若忘記密碼時將用於身份驗證喔！</div>
           <img
             src={`${process.env.REACT_APP_API_DOMAIN}/captcha?cache=${clearCacheCode}`}
             className={style.captcha}
@@ -123,16 +124,19 @@ function Signup() {
             inputProps={{ maxLength: 4 }}
             sx={{ mt: 2 }}
           />
-          <FormControlLabel
-            required
-            control={
-              <Checkbox
-                onChange={(event) => setBetaCheck(event.target.checked)}
-              />
-            }
-            label="該網站為測試版本"
-            sx={{ mr: "auto" }}
-          />
+          <div>
+            <FormControlLabel
+              required
+              control={
+                <Checkbox
+                  onChange={(event) => setBetaCheck(event.target.checked)}
+                />
+              }
+              label="該網站為測試版本"
+              sx={{ mr: "auto" }}
+            />
+          </div>
+
           <NavLink to="/login" className={style.extraAction}>
             已經有帳號?
           </NavLink>

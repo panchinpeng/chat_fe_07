@@ -7,12 +7,22 @@ const ZoomImg = () => {
   const store = useStore();
   useEffect(() => {
     let pz;
+    const handlePopstate = () => {
+      store.zoomImg.close();
+    };
+
     if (store.zoomImg.url) {
+      // 模擬 push 一個 state，讓返回鍵不會直接離開當前頁面
+      if (!window.history.state || !window.history.state.zoomImg) {
+        window.history.pushState({ zoomImg: true }, "");
+      }
       pz = new PinchZoom(document.getElementById("zoomImg"));
+      window.addEventListener("popstate", handlePopstate);
     }
     return () => {
       pz && pz.destroy();
       pz = null;
+      window.removeEventListener("popstate", handlePopstate);
     };
   }, [store.zoomImg.url]);
   if (!store.zoomImg.url) {

@@ -1,3 +1,4 @@
+import React from "react";
 import { IconButton } from "@mui/material";
 import { useStore } from "./../../store";
 import { observer } from "mobx-react-lite";
@@ -11,6 +12,8 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import Emoji from "../emoji/emoji";
 import { FacebookCounter } from "@charkour/react-reactions";
 import { useState, lazy } from "react";
+
+const SoundPlay = React.lazy(() => import("./soundPlay"));
 
 const PostArticle = lazy(() => import("./../postArticle/postArticle"));
 function Message({ message, setReply, sendReaction, deleteMessage }) {
@@ -50,6 +53,8 @@ function Message({ message, setReply, sendReaction, deleteMessage }) {
           ></img>
         </div>
       );
+    } else if (typeof message === "object" && message.type === "audio") {
+      return <SoundPlay message={message}></SoundPlay>;
     }
 
     try {

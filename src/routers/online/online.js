@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import useIntersectionObserver from "./../../hooks/useIntersectionObserver";
 import MessageUploadFile from "../../component/messageUploadFile/messageUploadFile";
 import VisibilityCheck from "./visibilityCheck"; // 加入可視區塊判斷元件
+import Recording from "./recording";
 
 function Online() {
   const store = useStore();
@@ -34,6 +35,7 @@ function Online() {
   const [reply, setReply] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const [fileKey, setFileKey] = useState(1);
+
   const renderReplyMessage = () => {
     const msgObj = history.find((msg) => msg.id === reply);
     return msgObj.message;
@@ -363,15 +365,19 @@ function Online() {
             value={message}
             placeholder="輸入訊息"
           />
-          <SendIcon
-            sx={{
-              fontSize: "30px",
-              cursor: "pointer",
-              mr: 0.5,
-              color: "#575757",
-            }}
-            onClick={sendMessage}
-          />
+          {message ? (
+            <SendIcon
+              sx={{
+                fontSize: "30px",
+                cursor: "pointer",
+                mr: 0.5,
+                color: "#575757",
+              }}
+              onClick={sendMessage}
+            />
+          ) : (
+            <Recording friend={friend} />
+          )}
         </div>
       </div>
 

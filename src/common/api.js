@@ -485,5 +485,16 @@ const api = {
       throw Promise.reject(e);
     }
   },
+  async uploadAudio(fd) {
+    try {
+      const res = fetch("/api/message/uploadAudio", {
+        method: "POST",
+        headers: {},
+        body: fd,
+      });
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
 };
 export default api;
