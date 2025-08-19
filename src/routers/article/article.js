@@ -272,7 +272,7 @@ function Article() {
       <Box sx={{ marginTop: "20px" }}>
         <List component="nav" sx={{ width: "100%" }}>
           {edits.map((edit) => (
-            <>
+            <React.Fragment key={edit.name}>
               <ListItem
                 key={edit.name}
                 sx={{ p: 0 }}
@@ -305,7 +305,6 @@ function Article() {
                           edit.name === "只允許好友看見" &&
                           store.user.account.public * 1 === 0
                         }
-                        defaultChecked
                         checked={renderSwitchChecked(edit.name)}
                         onChange={() => switchChange(edit.name)}
                         inputProps={{
@@ -333,7 +332,7 @@ function Article() {
                   ></UserSlide>
                 </div>
               )}
-            </>
+            </React.Fragment>
           ))}
         </List>
       </Box>

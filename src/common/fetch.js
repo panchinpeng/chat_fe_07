@@ -2,6 +2,7 @@ export default async function (url, settings) {
   const res = settings
     ? await fetch(`${process.env.REACT_APP_API_DOMAIN}${url}`, {
         credentials: "include",
+        withCredentials: true,
         headers: settings.headers
           ? settings.headers
           : {

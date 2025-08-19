@@ -173,15 +173,22 @@ function Intro() {
   const { person, setPerson } = useContext(InfoContext);
   return (
     <Box>
-      <h3>個人介紹</h3>
       <Box sx={{ textAlign: "center" }} className={style.field}>
         <CuAvatar from="my"></CuAvatar>
 
-        <Box sx={{ mt: 4, textAlign: "left" }}>
+        <Box
+          sx={{
+            mt: 4,
+            textAlign: "left",
+            backgroundColor: "#fff",
+            p: 2,
+            borderRadius: "5px",
+          }}
+        >
           <FormControl sx={{ width: "100%" }}>
             <h3 className={style.title}>關於自己</h3>
             <textarea
-              rows={3}
+              rows={10}
               className={style.textarea}
               placeholder="更有趣的簡介，可以增加配對哦😄"
               value={person.intro}
@@ -195,7 +202,16 @@ function Intro() {
             ></textarea>
           </FormControl>
         </Box>
-        <Box sx={{ textAlign: "left" }} className={style.field}>
+        <Box
+          sx={{
+            textAlign: "left",
+            backgroundColor: "#fff",
+            p: 2,
+            borderRadius: "5px",
+            mt: 3,
+          }}
+          className={style.field}
+        >
           <FormControl sx={{ width: "100%" }}>
             <h3 className={style.title}>是否開放被搜尋</h3>
             <FormLabel>
@@ -223,7 +239,16 @@ function Intro() {
           </FormControl>
         </Box>
       </Box>
-      <Box sx={{ textAlign: "left" }} className={style.field}>
+      <Box
+        sx={{
+          textAlign: "left",
+          backgroundColor: "#fff",
+          p: 2,
+          borderRadius: "5px",
+          mt: 3,
+        }}
+        className={style.field}
+      >
         <FormControl sx={{ width: "100%" }}>
           <h3 className={style.title}>職業</h3>
           <FormLabel>
@@ -283,7 +308,16 @@ function Intro() {
           </select>
         </FormControl>
       </Box>
-      <Box sx={{ textAlign: "left" }} className={style.field}>
+      <Box
+        sx={{
+          textAlign: "left",
+          backgroundColor: "#fff",
+          p: 2,
+          borderRadius: "5px",
+          mt: 3,
+        }}
+        className={style.field}
+      >
         <FormControl sx={{ width: "100%" }}>
           <h3 className={style.title}>興趣</h3>
           <FormLabel>

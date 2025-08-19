@@ -1,3 +1,4 @@
+import React from "react";
 import { IconButton } from "@mui/material";
 import { useStore } from "./../../store";
 import { observer } from "mobx-react-lite";
@@ -12,12 +13,12 @@ import Emoji from "../emoji/emoji";
 import { FacebookCounter } from "@charkour/react-reactions";
 import { useState, lazy } from "react";
 
+const SoundPlay = React.lazy(() => import("./soundPlay"));
+
 const PostArticle = lazy(() => import("./../postArticle/postArticle"));
-const ZoomImg = lazy(() => import("./../zoomImg/zoomImg"));
 function Message({ message, setReply, sendReaction, deleteMessage }) {
   const [showMore, setShowMore] = useState(false);
   const [showEmoji, setShowEmoji] = useState(false);
-  const [zoomImgUrl, setZoomImgUrl] = useState("");
   const store = useStore();
   const my = store.user.account.username === message.from_username;
   const time = new Date(Date.parse(message.send_time));
@@ -42,15 +43,18 @@ function Message({ message, setReply, sendReaction, deleteMessage }) {
         <div>
           <img
             width="100%"
+            alt="message"
             src={`${process.env.REACT_APP_API_DOMAIN}/api/message/getImage?path=${message.path}`}
             onClick={() =>
-              setZoomImgUrl(
+              store.zoomImg.watch(
                 `${process.env.REACT_APP_API_DOMAIN}/api/message/getImage?path=${message.path}`
               )
             }
           ></img>
         </div>
       );
+    } else if (typeof message === "object" && message.type === "audio") {
+      return <SoundPlay message={message}></SoundPlay>;
     }
 
     try {
@@ -170,7 +174,6 @@ function Message({ message, setReply, sendReaction, deleteMessage }) {
         </div>
       </div>
       <div className={style.fakeDiv}></div>
-      <ZoomImg url={zoomImgUrl} closeZoom={() => setZoomImgUrl("")}></ZoomImg>
     </div>
   );
 }

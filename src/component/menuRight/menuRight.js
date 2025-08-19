@@ -45,11 +45,11 @@ const menu = [
     page: "/member/info",
     icon: <PersonIcon></PersonIcon>,
   },
-  {
-    title: "歷史",
-    page: "/history",
-    icon: <HistoryIcon></HistoryIcon>,
-  },
+  // {
+  //   title: "歷史",
+  //   page: "/history",
+  //   icon: <HistoryIcon></HistoryIcon>,
+  // },
   {
     title: "好友",
     page: "/member/addFriend",

@@ -1,0 +1,43 @@
+.audioWrap {
+    display: flex;
+    align-items: center;
+}
+
+.voiceWave {
+    width: calc(100% - 30px);
+    height: 40px;
+    overflow: hidden;
+    background: white;
+    padding: 10px 15px;
+    border-radius: 16px;
+}
+
+.voiceWave span {
+    display: inline-block;
+    width: 4px;
+    margin: 0 1px;
+    background-color: #4caf50;
+    border-radius: 5px;
+    height: 100%;
+    transform-origin: bottom center;
+    animation: none;
+}
+
+.voiceWave.play span {
+    animation: bounce 1s infinite ease-in-out;
+}
+
+@keyframes bounce {
+    0%,
+    100% {
+        transform: scaleY(0.4);
+    }
+    50% {
+        transform: scaleY(1);
+    }
+}
+
+.playBtn {
+    cursor: pointer;
+    margin-left: 8px;
+}

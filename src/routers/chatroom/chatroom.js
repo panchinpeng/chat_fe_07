@@ -16,6 +16,7 @@ import api from "../../common/api";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../store";
 import TrendOverride from "../../component/trendOverview/trendOverview";
+import VerifiedIcon from "@mui/icons-material/Verified";
 function Chatroom() {
   const store = useStore();
   const [friend, setFriend] = useState([]);
@@ -57,13 +58,26 @@ function Chatroom() {
                   <ListItemText
                     sx={{ ml: 1 }}
                     primary={
-                      <span className={style.chatName}>{friendUsername}</span>
+                      <>
+                        <span className={style.chatName}>{friendUsername}</span>
+                        {item.isAI && (
+                          <VerifiedIcon
+                            sx={{
+                              fontSize: "12px",
+                              color: "blue",
+                            }}
+                          ></VerifiedIcon>
+                        )}
+                      </>
                     }
                     className={style.lastMessage}
                     secondary={
                       <>
                         <Typography
-                          sx={{ display: "inline", fontSize: "13px" }}
+                          sx={{
+                            display: "inline",
+                            fontSize: "13px",
+                          }}
                           component="span"
                           variant="body2"
                           color="text.primary"

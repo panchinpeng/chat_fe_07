@@ -12,3 +12,7 @@
   text-align: center;
   height: 60px;
 }
+.text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

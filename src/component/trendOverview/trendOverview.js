@@ -5,7 +5,7 @@ import { useStore } from "../../store";
 import { observer } from "mobx-react-lite";
 function TrendOverride() {
   const store = useStore();
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     store.trends.getAllFriendTrends();
   }, []);

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   TextField,
@@ -10,18 +10,14 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import style from "./signup.module.css";
-import * as THREE from "three";
-
 import { NavLink, useNavigate } from "react-router-dom";
 import api from "../../common/api";
-
-import WAVES from "vanta/dist/vanta.waves.min";
+import signup from "./../../public/signup.png";
 
 import { observer } from "mobx-react-lite";
 import { useStore } from "./../../store";
 function Signup() {
   const store = useStore();
-  const myRef = useRef(null);
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -31,22 +27,7 @@ function Signup() {
   const [clearCacheCode, setClearCacheCode] = useState("");
 
   useEffect(() => {
-    const vantaEffect = WAVES({
-      el: myRef.current,
-      mouseControls: false,
-      touchControls: false,
-      THREE: THREE,
-      gyroControls: false,
-      scale: 1.0,
-      scaleMobile: 1.0,
-      color: "#1685c8",
-    });
-    console.log("aaa");
     setClearCacheCode(Date.now());
-
-    return () => {
-      if (vantaEffect) vantaEffect.destroy();
-    };
   }, []);
 
   const submit = async () => {
@@ -91,70 +72,80 @@ function Signup() {
   };
   return (
     <>
-      <div className={style.bgImgage} ref={myRef}></div>
       <Box className={style.bg}>
-        <div className={style.logo}></div>
-        <h4>歡迎你加入</h4>
-        <div>填寫下方資訊，建立帳號</div>
+        <div className={style.field}>
+          <img src={signup} className={style.pageIcon}></img>
+          <h4>歡迎你加入</h4>
+          <div>填寫下方資訊，建立帳號</div>
 
-        <TextField
-          fullWidth
-          value={username}
-          onChange={(event) => setUsername(event.target.value)}
-          margin="dense"
-          id="username"
-          label="帳號"
-          variant="outlined"
-          required={true}
-        />
-        <TextField
-          fullWidth
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          margin="dense"
-          id="password"
-          label="密碼"
-          variant="outlined"
-          type="password"
-          required={true}
-        />
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            label="生日"
-            sx={{ mt: 1, width: 1 }}
-            onChange={(event) => setBirthday(event.format("YYYY-MM-DD"))}
+          <TextField
+            fullWidth
+            value={username}
+            onChange={(event) => setUsername(event.target.value)}
+            margin="dense"
+            id="username"
+            label="帳號"
+            variant="outlined"
+            required={true}
+            sx={{ mt: 2 }}
           />
-        </LocalizationProvider>
-        <img
-          src={`${process.env.REACT_APP_API_DOMAIN}/captcha?cache=${clearCacheCode}`}
-          className={style.captcha}
-          alt="captcha"
-        ></img>
-        <TextField
-          label="驗證碼"
-          variant="outlined"
-          fullWidth
-          value={captcha}
-          required={true}
-          onChange={(event) => setCaptcha(event.target.value)}
-          inputProps={{ maxLength: 4 }}
-        />
-        <FormControlLabel
-          required
-          control={
-            <Checkbox
-              onChange={(event) => setBetaCheck(event.target.checked)}
+          <TextField
+            fullWidth
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            margin="dense"
+            id="password"
+            label="密碼"
+            variant="outlined"
+            type="password"
+            required={true}
+            sx={{ mt: 2 }}
+          />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              label="生日"
+              sx={{ mt: 2, width: 1 }}
+              onChange={(event) => setBirthday(event.format("YYYY-MM-DD"))}
             />
-          }
-          label="該網站為測試版本"
-          sx={{ mr: "auto" }}
-        />
-        <NavLink to="/login" className={style.extraAction}>
-          已經有帳號?
-        </NavLink>
-        <Button variant="contained" onClick={submit} sx={{ mt: 4 }}>
-          註冊
-        </Button>
+          </LocalizationProvider>
+          <div className={style.right}>未來若忘記密碼時將用於身份驗證喔！</div>
+          <img
+            src={`${process.env.REACT_APP_API_DOMAIN}/captcha?cache=${clearCacheCode}`}
+            className={style.captcha}
+            alt="captcha"
+          ></img>
+          <TextField
+            label="驗證碼"
+            variant="outlined"
+            fullWidth
+            value={captcha}
+            required={true}
+            onChange={(event) => setCaptcha(event.target.value)}
+            inputProps={{ maxLength: 4 }}
+            sx={{ mt: 2 }}
+          />
+          <div>
+            <FormControlLabel
+              required
+              control={
+                <Checkbox
+                  onChange={(event) => setBetaCheck(event.target.checked)}
+                />
+              }
+              label="該網站為測試版本"
+              sx={{ mr: "auto" }}
+            />
+          </div>
+
+          <NavLink to="/login" className={style.extraAction}>
+            已經有帳號?
+          </NavLink>
+          <div className={style.actions}>
+            <Button variant="contained" onClick={submit} sx={{ mt: 4 }}>
+              註冊
+            </Button>
+          </div>
+        </div>
       </Box>
     </>
   );

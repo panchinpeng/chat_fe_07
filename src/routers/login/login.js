@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import style from "./login.module.css";
 import {
   TextField,
@@ -9,16 +9,13 @@ import {
 } from "@mui/material";
 import api from "../../common/api";
 import { NavLink, useNavigate } from "react-router-dom";
-import * as THREE from "three";
+import loginImg from "./../../public/login.png";
 
 // store
 import { observer } from "mobx-react-lite";
 import { useStore } from "./../../store";
 
-import WAVES from "vanta/dist/vanta.waves.min";
-
 function Login() {
-  const myRef = useRef(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [betaCheck, setBetaCheck] = useState(false);
@@ -29,21 +26,7 @@ function Login() {
   const store = useStore();
 
   useEffect(() => {
-    const vantaEffect = WAVES({
-      el: myRef.current,
-      mouseControls: false,
-      touchControls: false,
-      THREE: THREE,
-      gyroControls: false,
-      scale: 1.0,
-      scaleMobile: 1.0,
-      color: "#1685c8",
-    });
     setClearCacheCode(Date.now());
-
-    return () => {
-      if (vantaEffect) vantaEffect.destroy();
-    };
   }, []);
 
   const submit = async () => {
@@ -84,64 +67,73 @@ function Login() {
 
   return (
     <>
-      <div className={style.bgImgage} ref={myRef}></div>
       <Box className={style.bg}>
-        <div className={style.logo}></div>
-        <h4>歡迎回來</h4>
-        <div>很高興再次看到你，請登入帳號，繼續享受我們的服務。</div>
-        <TextField
-          fullWidth
-          value={username}
-          onChange={(event) => setUsername(event.target.value)}
-          margin="dense"
-          id="username"
-          label="帳號"
-          variant="outlined"
-          required={true}
-          inputProps={{ maxLength: 50 }}
-        />
-        <TextField
-          fullWidth
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          margin="dense"
-          id="password"
-          label="密碼"
-          variant="outlined"
-          type="password"
-          required={true}
-          inputProps={{ maxLength: 50 }}
-        />
-        <img
-          src={`${process.env.REACT_APP_API_DOMAIN}/captcha?cache=${clearCacheCode}`}
-          className={style.captcha}
-          alt="captcha"
-        ></img>
-        <TextField
-          label="驗證碼"
-          variant="outlined"
-          fullWidth
-          value={captcha}
-          required={true}
-          onChange={(event) => setCaptcha(event.target.value)}
-          inputProps={{ maxLength: 4 }}
-        />
-        <FormControlLabel
-          required
-          control={
-            <Checkbox
-              onChange={(event) => setBetaCheck(event.target.checked)}
+        <div className={style.field}>
+          <img src={loginImg} className={style.pageIcon}></img>
+          <h4>歡迎回來</h4>
+          <div>很高興再次看到你，請登入帳號，繼續享受我們的服務。</div>
+          <TextField
+            fullWidth
+            value={username}
+            onChange={(event) => setUsername(event.target.value)}
+            margin="dense"
+            id="username"
+            label="帳號"
+            variant="outlined"
+            required={true}
+            inputProps={{ maxLength: 50 }}
+          />
+          <TextField
+            fullWidth
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            margin="dense"
+            id="password"
+            label="密碼"
+            variant="outlined"
+            type="password"
+            required={true}
+            inputProps={{ maxLength: 50 }}
+          />
+          <NavLink to="/forgetPassword" className={style.extraAction}>
+            忘記密碼
+          </NavLink>
+          <img
+            src={`${process.env.REACT_APP_API_DOMAIN}/captcha?cache=${clearCacheCode}`}
+            className={style.captcha}
+            alt="captcha"
+          ></img>
+          <TextField
+            label="驗證碼"
+            variant="outlined"
+            fullWidth
+            value={captcha}
+            required={true}
+            onChange={(event) => setCaptcha(event.target.value)}
+            inputProps={{ maxLength: 4 }}
+          />
+          <div>
+            <FormControlLabel
+              required
+              control={
+                <Checkbox
+                  onChange={(event) => setBetaCheck(event.target.checked)}
+                />
+              }
+              label="目前網站為測試版本"
+              sx={{ mr: "auto" }}
             />
-          }
-          label="目前網站為測試版本"
-          sx={{ mr: "auto" }}
-        />
-        <NavLink to="/signup" className={style.extraAction}>
-          還沒有帳號?
-        </NavLink>
-        <Button variant="contained" onClick={submit} sx={{ mt: 4 }}>
-          登入
-        </Button>
+          </div>
+
+          <NavLink to="/signup" className={style.extraAction}>
+            還沒有帳號?
+          </NavLink>
+          <div className={style.actions}>
+            <Button variant="contained" onClick={submit} sx={{ mt: 4 }}>
+              登入
+            </Button>
+          </div>
+        </div>
       </Box>
     </>
   );
