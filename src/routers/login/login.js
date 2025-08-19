@@ -99,7 +99,7 @@ function Login() {
             忘記密碼
           </NavLink>
           <img
-            src={`${process.env.REACT_APP_API_DOMAIN}/captcha?cache=${clearCacheCode}`}
+            src={`/captcha?cache=${clearCacheCode}`}
             className={style.captcha}
             alt="captcha"
           ></img>

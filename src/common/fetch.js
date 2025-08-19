@@ -1,6 +1,6 @@
 export default async function (url, settings) {
   const res = settings
-    ? await fetch(`${process.env.REACT_APP_API_DOMAIN}${url}`, {
+    ? await fetch(`${url}`, {
         credentials: "include",
         withCredentials: true,
         headers: settings.headers
@@ -14,7 +14,7 @@ export default async function (url, settings) {
             : JSON.stringify(settings.body),
         method: settings.method,
       })
-    : await fetch(`${process.env.REACT_APP_API_DOMAIN}${url}`, {
+    : await fetch(`${url}`, {
         credentials: "include",
       });
   if (/image\//.test(res.headers.get("content-type"))) {

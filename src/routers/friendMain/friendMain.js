@@ -89,7 +89,7 @@ function FriendMain() {
         <img
           width="100%"
           alt="avatar"
-          src={`${process.env.REACT_APP_API_DOMAIN}/api/user/avatar?username=${user}`}
+          src={`/api/user/avatar?username=${user}`}
           onError={(e) => (e.target.src = man)}
           className={style.pic}
         ></img>

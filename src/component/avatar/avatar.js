@@ -14,7 +14,7 @@ function CuAvatar({ from, friendName, disabledClick }) {
   const [cache] = useState(Math.floor(Date.now() / 1000 / 30));
 
   const [avatar, setAvatar] = useState(
-    `${process.env.REACT_APP_API_DOMAIN}/api/user/avatar${friendName ? "?username=" + friendName + `&cache=${cache}` : `?cache=${cache}`}`
+    `/api/user/avatar${friendName ? "?username=" + friendName + `&cache=${cache}` : `?cache=${cache}`}`
   );
   const handleAvatar = async (e) => {
     const file = e.target.files[0];
@@ -32,9 +32,7 @@ function CuAvatar({ from, friendName, disabledClick }) {
     fd.append("type", "image");
     const res = await api.setAvatar(fd);
     if (res.status) {
-      setAvatar(
-        `${process.env.REACT_APP_API_DOMAIN}/api/user/avatar?v=${Date.now()}`
-      );
+      setAvatar(`/api/user/avatar?v=${Date.now()}`);
     }
   };
 

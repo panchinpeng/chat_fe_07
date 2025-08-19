@@ -110,7 +110,7 @@ function Signup() {
           </LocalizationProvider>
           <div className={style.right}>未來若忘記密碼時將用於身份驗證喔！</div>
           <img
-            src={`${process.env.REACT_APP_API_DOMAIN}/captcha?cache=${clearCacheCode}`}
+            src={`/captcha?cache=${clearCacheCode}`}
             className={style.captcha}
             alt="captcha"
           ></img>
