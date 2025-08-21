@@ -31,7 +31,7 @@
   float: right;
 }
 .captcha {
-  margin: 10px auto;
+  margin: 10px auto 0;
   clear: both;
   display: block;
 }
@@ -44,7 +44,13 @@
 }
 .actions {
   margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
-.right {
-  text-align: right;
+.warn {
+  display: flex;
+  align-items: center;
+  color: brown;
+  margin-top: 3px;
 }
