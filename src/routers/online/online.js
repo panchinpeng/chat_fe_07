@@ -38,125 +38,135 @@ function Online() {
 
   const renderReplyMessage = () => {
     const msgObj = history.find((msg) => msg.id === reply);
-    return msgObj.message;
+    return msgObj?.message || "原訊息已不存在";
   };
 
   const updateUnreadData = useCallback(() => {
+    if (!socket.current) return;
     socket.current.emit("receiveMessage", friend, (totalUnreadCount) => {
       store.user.changeUnread(totalUnreadCount.unread);
     });
-  }, [friend]);
+  }, [friend, store.user]);
 
   useEffect(() => {
-    if (!socket.current) {
-      socket.current = io(process.env.REACT_APP_SOCKET_DOMAIN, {
-        withCredentials: true,
-        transports: ["websocket"],
-      });
-      socket.current.on("connect", () => {
-        setNetworkError((networkError) => {
-          (async () => {
-            if (networkError) {
-              const res = await api.getMessageHistory(friend);
-              if (res && res.status) {
-                setTimeout(() => updateUnreadData(), 2000);
-                setHistory(res.data);
-              }
-            }
-          })();
-          return false;
-        });
-      });
-      socket.current.on("message", async (message) => {
-        let historyMsgObj;
-        if (message.reply_id) {
-          historyMsgObj = messageIds.current.findIndex(
-            (item) => item === message.reply_id
-          );
-          if (historyMsgObj <= -1) {
-            const replyMessage = await api.getSingleHistory(
-              friend,
-              message.reply_id
-            );
-            if (replyMessage) {
-              historyMsgObj = replyMessage.data.message;
-            }
-          }
-        }
-        if (message.message.path2) {
-          message.message.path = message.message.path2;
-        }
-        setHistory((history) => [
-          {
-            ...message,
-            reply_message:
-              historyMsgObj === undefined || historyMsgObj === -1
-                ? ""
-                : typeof historyMsgObj === "string"
-                  ? historyMsgObj
-                  : history[historyMsgObj].message,
-          },
-          ...history,
-        ]);
-        updateUnreadData();
-      });
-      socket.current.on("reaction", (reaction) => {
-        setHistory((history) => {
-          const cpHistory = [...history];
-          const targetMessageIndex = cpHistory.findIndex(
-            (item) => item.id === reaction.id
-          );
-          if (targetMessageIndex > -1) {
-            cpHistory[targetMessageIndex].reaction = {
-              ...(cpHistory[targetMessageIndex].reaction
-                ? cpHistory[targetMessageIndex].reaction
-                : {}),
-              ...reaction.reaction,
-            };
-          }
-          return cpHistory;
-        });
-      });
-      socket.current.on("delMessage", (delRes) => {
-        setHistory((history) => {
-          const cpHistory = [...history];
-          const targetMessageIndex = cpHistory.findIndex(
-            (item) => item.id === delRes.id
-          );
-          if (targetMessageIndex > -1) {
-            cpHistory[targetMessageIndex].is_del = 1;
-          }
-          return cpHistory;
-        });
-      });
-      socket.current.on("logout", () => navigate("/logout"));
-      socket.current.on("disconnect", (reason) => {
-        if (!reason.includes("client disconnect")) {
-          setNetworkError(socket.current.active ? 1 : 2);
-        }
-      });
-      socket.current.on("connect_error", (error) => {
-        if (error.message === "login fail") navigate("/logout");
-        console.log("connect_error", error.message);
-      });
-      socket.current.on("reconnect_failed", () => {
-        console.log("reconnect_failed");
-      });
+    if (!friend) return;
+
+    const socketDomain = import.meta.env.VITE_SOCKET_DOMAIN;
+    if (!socketDomain) {
+      setNetworkError(2);
+      return;
     }
-    (async () => {
-      if (friend) {
-        const res = await api.getMessageHistory(friend);
-        if (res && res.status) {
-          setTimeout(() => updateUnreadData(), 2000);
-          setHistory(res.data);
-          setTimeout(() => {
-            startObserve(loadMoreDom.current);
-          }, 300);
+
+    const currentSocket = io(socketDomain, {
+      withCredentials: true,
+      transports: ["websocket"],
+    });
+    socket.current = currentSocket;
+
+    currentSocket.on("connect", () => {
+      setNetworkError((networkError) => {
+        (async () => {
+          if (networkError) {
+            const res = await api.getMessageHistory(friend);
+            if (res && res.status) {
+              setTimeout(() => updateUnreadData(), 2000);
+              setHistory(res.data);
+            }
+          }
+        })();
+        return false;
+      });
+    });
+    currentSocket.on("message", async (message) => {
+      let historyMsgObj;
+      if (message.reply_id) {
+        historyMsgObj = messageIds.current.findIndex(
+          (item) => item === message.reply_id
+        );
+        if (historyMsgObj <= -1) {
+          const replyMessage = await api.getSingleHistory(
+            friend,
+            message.reply_id
+          );
+          if (replyMessage) {
+            historyMsgObj = replyMessage.data.message;
+          }
         }
       }
+      if (message.message.path2) {
+        message.message.path = message.message.path2;
+      }
+      setHistory((history) => [
+        {
+          ...message,
+          reply_message:
+            historyMsgObj === undefined || historyMsgObj === -1
+              ? ""
+              : typeof historyMsgObj === "string"
+                ? historyMsgObj
+                : history[historyMsgObj]?.message || "",
+        },
+        ...history,
+      ]);
+      updateUnreadData();
+    });
+    currentSocket.on("reaction", (reaction) => {
+      setHistory((history) => {
+        const cpHistory = [...history];
+        const targetMessageIndex = cpHistory.findIndex(
+          (item) => item.id === reaction.id
+        );
+        if (targetMessageIndex > -1) {
+          cpHistory[targetMessageIndex].reaction = {
+            ...(cpHistory[targetMessageIndex].reaction
+              ? cpHistory[targetMessageIndex].reaction
+              : {}),
+            ...reaction.reaction,
+          };
+        }
+        return cpHistory;
+      });
+    });
+    currentSocket.on("delMessage", (delRes) => {
+      setHistory((history) => {
+        const cpHistory = [...history];
+        const targetMessageIndex = cpHistory.findIndex(
+          (item) => item.id === delRes.id
+        );
+        if (targetMessageIndex > -1) {
+          cpHistory[targetMessageIndex].is_del = 1;
+        }
+        return cpHistory;
+      });
+    });
+    currentSocket.on("logout", () => navigate("/logout"));
+    currentSocket.on("disconnect", (reason) => {
+      if (!reason.includes("client disconnect")) {
+        setNetworkError(currentSocket.active ? 1 : 2);
+      }
+    });
+    currentSocket.on("connect_error", (error) => {
+      if (error.message === "login fail") navigate("/logout");
+    });
+
+    (async () => {
+      const res = await api.getMessageHistory(friend);
+      if (res && res.status) {
+        setTimeout(() => updateUnreadData(), 2000);
+        setHistory(res.data);
+        setTimeout(() => {
+          startObserve(loadMoreDom.current);
+        }, 300);
+      }
     })();
-    return () => socket.current.disconnect();
-  }, []);
+
+    return () => {
+      currentSocket.disconnect();
+      if (socket.current === currentSocket) {
+        socket.current = null;
+      }
+    };
+  }, [friend, navigate, startObserve, updateUnreadData]);
 
   useEffect(() => {
     (async () => {
@@ -177,7 +187,7 @@ function Online() {
         }
       }
     })();
-  }, [isIntersecting]);
+  }, [friend, isIntersecting, store.loading]);
 
   useEffect(() => {
     messageIds.current = history.map((item) => item.id);
@@ -233,14 +243,15 @@ function Online() {
   const sendMessage = () => {
     if (message) {
       socket.current.emit("message", message, friend, reply, (res) => {
+        const replyMessage = reply
+          ? history.find((item) => item.id === reply)?.message || ""
+          : "";
         if (res.status && res.data) {
           setHistory((history) => [
             {
               ...res.data,
               reply_id: reply || null,
-              reply_message: reply
-                ? history.find((item) => item.id === reply).message
-                : "",
+              reply_message: replyMessage,
             },
             ...history,
           ]);
@@ -248,7 +259,6 @@ function Online() {
           setReply(null);
         } else {
           alert("訊息傳送失敗");
-          console.log(res);
         }
       });
     }
@@ -285,7 +295,6 @@ function Online() {
               setPreviewImage(null);
             } else {
               alert("訊息檔案失敗");
-              console.log(res);
             }
           }
         );

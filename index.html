@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/logo.png" />
+    <meta name="viewport" content="initial-scale=1, width=device-width, user-scalable=no, minimum-scale=1, maximum-scale=1, interactive-widget=resizes-content" />
+    <meta name="theme-color" content="#1976d2" />
+    <meta name="description" content="心語星球是結合社群互動、即時聊天與AI陪伴的療癒平台，讓你找到朋友、表達心情、每天與專屬AI聊天，打造屬於你的溫暖宇宙。" />
+    <meta name="keywords" content="心語星球, AI陪伴, 即時聊天, 社群平台, 陪聊, 小天使推薦, 線上儲值, 心靈療癒, 找朋友平台" />
+    <meta name="author" content="心語星球開發團隊" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="心語星球｜溫暖社群、即時聊天與AI陪伴的療癒平台" />
+    <meta property="og:description" content="探索他人故事、即時聊天與AI陪伴，打造你的專屬心靈星球。" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="心語星球｜溫暖社群、即時聊天與AI陪伴的療癒平台" />
+    <meta name="twitter:description" content="結合社群、聊天與AI陪伴，讓你每天都有傾訴與被理解的出口。" />
+    <title>心語星球｜溫暖社群、即時聊天與AI陪伴的療癒平台</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script>
+      document.body.addEventListener("touch", function() {
+        window.supportTouch = true;
+      });
+
+      window.addEventListener("unhandledrejection", function(e) {
+        console.log("err", e);
+        window.location = "/error";
+      });
+    </script>
+    <script type="module" src="/src/index.jsx"></script>
+  </body>
+</html>

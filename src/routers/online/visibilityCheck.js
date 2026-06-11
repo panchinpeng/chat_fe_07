@@ -17,9 +17,6 @@ const observer = new IntersectionObserver(
             const isVisible = !isFarAway && entry.isIntersecting;
 
             if (callback) {
-                if (!isVisible) {
-                    console.log("🚫 元素超出畫面太遠，將被隱藏");
-                }
                 callback(isVisible);
             }
         });
