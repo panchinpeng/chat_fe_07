@@ -23,7 +23,7 @@ function Header() {
     <>
       <AppBar
         position="static"
-        sx={{ flex: "0 0 0", zIndex: "9", boxShadow: "none" }}
+        sx={{ flex: "0 0 0", zIndex: "9", boxShadow: "none", mb: "1px" }}
       >
         <Toolbar>
           <div>

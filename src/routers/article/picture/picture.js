@@ -68,7 +68,7 @@ function Picture(props, ref) {
       const draftImagesData = props.draftImages.map((pic, index) => ({
         originSort: index,
         id: pic,
-        src: `${process.env.REACT_APP_API_DOMAIN}/api/article/img?t=${pic}`,
+        src: `/api/article/img?t=${pic}`,
       }));
       setPicture(draftImagesData);
     }

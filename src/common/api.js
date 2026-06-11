@@ -1,503 +1,501 @@
 import fetch from "./fetch";
 
 const api = {
-    async logout() {
-        try {
-            const res = await fetch("/api/user/logout");
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
+  async logout() {
+    try {
+      const res = await fetch("/api/user/logout");
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
 
-    async getVerify() {
-        try {
-            const res = await fetch("/api/user/verify");
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async login(username, password, captcha) {
-        try {
-            const res = await fetch("/api/user/login", {
-                body: { username, password, captcha },
-                method: "POST",
-            });
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async regester(username, password, birthday, captcha) {
-        try {
-            const res = await fetch("/api/user/register", {
-                body: { username, password, birthday, captcha },
-                method: "POST",
-            });
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async setUserInfo(
-        job,
-        work_time,
-        salary,
-        self_introd,
-        interests,
-        publicData
+  async getVerify() {
+    try {
+      const res = await fetch("/api/user/verify");
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async login(username, password, captcha) {
+    try {
+      const res = await fetch("/api/user/login", {
+        body: { username, password, captcha },
+        method: "POST",
+      });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async regester(username, password, birthday, captcha, gender) {
+    try {
+      const res = await fetch("/api/user/register", {
+        body: { username, password, birthday, captcha, gender },
+        method: "POST",
+      });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async setUserInfo(
+    job,
+    work_time,
+    salary,
+    self_introd,
+    interests,
+    publicData
+  ) {
+    try {
+      const res = await fetch("/api/user/info", {
+        body: {
+          job,
+          work_time,
+          salary,
+          self_introd,
+          interests,
+          public: publicData,
+        },
+        method: "POST",
+      });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getAccountData() {
+    try {
+      const res = await fetch("/api/user/account");
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getUserInfo(username) {
+    try {
+      const res = await fetch(
+        `/api/user/info${username ? "?username=" + username : ""}`
+      );
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async setAvatar(fd) {
+    try {
+      const res = await fetch("/api/user/avatar", {
+        method: "POST",
+        headers: {},
+        body: fd,
+      });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getAvatar() {
+    try {
+      const res = await fetch("/api/user/avatar");
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async addPost(message, privateString, color, image, pos) {
+    const fd = new FormData();
+    try {
+      JSON.parse(pos);
+      color = /^#[0-9a-f]+$/is.test(color) ? color : "#fff";
+      privateString = privateString * 1 === 1 ? 1 : 0;
+      message = message ? message : "";
+      fd.append("image", image);
+      fd.append("message", message);
+      fd.append("private", privateString);
+      fd.append("color", color);
+      fd.append("pos", pos);
+
+      const res = await fetch("/api/trends/add", {
+        method: "POST",
+        headers: {},
+        body: fd,
+      });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async addPostArticle(
+    message,
+    place,
+    tagFriends,
+    isReply,
+    isThumb,
+    isPrivate,
+    images,
+    sort,
+    status,
+    draftData
+  ) {
+    if (
+      !message ||
+      !place ||
+      typeof isReply !== "boolean" ||
+      typeof isThumb !== "boolean" ||
+      typeof isPrivate !== "boolean" ||
+      !Array.isArray(images) ||
+      !Array.isArray(tagFriends)
     ) {
-        try {
-            const res = await fetch("/api/user/info", {
-                body: {
-                    job,
-                    work_time,
-                    salary,
-                    self_introd,
-                    interests,
-                    public: publicData,
-                },
-                method: "POST",
-            });
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async getAccountData() {
-        try {
-            const res = await fetch("/api/user/account");
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async getUserInfo(username) {
-        try {
-            const res = await fetch(
-                `/api/user/info${username ? "?username=" + username : ""}`
-            );
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async setAvatar(fd) {
-        try {
-            const res = await fetch("/api/user/avatar", {
-                method: "POST",
-                headers: {},
-                body: fd,
-            });
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async getAvatar() {
-        try {
-            const res = await fetch("/api/user/avatar");
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async addPost(message, privateString, color, image, pos) {
-        const fd = new FormData();
-        try {
-            JSON.parse(pos);
-            color = /^#[0-9a-f]+$/is.test(color) ? color : "#fff";
-            privateString = privateString * 1 === 1 ? 1 : 0;
-            message = message ? message : "";
-            fd.append("image", image);
-            fd.append("message", message);
-            fd.append("private", privateString);
-            fd.append("color", color);
-            fd.append("pos", pos);
+      return;
+    }
+    if (![0, 1].includes(status)) {
+      return;
+    }
 
-            const res = await fetch("/api/trends/add", {
-                method: "POST",
-                headers: {},
-                body: fd,
-            });
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async addPostArticle(
-        message,
-        place,
-        tagFriends,
-        isReply,
-        isThumb,
-        isPrivate,
-        images,
-        sort,
-        status,
-        draftData
-    ) {
-        if (
-            !message ||
-            !place ||
-            typeof isReply !== "boolean" ||
-            typeof isThumb !== "boolean" ||
-            typeof isPrivate !== "boolean" ||
-            !Array.isArray(images) ||
-            !Array.isArray(tagFriends)
-        ) {
-            return;
-        }
-        if (![0, 1].includes(status)) {
-            return;
-        }
+    const fd = new FormData();
+    fd.append("message", message);
+    fd.append("place", JSON.stringify(place));
+    fd.append("tagFriends", tagFriends);
+    fd.append("isReply", isReply);
+    fd.append("isThumb", isThumb);
+    fd.append("isPrivate", isPrivate);
+    fd.append("status", status);
+    fd.append("sort", sort);
+    fd.append("draftData", draftData);
 
-        const fd = new FormData();
-        fd.append("message", message);
-        fd.append("place", JSON.stringify(place));
-        fd.append("tagFriends", tagFriends);
-        fd.append("isReply", isReply);
-        fd.append("isThumb", isThumb);
-        fd.append("isPrivate", isPrivate);
-        fd.append("status", status);
-        fd.append("sort", sort);
-        fd.append("draftData", draftData);
+    images.forEach((image) => {
+      fd.append("images", image);
+    });
 
-        images.forEach((image) => {
-            fd.append("images", image);
-        });
-
-        const res = await fetch("/api/article/add", {
-            method: "POST",
-            headers: {},
-            body: fd,
-        });
-        return res;
-    },
-    async searchFriend(keyword) {
-        keyword = keyword.trim();
-        try {
-            const res = await fetch("/api/user/searchUser", {
-                method: "POST",
-                body: { keyword },
-            });
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async addFriend(friendUsername) {
-        try {
-            const res = await fetch("/api/user/addFriend", {
-                method: "POST",
-                body: { friendUsername },
-            });
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async getFriendApply() {
-        try {
-            const res = await fetch("/api/user/friendApply");
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async setFriendApply(action, distUsername) {
-        try {
-            const res = await fetch("/api/user/friendApplyAction", {
-                method: "POST",
-                body: { action, distUsername },
-            });
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async getFriendChat() {
-        try {
-            const res = await fetch("/api/user/friendChat");
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async getFriend() {
-        try {
-            const res = await fetch("/api/user/friend");
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async getMessageHistory(friend, lastID) {
-        try {
-            const res = await fetch("/api/message/history", {
-                method: "POST",
-                body: { friend, lastID },
-            });
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async getSingleHistory(friend, q) {
-        try {
-            const res = await fetch("/api/message/singleHistory", {
-                method: "POST",
-                body: { friend, q },
-            });
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async getAllFriendTrends() {
-        try {
-            const res = await fetch("/api/trends/allFriendTrends");
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async getTrends(user) {
-        try {
-            const res = await fetch("/api/trends/getUserTrends", {
-                method: "POST",
-                body: { user },
-            });
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async watchTrends(eid) {
-        try {
-            const res = await fetch("/api/trends/watch", {
-                method: "POST",
-                body: { eid },
-            });
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async searchPlace(q) {
-        try {
-            const res = await fetch("/api/article/place", {
-                method: "POST",
-                body: { q },
-            });
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async getArticle(fid, last) {
-        try {
-            const res = await fetch(
-                `/api/article?pre=${fid ? "&fid=" + fid : ""}${last ? "&last=" + last : ""}`
-            );
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async removeThumb(id) {
-        try {
-            const res = await fetch("/api/article/removeThumb", {
-                method: "POST",
-                body: { id },
-            });
-            return res.status;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async getThumb(id) {
-        try {
-            const res = await fetch("/api/article/getThumb", {
-                method: "POST",
-                body: { id },
-            });
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async setThumb(id) {
-        try {
-            const res = await fetch("/api/article/setThumb", {
-                method: "POST",
-                body: {
-                    id,
-                },
-            });
-            return res.data;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async setCommits(id, message) {
-        try {
-            const res = await fetch("/api/article/commits", {
-                method: "POST",
-                body: {
-                    id,
-                    message,
-                },
-            });
-            return res.data;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async getCommits(id, lastId) {
-        try {
-            const res = await fetch(
-                `/api/article/commits?id=${id}${lastId ? "&lastId=" + lastId : ""}`
-            );
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async getRecommendArticle(last) {
-        try {
-            const res = await fetch(
-                `/api/article/recommend${last ? "?last=" + last : ""}`
-            );
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async getRecommendFriend() {
-        try {
-            const res = await fetch("/api/user/recommendFriend");
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async getArticleDraft() {
-        try {
-            const res = await fetch("/api/article/getDraft");
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async deleteDraft(id) {
-        try {
-            const res = await fetch("/api/article/deleteDraft", {
-                method: "POST",
-                body: {
-                    id,
-                },
-            });
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async getUserRankInfo(username) {
-        try {
-            const res = await fetch(
-                `/api/user/getRankInfo?username=${username}`
-            );
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async addShareArticle(articleId, toUsers) {
-        try {
-            const res = await fetch("/api/article/share", {
-                method: "POST",
-                body: {
-                    articleId,
-                    toUsers,
-                },
-            });
-            return res.status;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async getUSDTProtocol() {
-        try {
-            const res = await fetch("/api/payment/crypto");
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async getPaymentInfo(protocol, amount) {
-        try {
-            const res = await fetch("/api/payment/crypto/getPaymentInfo", {
-                method: "POST",
-                body: {
-                    protocol,
-                    amount,
-                },
-            });
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async cancelDeposit(protocol) {
-        try {
-            const res = await fetch("/api/payment/crypto/cancel", {
-                method: "POST",
-                body: {
-                    protocol,
-                },
-            });
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async getCreditOrderID() {
-        try {
-            const res = await fetch("/api/payment/createCredit");
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async resetPassowrd(username, newpassword, birthday, captcha) {
-        try {
-            const res = await fetch("/api/user/forgetPasswod", {
-                method: "POST",
-                body: {
-                    username,
-                    newpassword,
-                    birthday,
-                    captcha,
-                },
-            });
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
-    async uploadAudio(fd) {
-        try {
-            const res = fetch("/api/message/uploadAudio", {
-                method: "POST",
-                headers: {},
-                body: fd,
-            });
-            return res;
-        } catch (e) {
-            throw Promise.reject(e);
-        }
-    },
+    const res = await fetch("/api/article/add", {
+      method: "POST",
+      headers: {},
+      body: fd,
+    });
+    return res;
+  },
+  async searchFriend(keyword) {
+    keyword = keyword.trim();
+    try {
+      const res = await fetch("/api/user/searchUser", {
+        method: "POST",
+        body: { keyword },
+      });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async addFriend(friendUsername) {
+    try {
+      const res = await fetch("/api/user/addFriend", {
+        method: "POST",
+        body: { friendUsername },
+      });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getFriendApply() {
+    try {
+      const res = await fetch("/api/user/friendApply");
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async setFriendApply(action, distUsername) {
+    try {
+      const res = await fetch("/api/user/friendApplyAction", {
+        method: "POST",
+        body: { action, distUsername },
+      });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getFriendChat() {
+    try {
+      const res = await fetch("/api/user/friendChat");
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getFriend() {
+    try {
+      const res = await fetch("/api/user/friend");
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getMessageHistory(friend, lastID) {
+    try {
+      const res = await fetch("/api/message/history", {
+        method: "POST",
+        body: { friend, lastID },
+      });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getSingleHistory(friend, q) {
+    try {
+      const res = await fetch("/api/message/singleHistory", {
+        method: "POST",
+        body: { friend, q },
+      });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getAllFriendTrends() {
+    try {
+      const res = await fetch("/api/trends/allFriendTrends");
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getTrends(user) {
+    try {
+      const res = await fetch("/api/trends/getUserTrends", {
+        method: "POST",
+        body: { user },
+      });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async watchTrends(eid) {
+    try {
+      const res = await fetch("/api/trends/watch", {
+        method: "POST",
+        body: { eid },
+      });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async searchPlace(q) {
+    try {
+      const res = await fetch("/api/article/place", {
+        method: "POST",
+        body: { q },
+      });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getArticle(fid, last) {
+    try {
+      const res = await fetch(
+        `/api/article?pre=${fid ? "&fid=" + fid : ""}${last ? "&last=" + last : ""}`
+      );
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async removeThumb(id) {
+    try {
+      const res = await fetch("/api/article/removeThumb", {
+        method: "POST",
+        body: { id },
+      });
+      return res.status;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getThumb(id) {
+    try {
+      const res = await fetch("/api/article/getThumb", {
+        method: "POST",
+        body: { id },
+      });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async setThumb(id) {
+    try {
+      const res = await fetch("/api/article/setThumb", {
+        method: "POST",
+        body: {
+          id,
+        },
+      });
+      return res.data;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async setCommits(id, message) {
+    try {
+      const res = await fetch("/api/article/commits", {
+        method: "POST",
+        body: {
+          id,
+          message,
+        },
+      });
+      return res.data;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getCommits(id, lastId) {
+    try {
+      const res = await fetch(
+        `/api/article/commits?id=${id}${lastId ? "&lastId=" + lastId : ""}`
+      );
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getRecommendArticle(last) {
+    try {
+      const res = await fetch(
+        `/api/article/recommend${last ? "?last=" + last : ""}`
+      );
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getRecommendFriend() {
+    try {
+      const res = await fetch("/api/user/recommendFriend");
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getArticleDraft() {
+    try {
+      const res = await fetch("/api/article/getDraft");
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async deleteDraft(id) {
+    try {
+      const res = await fetch("/api/article/deleteDraft", {
+        method: "POST",
+        body: {
+          id,
+        },
+      });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getUserRankInfo(username) {
+    try {
+      const res = await fetch(`/api/user/getRankInfo?username=${username}`);
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async addShareArticle(articleId, toUsers) {
+    try {
+      const res = await fetch("/api/article/share", {
+        method: "POST",
+        body: {
+          articleId,
+          toUsers,
+        },
+      });
+      return res.status;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getUSDTProtocol() {
+    try {
+      const res = await fetch("/api/payment/crypto");
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getPaymentInfo(protocol, amount) {
+    try {
+      const res = await fetch("/api/payment/crypto/getPaymentInfo", {
+        method: "POST",
+        body: {
+          protocol,
+          amount,
+        },
+      });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async cancelDeposit(protocol) {
+    try {
+      const res = await fetch("/api/payment/crypto/cancel", {
+        method: "POST",
+        body: {
+          protocol,
+        },
+      });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async getCreditOrderID() {
+    try {
+      const res = await fetch("/api/payment/createCredit");
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async resetPassowrd(username, newpassword, birthday, captcha) {
+    try {
+      const res = await fetch("/api/user/forgetPasswod", {
+        method: "POST",
+        body: {
+          username,
+          newpassword,
+          birthday,
+          captcha,
+        },
+      });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
+  async uploadAudio(fd) {
+    try {
+      const res = fetch("/api/message/uploadAudio", {
+        method: "POST",
+        headers: {},
+        body: fd,
+      });
+      return res;
+    } catch (e) {
+      throw Promise.reject(e);
+    }
+  },
 };
 export default api;

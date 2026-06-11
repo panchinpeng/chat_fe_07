@@ -68,5 +68,6 @@
     "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
       "prettier --write"
     ]
-  }
+  },
+  "proxy": "http://192.168.83.139:3001"
 }

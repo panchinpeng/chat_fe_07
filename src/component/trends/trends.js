@@ -43,7 +43,7 @@ function Trends() {
   const getComputedStyleBg = (trend) => {
     const style = {};
     if (trend.image) {
-      style.backgroundImage = `url(${process.env.REACT_APP_API_DOMAIN}${trend.image})`;
+      style.backgroundImage = `url(${trend.image})`;
       style.backgroundColor = "transparent";
     }
     if (trend.pos.layoutX) {

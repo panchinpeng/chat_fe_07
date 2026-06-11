@@ -132,7 +132,7 @@ function ForgetPassword() {
           sx={{ mt: 2 }}
         />
         <img
-          src={`${process.env.REACT_APP_API_DOMAIN}/captcha?cache=${clearCacheCode}`}
+          src={`/captcha?cache=${clearCacheCode}`}
           className={style.captcha}
           alt="captcha"
         ></img>

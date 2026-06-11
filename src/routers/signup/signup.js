@@ -5,7 +5,12 @@ import {
   Button,
   FormControlLabel,
   Checkbox,
+  Radio,
+  RadioGroup,
+  FormLabel,
+  FormControl,
 } from "@mui/material";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -22,6 +27,7 @@ function Signup() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [birthday, setBirthday] = useState("");
+  const [gender, setGender] = useState("");
   const [captcha, setCaptcha] = useState("");
   const [betaCheck, setBetaCheck] = useState(false);
   const [clearCacheCode, setClearCacheCode] = useState("");
@@ -43,6 +49,10 @@ function Signup() {
       store.tip.show("請輸入生日", "error");
       return;
     }
+    if (!gender) {
+      store.tip.show("請輸入性別", "error");
+      return;
+    }
     if (!captcha) {
       store.tip.show("請輸入驗證碼", "error");
       return;
@@ -60,7 +70,13 @@ function Signup() {
       return;
     }
 
-    const res = await api.regester(username, password, birthday, captcha);
+    const res = await api.regester(
+      username,
+      password,
+      birthday,
+      captcha,
+      gender
+    );
     if (res.status) {
       store.tip.show("恭喜你註冊成功，將為你導向登入頁", "success");
       setTimeout(() => {
@@ -108,9 +124,34 @@ function Signup() {
               onChange={(event) => setBirthday(event.format("YYYY-MM-DD"))}
             />
           </LocalizationProvider>
-          <div className={style.right}>未來若忘記密碼時將用於身份驗證喔！</div>
+          <div className={style.warn}>
+            <InfoOutlinedIcon></InfoOutlinedIcon>
+            未來若忘記密碼時將用於身份驗證喔！
+          </div>
+          <FormControl
+            sx={{
+              textAlign: "left",
+              width: "100%",
+              margin: "10px 0",
+            }}
+          >
+            <FormLabel>性別</FormLabel>
+            <RadioGroup
+              row
+              name="row-radio-buttons-group"
+              value={gender}
+              onChange={(e) => setGender(e.target.value)}
+            >
+              <FormControlLabel value="男生" control={<Radio />} label="男生" />
+              <FormControlLabel value="女生" control={<Radio />} label="女生" />
+            </RadioGroup>
+            <div className={style.warn}>
+              <InfoOutlinedIcon></InfoOutlinedIcon>
+              將作為每日配對的依據，請確認後再送出！
+            </div>
+          </FormControl>
           <img
-            src={`${process.env.REACT_APP_API_DOMAIN}/captcha?cache=${clearCacheCode}`}
+            src={`/captcha?cache=${clearCacheCode}`}
             className={style.captcha}
             alt="captcha"
           ></img>

@@ -44,11 +44,9 @@ function Message({ message, setReply, sendReaction, deleteMessage }) {
           <img
             width="100%"
             alt="message"
-            src={`${process.env.REACT_APP_API_DOMAIN}/api/message/getImage?path=${message.path}`}
+            src={`/api/message/getImage?path=${message.path}`}
             onClick={() =>
-              store.zoomImg.watch(
-                `${process.env.REACT_APP_API_DOMAIN}/api/message/getImage?path=${message.path}`
-              )
+              store.zoomImg.watch(`/api/message/getImage?path=${message.path}`)
             }
           ></img>
         </div>

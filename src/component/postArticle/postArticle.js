@@ -45,12 +45,11 @@ function PostArticle({ article, renderFn, from }) {
         imgObj.onload = () => {
           setImages((images) => {
             const cpImages = [...images];
-            cpImages[index + 2] =
-              `${process.env.REACT_APP_API_DOMAIN}/api/article/img?t=${img}`;
+            cpImages[index + 2] = `/api/article/img?t=${img}`;
             return cpImages;
           });
         };
-        imgObj.src = `${process.env.REACT_APP_API_DOMAIN}/api/article/img?t=${img}`;
+        imgObj.src = `/api/article/img?t=${img}`;
         return undefined;
       });
     }
@@ -66,12 +65,11 @@ function PostArticle({ article, renderFn, from }) {
         imgObj.onload = () => {
           setImages((images) => {
             const cpImages = [...images];
-            cpImages[index] =
-              `${process.env.REACT_APP_API_DOMAIN}/api/article/img?t=${img}`;
+            cpImages[index] = `/api/article/img?t=${img}`;
             return cpImages;
           });
         };
-        imgObj.src = `${process.env.REACT_APP_API_DOMAIN}/api/article/img?t=${img}`;
+        imgObj.src = `/api/article/img?t=${img}`;
         return undefined;
       });
     }
