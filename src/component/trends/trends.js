@@ -111,10 +111,10 @@ function Trends() {
       <div className={style.timeLineWrap}>
         {store.trends.trendsData.map((item, index) => (
           <Box
+            key={item.id || index}
             sx={{ width: `${100 / store.trends.trendsData.length}%`, mr: 0.5 }}
           >
             <LinearProgress
-              key={item.id}
               color="secondary"
               variant="determinate"
               value={index < story ? 100 : index > story ? 0 : progress}

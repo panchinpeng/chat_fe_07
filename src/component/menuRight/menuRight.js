@@ -69,6 +69,13 @@ function MenuRight({ open, setOpen }) {
 
   const [refreshBalance, setRefreshBalance] = useState(false);
 
+  const closeDrawer = () => {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    setOpen(false);
+  };
+
   const refreshFn = async () => {
     setRefreshBalance(true);
     await store.user.verify();
@@ -81,7 +88,7 @@ function MenuRight({ open, setOpen }) {
     <Drawer
       anchor="right"
       open={open}
-      onClose={() => setOpen(false)}
+      onClose={closeDrawer}
       SlideProps={{
         sx: {
           textAlign: "center",
@@ -98,7 +105,7 @@ function MenuRight({ open, setOpen }) {
               width: 1,
             }}
           >
-            <div onClick={() => setOpen(false)}>
+            <div onClick={closeDrawer}>
               <CuAvatar></CuAvatar>
             </div>
           </Box>
@@ -132,7 +139,7 @@ function MenuRight({ open, setOpen }) {
               variant="contained"
               sx={{ position: "absolute", top: 10, right: 10 }}
               onClick={() => {
-                setOpen(false);
+                closeDrawer();
                 navigate("/pay");
               }}
             >
@@ -153,7 +160,7 @@ function MenuRight({ open, setOpen }) {
                   <ListItem disablePadding key={item.title}>
                     <ListItemButton
                       onClick={() => {
-                        setOpen(false);
+                        closeDrawer();
                         navigate(item.page);
                       }}
                     >
@@ -189,7 +196,7 @@ function MenuRight({ open, setOpen }) {
                     <ListItemButton
                       onClick={() => {
                         navigate(item.page);
-                        setOpen(false);
+                        closeDrawer();
                       }}
                     >
                       <ListItemIcon>{item.icon}</ListItemIcon>

@@ -1,12 +1,14 @@
 .overviewWrap {
-  background: #fff;
+  background: rgba(255, 253, 251, 0.86);
   overflow: auto;
   white-space: nowrap;
   width: 100vw;
-  border-bottom: 1px solid #e3e2e2;
+  border-bottom: 1px solid rgba(17, 24, 39, 0.07);
+  box-shadow: 0 8px 22px rgba(31, 41, 55, 0.05);
+  backdrop-filter: blur(12px);
 }
 .overviewWrap > div {
   display: inline-block;
-  margin-left: 10px;
-  padding: 10px 0;
+  margin-left: 8px;
+  padding: 8px 0;
 }

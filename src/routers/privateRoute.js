@@ -27,7 +27,9 @@ function PrivateRoutes({ forceToLogin }) {
     if (location.pathname === "/logout") {
       return;
     }
+    clearInterval(intervalID.current);
     checkLogin(() => {
+      clearInterval(intervalID.current);
       intervalID.current = setInterval(() => {
         store.trends.getAllFriendTrends();
         checkLogin();
@@ -37,7 +39,7 @@ function PrivateRoutes({ forceToLogin }) {
     return () => {
       clearInterval(intervalID.current);
     };
-  }, [location, checkLogin, store.trends]);
+  }, [location.pathname, checkLogin, store.trends]);
   if (forceToLogin) {
     return store.user.login ? (
       <>

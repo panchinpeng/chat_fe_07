@@ -21,11 +21,6 @@ import api from "../../common/api";
 import { useStore } from "../../store";
 import { observer } from "mobx-react-lite";
 import PostCancel from "../../component/dialog/postCancel/postCancel";
-var angleScale = {
-  angle: 0,
-  scale: 1,
-};
-
 function Post() {
   const store = useStore();
   const navigate = useNavigate();
@@ -34,6 +29,10 @@ function Post() {
   const textWrap = useRef();
   const imgIuput = useRef();
   const resetTimeout = useRef();
+  const angleScale = useRef({
+    angle: 0,
+    scale: 1,
+  });
   const [loopTouch, setLoopTouch] = useState(false);
   const [openDial, setOpenDial] = useState(false);
   const [openLeaveAlert, setOpenLeaveAlert] = useState(false);
@@ -52,9 +51,6 @@ function Post() {
       var y = (parseFloat(target.getAttribute("data-y")) || 0) + event.dy;
 
       // translate the element
-      console.log(
-        "translate(calc(-50% + " + x + "px), calc(-50% + " + y + "px))"
-      );
       target.style.transform =
         "translate(calc(-50% + " + x + "px), calc(-50% + " + y + "px))";
 
@@ -66,21 +62,21 @@ function Post() {
       .gesturable({
         listeners: {
           start(event) {
-            angleScale.angle -= event.angle;
+            angleScale.current.angle -= event.angle;
             clearTimeout(resetTimeout.current);
             textarea.current.classList.remove("reset");
           },
           move(event) {
-            const currentAngle = event.angle + angleScale.angle;
-            const currentScale = event.scale * angleScale.scale;
+            const currentAngle = event.angle + angleScale.current.angle;
+            const currentScale = event.scale * angleScale.current.scale;
 
             textarea.current.style.transform = `rotate(${currentAngle}deg) scale(${currentScale})`;
 
             window.dragMoveListener(event);
           },
           end(event) {
-            angleScale.angle = angleScale.angle + event.angle;
-            angleScale.scale = angleScale.scale * event.scale;
+            angleScale.current.angle += event.angle;
+            angleScale.current.scale *= event.scale;
           },
         },
       })
@@ -90,6 +86,7 @@ function Post() {
 
     return () => {
       window.dragMoveListener = undefined;
+      interact(".textareaWrap").unset();
     };
   }, []);
 
@@ -121,7 +118,6 @@ function Post() {
   };
 
   const textareaTouchStartEvent = (e) => {
-    e.preventDefault();
     touchId.current = setTimeout(() => {
       setLoopTouch(true);
     }, 3000);
@@ -139,8 +135,8 @@ function Post() {
       JSON.stringify({
         x: textWrap.current.dataset.x,
         y: textWrap.current.dataset.y,
-        r: angleScale.angle,
-        s: angleScale.scale,
+        r: angleScale.current.angle,
+        s: angleScale.current.scale,
         w: textarea.current.style.width,
         h: textarea.current.style.height,
         layoutX: window.innerWidth,
@@ -263,7 +259,7 @@ function Post() {
                   }));
                   break;
                 default:
-                  console.log("no action");
+                  break;
               }
             }}
           />

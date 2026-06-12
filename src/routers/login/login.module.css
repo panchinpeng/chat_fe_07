@@ -3,47 +3,63 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 10px;
-  border-radius: 5px;
-  background-color: #eff0ef;
+  padding: 24px 12px;
+  border-radius: 0;
+  background:
+    radial-gradient(circle at 24% 18%, rgba(124, 92, 255, 0.1), transparent 28%),
+    radial-gradient(circle at 80% 18%, rgba(255, 214, 165, 0.12), transparent 24%),
+    linear-gradient(135deg, #fffdfb 0%, #f8f6ff 100%);
   overflow: auto;
+  align-items: center;
+  justify-content: center;
 }
 .pageIcon {
   position: absolute;
-  top: -112px;
+  top: -58px;
   left: 50%;
   transform: translateX(-50%);
-  width: 200px;
+  width: 120px;
+  filter: drop-shadow(0 14px 24px rgba(124, 92, 255, 0.16));
 }
 
 .extraAction {
   margin-top: 10px;
   margin-left: auto;
   padding-right: 10px;
-  color: #1976d2;
-  text-decoration: underline;
+  color: #6c55e8;
+  text-decoration: none;
+  font-weight: 700;
   float: right;
 }
 .captcha {
-  margin: 10px auto;
+  margin: 14px auto;
   clear: both;
   display: block;
+  border-radius: 14px;
+  box-shadow: 0 8px 18px rgba(31, 41, 55, 0.06);
 }
 .field {
-  background-color: #fff;
-  padding: 16px;
-  padding-top: 60px;
-  border-radius: 5px;
+  width: min(100%, 440px);
+  background: rgba(255, 255, 255, 0.88);
+  padding: 68px 20px 22px;
+  border: 1px solid rgba(31, 41, 55, 0.06);
+  border-radius: 22px;
   position: relative;
   text-align: center;
-  margin-top: 100px;
+  margin-top: 48px;
+  box-shadow: 0 14px 40px rgba(31, 41, 55, 0.08);
+  backdrop-filter: blur(12px);
 }
 .field h4 {
-  font-size: 20px;
+  margin: 0 0 8px;
+  font-size: clamp(26px, 5vw, 36px);
+  line-height: 1.12;
   text-align: center;
+  letter-spacing: -0.04em;
+  color: #111827;
 }
 .actions {
-  margin-top: 15px;
+  margin-top: 12px;
   display: flex;
   justify-content: center;
   width: 100%;

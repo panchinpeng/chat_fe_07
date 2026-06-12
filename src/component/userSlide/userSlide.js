@@ -14,11 +14,17 @@ const titles = {
   article: "貼文數排行",
   friend: "好友",
 };
-export default function UserSlide({ type, data, onClick, disableHeader }) {
+export default function UserSlide({ type, data, onClick, disableHeader, variant }) {
+  const isRecommend = variant === "recommend";
   return (
-    <>
+    <div className={isRecommend ? style.recommendCard : undefined}>
       {!disableHeader && (
-        <Typography variant="h7" gutterBottom sx={{ mt: 0 }}>
+        <Typography
+          variant="subtitle1"
+          className={isRecommend ? style.recommendTitle : undefined}
+          gutterBottom
+          sx={{ mt: 0 }}
+        >
           {titles[type]}
         </Typography>
       )}
@@ -29,7 +35,7 @@ export default function UserSlide({ type, data, onClick, disableHeader }) {
         freeMode={true}
         pagination={false}
         modules={[FreeMode, Pagination]}
-        className={style.wrap}
+        className={`${style.wrap} ${isRecommend ? style.recommendSlide : ""}`}
         breakpoints={{
           460: {
             slidesPerView: 5,
@@ -43,7 +49,7 @@ export default function UserSlide({ type, data, onClick, disableHeader }) {
           data.map((username) => (
             <SwiperSlide key={username}>
               <div
-                className={style.member}
+                className={`${style.member} ${isRecommend ? style.recommendMember : ""}`}
                 onClick={() => {
                   onClick && onClick(username);
                 }}
@@ -58,9 +64,9 @@ export default function UserSlide({ type, data, onClick, disableHeader }) {
             </SwiperSlide>
           ))
         ) : (
-          <div className={style.center}>無紀錄</div>
+          <div className={`${style.center} ${isRecommend ? style.recommendEmpty : ""}`}>無紀錄</div>
         )}
       </Swiper>
-    </>
+    </div>
   );
 }

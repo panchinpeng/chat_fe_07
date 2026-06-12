@@ -15,10 +15,9 @@ function SoundPlay({ message }) {
         const width = containerRef.current.offsetWidth - 30;
         const barTotalWidth = 6; // span 寬度 + 間距
         const count = Math.floor(width / barTotalWidth);
-        if (count !== bars) {
-          setBars(count);
-        }
-        console.log("runrun");
+        setBars((currentBars) =>
+          count !== currentBars ? Math.max(count, 0) : currentBars
+        );
       }
     });
     if (containerRef.current) {
@@ -29,18 +28,18 @@ function SoundPlay({ message }) {
 
   useEffect(() => {
     const onEnded = () => setPlay(false);
-    audioRef.current.addEventListener("ended", onEnded);
+    const audio = audioRef.current;
+    audio?.addEventListener("ended", onEnded);
     return () => {
-      audioRef.current &&
-        audioRef.current.removeEventListener("ended", onEnded);
+      audio?.removeEventListener("ended", onEnded);
     };
   }, []);
 
   useEffect(() => {
     if (play) {
-      audioRef.current.play();
+      audioRef.current?.play();
     } else {
-      audioRef.current.pause();
+      audioRef.current?.pause();
     }
   }, [play]);
 

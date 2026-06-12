@@ -6,7 +6,7 @@ const api = {
       const res = await fetch("/api/user/logout");
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
 
@@ -15,7 +15,7 @@ const api = {
       const res = await fetch("/api/user/verify");
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async login(username, password, captcha) {
@@ -26,7 +26,7 @@ const api = {
       });
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async regester(username, password, birthday, captcha, gender) {
@@ -37,7 +37,7 @@ const api = {
       });
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async setUserInfo(
@@ -62,7 +62,7 @@ const api = {
       });
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async getAccountData() {
@@ -70,17 +70,17 @@ const api = {
       const res = await fetch("/api/user/account");
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async getUserInfo(username) {
     try {
       const res = await fetch(
-        `/api/user/info${username ? "?username=" + username : ""}`
+        `/api/user/info${username ? "?username=" + encodeURIComponent(username) : ""}`
       );
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async setAvatar(fd) {
@@ -92,7 +92,7 @@ const api = {
       });
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async getAvatar() {
@@ -100,7 +100,7 @@ const api = {
       const res = await fetch("/api/user/avatar");
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async addPost(message, privateString, color, image, pos) {
@@ -123,7 +123,7 @@ const api = {
       });
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async addPostArticle(
@@ -184,7 +184,7 @@ const api = {
       });
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async addFriend(friendUsername) {
@@ -195,7 +195,7 @@ const api = {
       });
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async getFriendApply() {
@@ -203,7 +203,7 @@ const api = {
       const res = await fetch("/api/user/friendApply");
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async setFriendApply(action, distUsername) {
@@ -214,7 +214,7 @@ const api = {
       });
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async getFriendChat() {
@@ -222,7 +222,7 @@ const api = {
       const res = await fetch("/api/user/friendChat");
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async getFriend() {
@@ -230,7 +230,7 @@ const api = {
       const res = await fetch("/api/user/friend");
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async getMessageHistory(friend, lastID) {
@@ -241,7 +241,7 @@ const api = {
       });
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async getSingleHistory(friend, q) {
@@ -252,7 +252,7 @@ const api = {
       });
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async getAllFriendTrends() {
@@ -260,7 +260,7 @@ const api = {
       const res = await fetch("/api/trends/allFriendTrends");
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async getTrends(user) {
@@ -271,7 +271,7 @@ const api = {
       });
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async watchTrends(eid) {
@@ -282,7 +282,7 @@ const api = {
       });
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async searchPlace(q) {
@@ -293,7 +293,7 @@ const api = {
       });
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async getArticle(fid, last) {
@@ -303,7 +303,7 @@ const api = {
       );
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async removeThumb(id) {
@@ -314,7 +314,7 @@ const api = {
       });
       return res.status;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async getThumb(id) {
@@ -325,7 +325,7 @@ const api = {
       });
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async setThumb(id) {
@@ -338,7 +338,7 @@ const api = {
       });
       return res.data;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async setCommits(id, message) {
@@ -352,7 +352,7 @@ const api = {
       });
       return res.data;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async getCommits(id, lastId) {
@@ -362,7 +362,7 @@ const api = {
       );
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async getRecommendArticle(last) {
@@ -372,7 +372,7 @@ const api = {
       );
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async getRecommendFriend() {
@@ -380,7 +380,7 @@ const api = {
       const res = await fetch("/api/user/recommendFriend");
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async getArticleDraft() {
@@ -388,7 +388,7 @@ const api = {
       const res = await fetch("/api/article/getDraft");
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async deleteDraft(id) {
@@ -401,15 +401,17 @@ const api = {
       });
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async getUserRankInfo(username) {
     try {
-      const res = await fetch(`/api/user/getRankInfo?username=${username}`);
+      const res = await fetch(
+        `/api/user/getRankInfo?username=${encodeURIComponent(username)}`
+      );
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async addShareArticle(articleId, toUsers) {
@@ -423,7 +425,7 @@ const api = {
       });
       return res.status;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async getUSDTProtocol() {
@@ -431,7 +433,7 @@ const api = {
       const res = await fetch("/api/payment/crypto");
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async getPaymentInfo(protocol, amount) {
@@ -445,7 +447,7 @@ const api = {
       });
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async cancelDeposit(protocol) {
@@ -458,7 +460,7 @@ const api = {
       });
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async getCreditOrderID() {
@@ -466,7 +468,7 @@ const api = {
       const res = await fetch("/api/payment/createCredit");
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async resetPassowrd(username, newpassword, birthday, captcha) {
@@ -482,7 +484,7 @@ const api = {
       });
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
   async uploadAudio(fd) {
@@ -494,7 +496,7 @@ const api = {
       });
       return res;
     } catch (e) {
-      throw Promise.reject(e);
+      throw e;
     }
   },
 };

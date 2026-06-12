@@ -90,10 +90,16 @@ function AddFriend() {
   return (
     <>
       <Box sx={{ bgcolor: "primary.main", width: "100vw" }}>
+        <div className={style.searchHero}>
+          <Typography variant="h5" className={style.searchTitle}>
+            找朋友
+          </Typography>
+          <Typography variant="body2" className={style.searchSubtitle}>
+            輸入使用者名稱，找到熟悉的人一起聊天。
+          </Typography>
         <Paper
+          className={style.searchBar}
           sx={{
-            m: 2,
-            p: "2px 4px",
             display: "flex",
             alignItems: "center",
             boxSizing: "border-box",
@@ -115,18 +121,19 @@ function AddFriend() {
             <SearchIcon />
           </IconButton>
         </Paper>
+        </div>
       </Box>
-      <Box sx={{ flex: "1 1 0", p: 1, width: "100%" }}>
+      <Box className={style.content} sx={{ flex: "1 1 0", width: "100%" }}>
         {friend.length > 0 && friend.map ? (
-          <>
-            <Typography variant="h6" gutterBottom>
+          <div className={style.resultPanel}>
+            <Typography variant="h6" className={style.sectionTitle}>
               搜尋結果
             </Typography>
-            <List sx={{ width: "100%", bgcolor: "background.paper", px: 0 }}>
+            <List className={style.resultList}>
               {friend.map((friendItem, index) => (
                 <Fragment key={friendItem.username}>
                   <ListItem
-                    sx={{ px: 0 }}
+                    className={style.resultItem}
                     alignItems="flex-start"
                     onClick={() => sendAddFriend(friendItem)}
                   >
@@ -170,21 +177,21 @@ function AddFriend() {
                     />
                     {(inviteUser.includes(friendItem.username) ||
                       friendItem.applying * 1 === 1) && (
-                      <div className={style.AddFriendWait}>等待回復</div>
+                      <div className={style.AddFriendWait}>等待回覆</div>
                     )}
 
                     {friendItem.applying * 1 === 2 && (
-                      <div className={style.AddFriendWait}>已成為好友</div>
+                      <div className={style.friendBadge}>已成為好友</div>
                     )}
                     {friendItem.receiveApplying && (
-                      <div className={style.AddFriendWait}>已邀請你</div>
+                      <div className={style.inviteBadge}>已邀請你</div>
                     )}
                   </ListItem>
-                  {friend.length !== index + 1 && <Divider />}
+                  {friend.length !== index + 1 && <Divider className={style.divider} />}
                 </Fragment>
               ))}
             </List>
-          </>
+          </div>
         ) : friend === false ? (
           <div className={style.textCenter}>
             <CircularProgress />

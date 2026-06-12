@@ -236,7 +236,6 @@ function Article() {
       setIsThumb(draftData.is_thumb * 1 === 1);
       setIsPrivate(draftData.is_private * 1 === 1);
       place.current = draftData.place;
-      console.log(draftData);
       if (draftData.users) {
         const friendData = draftData.users.split(",");
         setTagFriends(friendData);

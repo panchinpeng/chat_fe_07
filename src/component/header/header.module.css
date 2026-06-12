@@ -3,8 +3,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 102px;
+  width: 108px;
+  color: #1f2937;
 }
 .logo {
   vertical-align: middle;
+  max-height: 42px;
+  filter: drop-shadow(0 6px 12px rgba(124, 92, 255, 0.12));
 }

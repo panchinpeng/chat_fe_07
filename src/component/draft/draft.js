@@ -37,7 +37,6 @@ function Draft({ open, setOpen, draft, setDraft, setDraftData }) {
     );
     if (confirmRes) {
       const res = await api.deleteDraft(draftItem.id);
-      console.log("res", res);
       if (res.data) {
         store.tip.show("已刪除", "success");
         const resetDraft = draft.filter((d) => d.id !== draftItem.id);
