@@ -118,7 +118,6 @@ function Post() {
   };
 
   const textareaTouchStartEvent = (e) => {
-    e.preventDefault();
     touchId.current = setTimeout(() => {
       setLoopTouch(true);
     }, 3000);

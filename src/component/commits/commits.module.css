@@ -3,6 +3,13 @@
 }
 .commitsWrap {
   position: relative;
+  margin: 8px 10px 12px;
+  padding: 10px;
+  border: 1px solid rgba(124, 92, 255, 0.1);
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(248, 247, 255, 0.92), rgba(255, 255, 255, 0.96)),
+    radial-gradient(circle at 0 0, rgba(124, 92, 255, 0.1), transparent 42%);
 }
 
 .placeholder {
@@ -14,15 +21,87 @@
   color: #fff;
 }
 .commit {
-  background-color: #0000001c;
-  border-radius: 19px;
-  padding: 6px;
-  margin-top: 2px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(17, 24, 39, 0.05);
+  border-radius: 16px;
+  padding: 8px !important;
+  margin-top: 7px;
+  box-shadow: 0 8px 18px rgba(31, 41, 55, 0.05);
   opacity: 1;
 }
-.commit * {
-  color: #000;
+.commitText :global(.MuiListItemText-primary) {
+  margin-bottom: 2px;
+  font-weight: 700;
+  color: #1f2937;
+  letter-spacing: -0.01em;
+}
+.commitText :global(.MuiListItemText-secondary) {
+  color: #4b5563;
+  line-height: 1.55;
 }
 .title {
-  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  margin: 12px 2px 4px;
+  color: #5b4bd6;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.title::before {
+  content: "";
+  width: 4px;
+  height: 14px;
+  margin-right: 6px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #6852de, #a38cff);
+}
+.editor {
+  padding: 2px;
+}
+.input :global(.MuiOutlinedInput-root) {
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.9);
+}
+.input :global(.MuiOutlinedInput-notchedOutline) {
+  border-color: rgba(124, 92, 255, 0.16);
+}
+.input :global(.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline),
+.input :global(.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline) {
+  border-color: rgba(104, 82, 222, 0.42);
+}
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+.submit {
+  min-width: 68px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, #6852de, #8f7aff) !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+}
+.list {
+  width: 100%;
+  padding: 0 !important;
+  background: transparent !important;
+}
+.more {
+  width: fit-content;
+  margin: 12px auto 0;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(124, 92, 255, 0.1);
+  color: #5b4bd6;
+  font-weight: 700;
+  cursor: pointer;
+}
+.empty {
+  margin-top: 8px;
+  padding: 14px 10px;
+  border: 1px dashed rgba(124, 92, 255, 0.2);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.54);
+  text-align: center;
+  color: #6b7280;
 }

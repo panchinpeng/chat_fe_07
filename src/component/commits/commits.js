@@ -59,23 +59,26 @@ function Commits({ id, renderFn }) {
     renderFn && renderFn();
   }, [history]);
   return (
-    <Box sx={{ mt: 1 }} className={style.commitsWrap}>
-      <Box sx={{ p: 1, pb: 0 }}>
+    <Box className={style.commitsWrap}>
+      <Box className={style.editor}>
         <TextField
           label=""
           multiline
           maxRows={8}
-          variant="standard"
+          minRows={2}
+          variant="outlined"
           fullWidth
           value={commitMsg}
           onInput={(e) => setCommitMsg(e.target.value)}
           placeholder="發表留言 ..."
+          className={style.input}
         />
-        <Box sx={{ "& button": { mt: 0.5 }, textAlign: "right" }}>
+        <Box className={style.actions}>
           <Button
             variant="contained"
-            color="success"
             size="small"
+            disableElevation
+            className={style.submit}
             onClick={handleSubmit}
           >
             送出
@@ -86,11 +89,7 @@ function Commits({ id, renderFn }) {
       {history.length ? (
         <>
           <List
-            sx={{
-              width: "100%",
-              bgcolor: "background.paper",
-              p: 1,
-            }}
+            className={style.list}
           >
             {history.map((item, index) => (
               <React.Fragment key={item.id}>
@@ -109,6 +108,7 @@ function Commits({ id, renderFn }) {
                   </ListItemAvatar>
                   <ListItemText
                     sx={{ whiteSpace: "pre-wrap", my: "3px" }}
+                    className={style.commitText}
                     primary={item.username}
                     secondary={item.message}
                   ></ListItemText>
@@ -117,13 +117,13 @@ function Commits({ id, renderFn }) {
             ))}
           </List>
           {nowPage < totalPage.current * 1 && (
-            <Box sx={{ textAlign: "center", mt: 2 }} onClick={moreCommit}>
+            <Box className={style.more} onClick={moreCommit}>
               加載更多
             </Box>
           )}
         </>
       ) : (
-        <Box sx={{ textAlign: "center" }}>沒有任何留言</Box>
+        <Box className={style.empty}>還沒有留言，來當第一個回覆的人</Box>
       )}
     </Box>
   );

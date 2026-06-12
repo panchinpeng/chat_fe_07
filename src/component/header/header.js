@@ -23,9 +23,17 @@ function Header() {
     <>
       <AppBar
         position="static"
-        sx={{ flex: "0 0 0", zIndex: "9", boxShadow: "none", mb: "1px" }}
+        sx={{
+          flex: "0 0 auto",
+          zIndex: "9",
+          boxShadow: "none",
+          color: "#1f2937",
+          background: "rgba(255,253,251,0.84)",
+          borderBottom: "1px solid rgba(17,24,39,0.08)",
+          backdropFilter: "blur(14px)",
+        }}
       >
-        <Toolbar>
+        <Toolbar sx={{ minHeight: { xs: 54, sm: 58 }, px: { xs: 1.5, sm: 2 } }}>
           <div>
             <Link to="/" reloadDocument>
               <img

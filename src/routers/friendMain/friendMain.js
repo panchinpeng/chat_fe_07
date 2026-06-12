@@ -86,38 +86,44 @@ function FriendMain() {
   return (
     <Box className={style.wrap}>
       <div className={style.picWrap}>
-        <img
-          width="100%"
-          alt="avatar"
-          src={`/api/user/avatar?username=${user}`}
-          onError={(e) => (e.target.src = man)}
-          className={style.pic}
-        ></img>
-        {rankInfo.friendStatus && (
-          <>
-            <Button
-              fullWidth
-              variant="contained"
-              sx={{
-                marginTop: "6px",
-                fontWeight: 700,
-              }}
-              color="info"
-              onClick={addFriend}
-              disabled={rankInfo.friendStatus === "pending"}
-            >
-              {rankInfo.friendStatus === "apply" ? "加為好友" : "等待回覆"}
-            </Button>
-          </>
-        )}
-        <div className={style.name}>{user}</div>
-        {userInfo && userInfo.self_introd && (
-          <div className={style.intro}>{userInfo.self_introd}</div>
-        )}
+        <div className={style.profileCard}>
+          <img
+            width="100%"
+            alt="avatar"
+            src={`/api/user/avatar?username=${user}`}
+            onError={(e) => (e.target.src = man)}
+            className={style.pic}
+          ></img>
+          <div className={style.profileContent}>
+            <div className={style.name}>{user}</div>
+            {userInfo && userInfo.self_introd && (
+              <div className={style.intro}>{userInfo.self_introd}</div>
+            )}
 
-        {userInfo && userInfo.interests && (
-          <UserInterests interests={userInfo.interests}></UserInterests>
-        )}
+            {userInfo && userInfo.interests && (
+              <div className={style.interestsWrap}>
+                <UserInterests interests={userInfo.interests}></UserInterests>
+              </div>
+            )}
+
+            {rankInfo.friendStatus && (
+              <Button
+                variant="contained"
+                sx={{
+                  alignSelf: "flex-start",
+                  borderRadius: "999px",
+                  fontWeight: 700,
+                  px: 3,
+                }}
+                color="info"
+                onClick={addFriend}
+                disabled={rankInfo.friendStatus === "pending"}
+              >
+                {rankInfo.friendStatus === "apply" ? "加為好友" : "等待回覆"}
+              </Button>
+            )}
+          </div>
+        </div>
 
         <div className={style.statistics}>
           <div>

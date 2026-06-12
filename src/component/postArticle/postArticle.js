@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
-  Card,
-  CardHeader,
-  IconButton,
   CardMedia,
   CardContent,
   Skeleton,
 } from "@mui/material";
+import { ActionIcon, Badge, Card, Group, Stack, Text } from "@mantine/core";
 import Avatar from "../avatar/avatar";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CommentIcon from "@mui/icons-material/Comment";
@@ -22,6 +20,8 @@ import PostArticleMore from "../postArticleMore/postArticleMore";
 function PostArticle({ article, renderFn, from }) {
   const store = useStore();
   const [showMore, setShowMore] = useState(false);
+  const cardRef = useRef(null);
+  const touchStart = useRef(null);
   const [images, setImages] = useState(() =>
     article ? new Array(article.img_names.length).fill(0) : []
   );
@@ -56,6 +56,78 @@ function PostArticle({ article, renderFn, from }) {
     e.target.dataset.loading = "loading";
   };
 
+  const getScrollTarget = (element) => {
+    let scrollTarget = element.parentElement;
+
+    while (scrollTarget) {
+      const { overflowY } = window.getComputedStyle(scrollTarget);
+
+      if (
+        ["auto", "scroll"].includes(overflowY) &&
+        scrollTarget.scrollHeight > scrollTarget.clientHeight
+      ) {
+        break;
+      }
+
+      scrollTarget = scrollTarget.parentElement;
+    }
+
+    return scrollTarget;
+  };
+
+  const scrollPageFromPost = (e) => {
+    if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) {
+      return;
+    }
+
+    const scrollTarget = getScrollTarget(e.currentTarget);
+
+    if (scrollTarget) {
+      scrollTarget.scrollTop += e.deltaY;
+      e.preventDefault();
+    }
+  };
+
+  useEffect(() => {
+    const card = cardRef.current;
+
+    if (!card) {
+      return undefined;
+    }
+
+    card.addEventListener("wheel", scrollPageFromPost, { passive: false });
+
+    return () => {
+      card.removeEventListener("wheel", scrollPageFromPost);
+    };
+  });
+
+  const handleTouchStart = (e) => {
+    const touch = e.touches[0];
+    touchStart.current = { x: touch.clientX, y: touch.clientY };
+  };
+
+  const handleTouchMove = (e) => {
+    if (!touchStart.current) {
+      return;
+    }
+
+    const touch = e.touches[0];
+    const deltaX = touchStart.current.x - touch.clientX;
+    const deltaY = touchStart.current.y - touch.clientY;
+
+    if (Math.abs(deltaY) <= Math.abs(deltaX)) {
+      return;
+    }
+
+    const scrollTarget = getScrollTarget(e.currentTarget);
+
+    if (scrollTarget) {
+      scrollTarget.scrollTop += deltaY;
+      touchStart.current = { x: touch.clientX, y: touch.clientY };
+    }
+  };
+
   useEffect(() => {
     if (article) {
       // 先載入動態前兩張圖片
@@ -86,23 +158,35 @@ function PostArticle({ article, renderFn, from }) {
 
   return (
     <>
-      <Card>
-        <CardHeader
-          avatar={<Avatar from="Index" friendName={article.username}></Avatar>}
-          action={
-            from === "chatroom" ? null : (
-              <IconButton aria-label="more" onClick={() => setShowMore(true)}>
-                <MoreVertIcon />
-              </IconButton>
-            )
-          }
-          title={article.username}
-          subheader={
-            <div className={style.subheader}>
-              <div>{renderTime(article.time)}</div>
-            </div>
-          }
-        />
+      <Card
+        ref={cardRef}
+        className={style.card}
+        padding="0"
+        radius="xl"
+        withBorder
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+      >
+        <Group className={style.cardHeader} justify="space-between" wrap="nowrap">
+          <Group gap="sm" wrap="nowrap">
+            <Avatar from="Index" friendName={article.username}></Avatar>
+            <Stack gap={2}>
+              <Text className={style.authorName}>{article.username}</Text>
+              <Text className={style.timeText}>{renderTime(article.time)}</Text>
+            </Stack>
+          </Group>
+          {from !== "chatroom" && (
+            <ActionIcon
+              aria-label="more"
+              variant="subtle"
+              color="gray"
+              radius="xl"
+              onClick={() => setShowMore(true)}
+            >
+              <MoreVertIcon fontSize="small" />
+            </ActionIcon>
+          )}
+        </Group>
 
         <CardMedia
           children={
@@ -137,7 +221,7 @@ function PostArticle({ article, renderFn, from }) {
             </div>
           }
         />
-        <CardContent sx={{ padding: "0px" }}>
+        <CardContent sx={{ padding: "0px", "&:last-child": { pb: 0 } }}>
           <div variant="body2" color="text.secondary">
             {(article.is_thumb * 1 === 1 ||
               article.is_reply * 1 === 1 ||
@@ -153,13 +237,19 @@ function PostArticle({ article, renderFn, from }) {
 
                 {article.is_reply * 1 === 1 && (
                   <>
-                    <CommentIcon
-                      sx={{ mr: 1 }}
+                    <ActionIcon
+                      variant="light"
+                      color="violet"
+                      radius="xl"
                       onClick={() =>
                         setShowCommits((showCommits) => !showCommits)
                       }
-                    ></CommentIcon>
-                    <span>{article.replyTotal}</span>
+                    >
+                      <CommentIcon fontSize="small"></CommentIcon>
+                    </ActionIcon>
+                    <Badge variant="light" color="violet" radius="xl">
+                      {article.replyTotal}
+                    </Badge>
                   </>
                 )}
                 {article.place.name !== "未設定" && (

@@ -23,7 +23,9 @@ class Trends {
   async getAllFriendTrends() {
     const res = await api.getAllFriendTrends();
     if (res && res.status) {
-      this.friendTrends = res.data;
+      runInAction(() => {
+        this.friendTrends = res.data;
+      });
     }
   }
   closeTrend() {

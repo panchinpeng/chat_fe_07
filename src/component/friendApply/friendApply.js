@@ -18,6 +18,12 @@ import { observer } from "mobx-react-lite";
 function FriendApply({ open, setOpen }) {
   const store = useStore();
   const [apply, setApply] = useState([]);
+  const closeDrawer = () => {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    setOpen(false);
+  };
   const handleReject = async (item, index) => {
     const res = await api.setFriendApply("reject", item.username);
     if (res.status) {
@@ -56,9 +62,7 @@ function FriendApply({ open, setOpen }) {
       <SwipeableDrawer
         anchor="bottom"
         open={open}
-        onClose={() => {
-          setOpen(false);
-        }}
+        onClose={closeDrawer}
         onOpen={() => {}}
       >
         <h4 className={style.header}>好友邀請</h4>
